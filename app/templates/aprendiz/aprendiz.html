@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aprendiz/aprendiz.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="aprendiz-container">
+  <h2>Panel del Aprendiz</h2>
+  <p>Bienvenido, {{ current_user.nombre }}. Aquí puedes gestionar tus solicitudes de salida.</p>
+  
+  <!-- Sección para registrar nueva solicitud -->
+  <section class="solicitud-section">
+    <h3>Registrar Solicitud de Salida</h3>
+    <form method="POST" action="{{ url_for('main.nueva_solicitud') }}">
+      <div class="form-group">
+        <label for="tipo_salida">Tipo de Salida:</label>
+        <select id="tipo_salida" name="tipo_salida" required>
+          {% for tipo in tipos_salida %}
+            <option value="{{ tipo.id_tipo }}" data-reingreso="{{ 1 if tipo.requiere_reingreso else 0 }}">
+              {{ tipo.nombre }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="hora_salida">Hora de Salida Estimada:</label>
+        <input type="time" id="hora_salida" name="hora_salida" required>
+      </div>
+
+      <div class="form-group" id="grupoReingreso" style="display: none;">
+        <label for="hora_reingreso">Hora de Reingreso Estimada (si aplica):</label>
+        <input type="time" id="hora_reingreso" name="hora_reingreso">
+      </div>
+
+      <div class="form-group">
+        <label for="motivo">Motivo:</label>
+        <input type="text" id="motivo" name="motivo" required>
+      </div>
+
+      <button type="submit" class="btn">Enviar Solicitud</button>
+    </form>
+  </section>
+  
+  <!-- Sección para mostrar el historial de solicitudes del aprendiz -->
+  <section class="historial-section">
+    <h3>Historial de Solicitudes</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Salida</th>
+            <th>Hora Salida</th>
+            <th>Hora Reingreso</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for solicitud in solicitudes %}
+          <tr>
+            <td>{{ solicitud.tipo_salida.nombre }}</td>
+            <td>{{ solicitud.hora_salida_estimada }}</td>
+            <td>{{ solicitud.hora_reingreso_estimada }}</td>
+            <td>{{ solicitud.motivo }}</td>
+            <td>{{ solicitud.estado.value if solicitud.estado else '' }}</td>
+            <td>{{ solicitud.fecha_creacion.strftime("%d/%m/%Y %H:%M") }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/aprendiz.js') }}"></script>
+{% endblock %}

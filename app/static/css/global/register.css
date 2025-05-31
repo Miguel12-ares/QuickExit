@@ -1,0 +1,115 @@
+/* Ajuste universal para box-sizing */
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Contenedor principal del registro */
+.register-container {
+  width: 100%;          /* Ocupa todo el ancho disponible */
+  max-width: 500px;     /* Pero no excede 500px en pantallas grandes */
+  margin: 40px auto;    /* Centra horizontalmente */
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.register-container h2 {
+  text-align: center;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+.register-form .form-group {
+  margin-bottom: 15px;
+}
+
+.register-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.register-form input,
+.register-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px 0 #a5d6a7, 0 2px 8px 0 rgba(76,175,80,0.10);
+  background: #fff;
+}
+
+.register-form input:hover,
+.register-form select:hover {
+  border-color: #388E3C;
+  background: #f0fff0;
+  box-shadow: 0 0 6px #a5d6a7;
+}
+
+.register-form .btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px 0 rgba(76,175,80,0.10);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.register-form .btn:hover {
+  background-color: #388E3C;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px 0 rgba(76,175,80,0.18);
+}
+
+/* Estilo mejorado para el enlace de inicio de sesión */
+.register-container p {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 0.95em;
+}
+
+.register-container p a {
+  color: #a5d6a7;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.register-container p a:hover {
+  color: #388e3c;
+    text-decoration: underline;
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+  .register-container {
+    margin: 20px auto;
+    padding: 15px;
+  }
+}
+
+/* Animación para el contenedor al hacer hover (opcional, sutil) */
+.register-container:hover {
+  box-shadow: 0 6px 24px 0 rgba(76,175,80,0.18), 0 2px 8px 0 rgba(0,0,0,0.13);
+  transition: box-shadow 0.3s;
+}

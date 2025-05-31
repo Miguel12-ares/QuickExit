@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/crear.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="fichas-panel">
+  <h2>Crear Nueva Ficha</h2>
+  <form method="POST" class="ficha-form">
+    <div class="form-group">
+      <label for="id_ficha">ID de la Ficha (SENA)</label>
+      <input type="number" id="id_ficha" name="id_ficha" required min="1">
+    </div>
+    <div class="form-group">
+      <label for="nombre">Nombre de la Ficha</label>
+      <input type="text" id="nombre" name="nombre" required>
+    </div>
+    <div class="form-group">
+      <label for="descripcion">Observaciones/Descripción</label>
+      <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="id_instructor_lider">Instructor Líder</label>
+      <select id="id_instructor_lider" name="id_instructor_lider">
+        <option value="">Sin instructor líder</option>
+        {% for instructor in instructores %}
+        <option value="{{ instructor.id_usuario }}">{{ instructor.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-actions">
+      <button type="submit">Crear Ficha</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

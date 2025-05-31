@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/deshabilitar.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="fichas-panel">
+  <h2>Deshabilitar Fichas</h2>
+  <table class="fichas-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Instructor Líder</th>
+        <th>Fecha de Creación</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ficha in fichas %}
+      <tr>
+        <td>{{ ficha.nombre }}</td>
+        <td>{{ ficha.instructor_lider.nombre if ficha.instructor_lider else 'Sin asignar' }}</td>
+        <td>{{ ficha.fecha_creacion.strftime('%Y-%m-%d') }}</td>
+        <td>
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="id_ficha" value="{{ ficha.id_ficha }}">
+            <button type="submit" class="btn-deshabilitar">Deshabilitar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

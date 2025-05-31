@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/administrar.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="fichas-panel">
+  <h2>Administrar Fichas</h2>
+  <table class="fichas-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Instructor Líder</th>
+        <th>Fecha de Creación</th>
+        <th>Estado</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ficha in fichas %}
+      <tr>
+        <td>{{ ficha.nombre }}</td>
+        <td>{{ ficha.instructor_lider.nombre if ficha.instructor_lider else 'Sin asignar' }}</td>
+        <td>{{ ficha.fecha_creacion.strftime('%Y-%m-%d') }}</td>
+        <td>
+          {% if ficha.habilitada %}
+            <span class="badge-activa">Activa</span>
+          {% else %}
+            <span class="badge-deshabilitada">Deshabilitada</span>
+          {% endif %}
+        </td>
+        <td>{{ ficha.descripcion or '-' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

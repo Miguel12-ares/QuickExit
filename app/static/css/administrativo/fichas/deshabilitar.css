@@ -1,0 +1,73 @@
+.fichas-panel {
+    max-width: 900px;
+    margin: 40px auto 0 auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 16px rgba(46,125,50,0.07);
+    padding: 32px 24px;
+  }
+  .fichas-panel h2 {
+    color: #2e7d32;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  .fichas-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #f7faf7;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .fichas-table th, .fichas-table td {
+    padding: 12px 10px;
+    text-align: left;
+  }
+  .fichas-table th {
+    background: #43a047;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .fichas-table tr:nth-child(even) {
+    background: #f1f8e9;
+  }
+  .fichas-table tr:nth-child(odd) {
+    background: #fff;
+  }
+  .fichas-table td {
+    font-size: 1rem;
+    color: #333;
+  }
+  .btn-deshabilitar {
+    background: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 16px;
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-deshabilitar:hover {
+    background: #b71c1c;
+  }
+  .badge-activa {
+    background: #43a047;
+    color: #fff;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .badge-deshabilitada {
+    background: #e53935;
+    color: #fff;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }

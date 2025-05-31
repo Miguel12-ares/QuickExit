@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/porteria/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="porteria-panel">
+  <h2>Panel de Portería</h2>
+  <div class="solicitudes-section">
+    <h3>Solicitudes para Registrar Salida</h3>
+    <table class="solicitudes-table">
+      <thead>
+        <tr>
+          <th>Aprendiz</th>
+          <th>Tipo de Salida</th>
+          <th>Hora Estimada</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitud in solicitudes_salida %}
+        <tr>
+          <td>{{ solicitud.aprendiz.nombre }}</td>
+          <td>{{ solicitud.tipo_salida.nombre }}</td>
+          <td>{{ solicitud.hora_salida_estimada }}</td>
+          <td>
+            <form action="{{ url_for('main.porteria_registrar_salida', id_solicitud=solicitud.id_solicitud) }}" method="post" class="form-inline">
+              <input type="time" name="hora_exacta_salida" required>
+              <button type="submit" class="btn-aprobar">Registrar Salida</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="solicitudes-section">
+    <h3>Solicitudes para Registrar Reingreso</h3>
+    <table class="solicitudes-table">
+      <thead>
+        <tr>
+          <th>Aprendiz</th>
+          <th>Tipo de Salida</th>
+          <th>Hora Estimada Reingreso</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitud in solicitudes_reingreso %}
+        <tr>
+          <td>{{ solicitud.aprendiz.nombre }}</td>
+          <td>{{ solicitud.tipo_salida.nombre }}</td>
+          <td>{{ solicitud.hora_reingreso_estimada }}</td>
+          <td>
+            <form action="{{ url_for('main.porteria_registrar_reingreso', id_solicitud=solicitud.id_solicitud) }}" method="post" class="form-inline">
+              <input type="time" name="hora_exacta_reingreso" required>
+              <button type="submit" class="btn-aprobar">Registrar Reingreso</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aprendiz/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="aprendiz-panel">
+  <h2>Panel de Aprendiz</h2>
+  <div class="solicitudes-section">
+    <h3>Mis Solicitudes</h3>
+    <table class="solicitudes-table">
+      <thead>
+        <tr>
+          <th>Tipo de Salida</th>
+          <th>Hora Estimada</th>
+          <th>Motivo</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+          <td>{{ solicitud.tipo_salida.nombre }}</td>
+          <td>{{ solicitud.hora_salida_estimada }}</td>
+          <td>{{ solicitud.motivo }}</td>
+          <td>{{ solicitud.estado.value|capitalize }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="nueva-solicitud-section">
+    <h3>Nueva Solicitud</h3>
+    <form action="{{ url_for('main.nueva_solicitud') }}" method="post" class="nueva-solicitud-form">
+      <div class="form-group">
+        <label for="tipo_salida">Tipo de Salida</label>
+        <select name="tipo_salida" id="tipo_salida" required>
+          {% for tipo in tipos_salida %}
+          <option value="{{ tipo.id_tipo }}">{{ tipo.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="hora_salida">Hora de Salida</label>
+        <input type="time" name="hora_salida" id="hora_salida" required>
+      </div>
+      <div class="form-group">
+        <label for="hora_reingreso">Hora de Reingreso (opcional)</label>
+        <input type="time" name="hora_reingreso" id="hora_reingreso">
+      </div>
+      <div class="form-group">
+        <label for="motivo">Motivo</label>
+        <input type="text" name="motivo" id="motivo" required>
+      </div>
+      <div class="form-actions">
+        <button type="submit">Enviar Solicitud</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %} 

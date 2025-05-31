@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/validar_salidas.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="validar-salidas-panel">
+  <h2>Validar Salidas de Aprendices</h2>
+  {% if solicitudes and solicitudes|length > 0 %}
+  <table class="validar-salidas-table">
+    <thead>
+      <tr>
+        <th>Aprendiz</th>
+        <th>Fecha/Hora Salida Estimada</th>
+        <th>Tipo de Salida</th>
+        <th>Motivo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for solicitud in solicitudes %}
+      <tr>
+        <td>{{ solicitud.aprendiz.nombre }}</td>
+        <td>{{ solicitud.hora_salida_estimada }}</td>
+        <td>{{ solicitud.tipo_salida.nombre }}</td>
+        <td>{{ solicitud.motivo }}</td>
+        <td>
+          <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="post" style="display:inline;">
+            <button type="submit" class="btn-aprobar">Aprobar</button>
+          </form>
+          <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="post" style="display:inline;">
+            <button type="submit" class="btn-rechazar">Rechazar</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="no-solicitudes">
+      No hay solicitudes de salida pendientes para validar.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

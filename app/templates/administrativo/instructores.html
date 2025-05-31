@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/instructores.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="instructores-panel">
+  <h2>Gestionar Instructores</h2>
+  <table class="instructores-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Estado de Validación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for instructor in instructores %}
+      <tr>
+        <td>{{ instructor.nombre }}</td>
+        <td>{{ instructor.email }}</td>
+        <td>
+          {% if instructor.validado %}
+            <span class="badge-validado">Validado</span>
+          {% else %}
+            <span class="badge-pendiente">Pendiente</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if not instructor.validado %}
+            <form action="{{ url_for('main.validar_usuario', id_usuario=instructor.id_usuario, accion='aprobar') }}" method="post" class="form-inline">
+              <button type="submit" class="btn-aprobar">Aprobar</button>
+            </form>
+            <form action="{{ url_for('main.validar_usuario', id_usuario=instructor.id_usuario, accion='rechazar') }}" method="post" class="form-inline">
+              <button type="submit" class="btn-rechazar">Rechazar</button>
+            </form>
+          {% else %}
+            <span class="badge-sin-accion">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/admin_instructores.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,61 @@
+.fichas-panel {
+  max-width: 500px;
+  margin: 40px auto 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(46,125,50,0.07);
+  padding: 32px 24px;
+}
+.fichas-panel h2 {
+  color: #2e7d32;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.ficha-form .form-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+.ficha-form label {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.4rem;
+}
+.ficha-form input,
+.ficha-form select,
+.ficha-form textarea {
+  border-radius: 0.375rem;
+  border: 1px solid #ced4da;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+}
+.ficha-form textarea {
+  resize: vertical;
+}
+.ficha-form input:focus,
+.ficha-form select:focus,
+.ficha-form textarea:focus {
+  border-color: #43a047;
+  outline: none;
+}
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.form-actions button {
+  background: #43a047;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.form-actions button:hover {
+  background: #2e7d32;
+}

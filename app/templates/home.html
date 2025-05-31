@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="home-hero">
+  <div class="home-content animate-fade-in">
+    <h1 class="animate-slide-down">Bienvenido a <span class="brand">QuickExit</span></h1>
+    <p class="subtitle animate-fade-in-delay">
+      Plataforma diseñada para <b>agilizar y gestionar la salida de aprendices</b> de la institución <span class="sena">SENA</span>.<br>
+      Optimiza el proceso, reduce tiempos y mejora la experiencia tanto para estudiantes como para el personal administrativo.
+    </p>
+    <div class="home-buttons animate-pop-in">
+      <a href="{{ url_for('main.login') }}" class="btn btn-primary">Iniciar sesión</a>
+      <a href="{{ url_for('main.register') }}" class="btn btn-secondary">Registrarse</a>
+    </div>
+  </div>
+  <div class="home-illustration animate-fade-in-delay">
+    <img src="{{ url_for('static', filename='img/hero_students.png') }}" alt="Aprendices SENA saliendo" />
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

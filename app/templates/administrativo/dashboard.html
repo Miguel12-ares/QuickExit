@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+  <div class="admin-title">Panel Administrativo</div>
+  <div class="admin-desc">Accede a las funciones administrativas principales del sistema.</div>
+  <div class="admin-grid">
+    <div class="admin-card">
+      <h3>Gestión de Usuarios</h3>
+      <p>Crear y gestionar usuarios del sistema.</p>
+      <a href="{{ url_for('main.crear_usuario_avanzado_form') }}">Crear Usuario</a>
+    </div>
+    <div class="admin-card">
+      <h3>Gestión de Fichas</h3>
+      <p>Administrar, crear y deshabilitar fichas.</p>
+      <a href="{{ url_for('main.crear_ficha') }}">Crear Ficha</a>
+      <a href="{{ url_for('main.deshabilitar_fichas') }}" style="margin-left:10px;">Deshabilitar Fichas</a>
+      <a href="{{ url_for('main.administrar_fichas') }}" style="margin-left:10px;">Administrar Fichas</a>
+    </div>
+    <div class="admin-card">
+      <h3>Validar Salidas</h3>
+      <p>Gestionar las solicitudes de salida aprobadas.</p>
+      <a href="{{ url_for('main.validar_salidas') }}">Ver Solicitudes</a>
+    </div>
+    <div class="admin-card">
+      <h3>Gestionar Instructores</h3>
+      <p>Administrar instructores y sus asignaciones.</p>
+      <a href="{{ url_for('main.gestionar_instructores_lideres') }}">Gestionar</a>
+    </div>
+    <div class="admin-card">
+      <h3>Validar Instructores</h3>
+      <p>Aprueba o rechaza instructores registrados.</p>
+      <a href="{{ url_for('main.administrar_instructores') }}">Validar</a>
+    </div>
+    <div class="admin-card">
+      <h3>Validar Porteros</h3>
+      <p>Aprueba o rechaza porteros registrados.</p>
+      <a href="{{ url_for('main.administrar_porteros') }}">Validar</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

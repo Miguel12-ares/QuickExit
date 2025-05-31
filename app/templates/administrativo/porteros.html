@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/porteros.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="porteros-panel">
+  <h2>Gestionar Porteros</h2>
+  <table class="porteros-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Estado de Validación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for portero in porteros %}
+      <tr>
+        <td>{{ portero.nombre }}</td>
+        <td>{{ portero.email }}</td>
+        <td>
+          {% if portero.validado %}
+            <span class="badge-validado">Validado</span>
+          {% else %}
+            <span class="badge-pendiente">Pendiente</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if not portero.validado %}
+            <form action="{{ url_for('main.validar_usuario', id_usuario=portero.id_usuario, accion='aprobar') }}" method="post" class="form-inline">
+              <button type="submit" class="btn-aprobar">Aprobar</button>
+            </form>
+            <form action="{{ url_for('main.validar_usuario', id_usuario=portero.id_usuario, accion='rechazar') }}" method="post" class="form-inline">
+              <button type="submit" class="btn-rechazar">Rechazar</button>
+            </form>
+          {% else %}
+            <span class="badge-sin-accion">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/admin_porteros.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,137 @@
+/* static/css/admin_instructores.css */
+
+.admin-instructores {
+    padding: 20px;
+}
+
+.admin-instructores h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.admin-instructores table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-instructores th,
+.admin-instructores td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.admin-instructores th {
+    background-color: #2196F3;
+    color: white;
+}
+
+.admin-instructores .btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.admin-instructores .btn.aprobar {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.admin-instructores .btn.rechazar {
+    background-color: #f44336;
+    color: white;
+}
+
+.admin-instructores .btn.editar {
+    background-color: #FFC107;
+    color: white;
+}
+
+/* Estilos para la gestión de instructores administrativos */
+.instructores-panel {
+  max-width: 900px;
+  margin: 40px auto 0 auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px rgba(46,125,50,0.07);
+  padding: 32px 20px;
+}
+.instructores-panel h2 {
+  color: #2e7d32;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.instructores-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  background: #f7faf7;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.instructores-table th, .instructores-table td {
+  padding: 12px 10px;
+  text-align: left;
+}
+.instructores-table th {
+  background: #43a047;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.instructores-table tr:nth-child(even) {
+  background: #f1f8e9;
+}
+.instructores-table tr:nth-child(odd) {
+  background: #fff;
+}
+.instructores-table td {
+  font-size: 1rem;
+  color: #333;
+}
+.btn-aprobar, .btn-rechazar {
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  margin-right: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-aprobar {
+  background: #43a047;
+  color: #fff;
+}
+.btn-aprobar:hover {
+  background: #2e7d32;
+}
+.btn-rechazar {
+  background: #e53935;
+  color: #fff;
+}
+.btn-rechazar:hover {
+  background: #b71c1c;
+}
+.badge-validado {
+  background: #43a047;
+  color: #fff;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.badge-pendiente {
+  color: #e53935;
+  font-weight: 600;
+}
+.badge-sin-accion {
+  color: #888;
+}
+.form-inline {
+  display: inline-block;
+}

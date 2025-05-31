@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Validar Aprendices</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Aprendices Pendientes de Validación</h4>
+                </div>
+                <div class="card-body">
+                    {% if aprendices %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Documento</th>
+                                    <th>Email</th>
+                                    <th>Ficha</th>
+                                    <th>Fecha de Registro</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for aprendiz in aprendices %}
+                                <tr>
+                                    <td>{{ aprendiz.nombre }}</td>
+                                    <td>{{ aprendiz.documento }}</td>
+                                    <td>{{ aprendiz.email }}</td>
+                                    <td>{{ aprendiz.ficha.nombre }}</td>
+                                    <td>{{ aprendiz.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')">
+                                                    Aprobar
+                                                </button>
+                                            </form>
+                                            <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST" class="d-inline">
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')">
+                                                    Rechazar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        No hay aprendices pendientes de validación en tus fichas.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

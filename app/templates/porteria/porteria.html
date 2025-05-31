@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/porteria/porteria.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="porteria-container">
+  <h2>Panel de Portería</h2>
+  <p>Hola, {{ current_user.nombre }}. Registra la hora exacta de salida y reingreso.</p>
+  
+  <!-- Tabla para registrar salida exacta -->
+  <section style="margin-bottom: 40px;">
+    <h3>Registrar Salida Exacta</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Aprendiz</th>
+            <th>Fecha/Hora Autorizada</th>
+            <th>Tipo de Salida</th>
+            <th>Hora Exacta Salida</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in solicitudes_salida %}
+          <tr>
+            <td>{{ s.aprendiz.nombre }}</td>
+            <td>{{ s.fecha_creacion.strftime("%Y-%m-%d %H:%M") }}</td>
+            <td>{{ s.tipo_salida.nombre }}</td>
+            <td>
+              <form action="{{ url_for('main.porteria_registrar_salida', id_solicitud=s.id_solicitud) }}" method="post" style="display:flex;gap:5px;">
+                <input type="time" name="hora_exacta_salida" required>
+                <button type="submit" class="btn btn-success">Registrar</button>
+              </form>
+            </td>
+            <td></td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" style="text-align:center;">No hay solicitudes pendientes de salida para hoy.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Tabla para registrar reingreso solo para temporales -->
+  <section>
+    <h3>Registrar Reingreso (Solo Temporales)</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Aprendiz</th>
+            <th>Fecha/Hora Salida</th>
+            <th>Hora Exacta Reingreso</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in solicitudes_reingreso %}
+          <tr>
+            <td>{{ s.aprendiz.nombre }}</td>
+            <td>{{ s.hora_exacta_salida.strftime("%H:%M") }}</td>
+            <td>
+              <form action="{{ url_for('main.porteria_registrar_reingreso', id_solicitud=s.id_solicitud) }}" method="post" style="display:flex;gap:5px;">
+                <input type="time" name="hora_exacta_reingreso" required>
+                <button type="submit" class="btn btn-primary">Registrar</button>
+              </form>
+            </td>
+            <td></td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4" style="text-align:center;">No hay reingresos pendientes para hoy.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+{% endblock %}
