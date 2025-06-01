@@ -1,6 +1,5 @@
 from app import create_app
 import logging
-import os
 
 # Configurar logging
 logging.basicConfig(level=logging.DEBUG)
@@ -11,8 +10,7 @@ app = create_app()
 if __name__ == '__main__':
     logger.info('Iniciando la aplicación...')
     try:
-        port = int(os.environ.get('PORT', 5000))
-        app.run(debug=True, host='0.0.0.0', port=port)
+        app.run(debug=True)
     except Exception as e:
         logger.error(f'Error al iniciar la aplicación: {str(e)}')
         raise
