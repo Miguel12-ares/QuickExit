@@ -1,11 +1,14 @@
 # config.py
-SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/quickexit_db'
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_ECHO = True  # Esto mostrará las consultas SQL en la consola
-SECRET_KEY = 'mysecretkey'
+import os
 
-# Configuración de la base de datos
-MYSQL_HOST = 'localhost'
-MYSQL_USER = 'root'
-MYSQL_PASSWORD = ''
-MYSQL_DB = 'quickexit_db'
+# Usar variable de entorno si existe, si no, usar valor local por defecto
+SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'mysql+pymysql://root:@localhost/quickexit_db')
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_ECHO = os.environ.get('SQLALCHEMY_ECHO', 'False').lower() == 'true'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'mysecretkey')
+
+# Configuración de la base de datos (ya no se necesita si usas SQLALCHEMY_DATABASE_URI)
+MYSQL_HOST = os.environ.get('MYSQL_HOST', 'localhost')
+MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
+MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', '')
+MYSQL_DB = os.environ.get('MYSQL_DB', 'quickexit_db')
