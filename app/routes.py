@@ -28,6 +28,10 @@ def register():
         rol_str = request.form.get('rol', '').strip()
         id_ficha = request.form.get('id_ficha') if rol_str == 'aprendiz' else None
 
+        if rol_str != 'aprendiz':
+            flash('Solo se permite el registro de aprendices. Si eres instructor o portero, contacta al área administrativa.', 'danger')
+            return redirect(url_for('main.register'))
+
         if not documento or not nombre or not email or not password or not rol_str:
             flash('Todos los campos son obligatorios', 'danger')
             return redirect(url_for('main.register'))
@@ -81,19 +85,23 @@ def login():
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '').strip()
         usuario = Usuario.query.filter_by(email=email).first()
-        if usuario and bcrypt.check_password_hash(usuario.password_hash, password):
-            # Si es aprendiz, verificar que su ficha esté habilitada
-            if usuario.rol == RolesEnum.aprendiz:
-                ficha = Ficha.query.get(usuario.id_ficha)
-                if not ficha or not ficha.habilitada:
-                    flash('Tu ficha está deshabilitada. Contacta al administrativo.', 'danger')
-                    return redirect(url_for('main.login'))
-            if not usuario.validado:
-                flash('Tu cuenta aún está pendiente de validación. Contacta al administrador.', 'warning')
-                return redirect(url_for('main.login'))
-            login_user(usuario)
-            return redirect(url_for('main.dashboard'))
-        flash('Credenciales inválidas', 'danger')
+        if not usuario:
+            flash('No existe un usuario registrado con ese correo.', 'danger')
+            return render_template('login.html')
+        if not bcrypt.check_password_hash(usuario.password_hash, password):
+            flash('Contraseña incorrecta.', 'danger')
+            return render_template('login.html')
+        # Si es aprendiz, verificar que su ficha esté habilitada
+        if usuario.rol == RolesEnum.aprendiz:
+            ficha = Ficha.query.get(usuario.id_ficha)
+            if not ficha or not ficha.habilitada:
+                flash('Tu número de ficha se encuentra suspendido. No puedes acceder al sistema.', 'danger')
+                return render_template('login.html')
+        if not usuario.validado:
+            flash('Tu cuenta aún está pendiente de validación. Contacta al administrador.', 'warning')
+            return render_template('login.html')
+        login_user(usuario)
+        return redirect(url_for('main.dashboard'))
     return render_template('login.html')
 
 # ------------------------------------------
@@ -538,31 +546,24 @@ def crear_ficha():
         return redirect(url_for('main.administrar_fichas'))
     return render_template('administrativo/fichas/crear.html', instructores=instructores)
 
-@main.route('/administrativo/fichas/deshabilitar', methods=['GET', 'POST'])
-@login_required
-def deshabilitar_fichas():
-    if current_user.rol.value not in ['administrativo', 'admin']:
-        flash("Acceso no autorizado", "danger")
-        return redirect(url_for('main.dashboard'))
-    fichas_activas = Ficha.query.filter_by(habilitada=True).all()
-    if request.method == 'POST':
-        id_ficha = request.form.get('id_ficha')
-        ficha = Ficha.query.get(id_ficha)
-        if ficha and ficha.habilitada:
-            ficha.habilitada = False
-            # Deshabilitar aprendices asociados
-            for aprendiz in ficha.usuarios:
-                aprendiz.validado = False
-            db.session.commit()
-            flash('Ficha y aprendices deshabilitados correctamente', 'success')
-        return redirect(url_for('main.deshabilitar_fichas'))
-    return render_template('administrativo/fichas/deshabilitar.html', fichas=fichas_activas)
-
-@main.route('/administrativo/fichas/administrar')
+@main.route('/administrativo/fichas/administrar', methods=['GET', 'POST'])
 @login_required
 def administrar_fichas():
     if current_user.rol.value not in ['administrativo', 'admin']:
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
+    if request.method == 'POST':
+        id_ficha = request.form.get('id_ficha')
+        nuevo_estado = request.form.get('nuevo_estado')
+        ficha = Ficha.query.get(id_ficha)
+        if ficha:
+            ficha.habilitada = True if nuevo_estado == 'activa' else False
+            # Si se deshabilita, deshabilitar aprendices asociados
+            if not ficha.habilitada:
+                for aprendiz in ficha.usuarios:
+                    aprendiz.validado = False
+            db.session.commit()
+            flash('Estado de la ficha actualizado correctamente', 'success')
+        return redirect(url_for('main.administrar_fichas'))
     fichas = Ficha.query.all()
     return render_template('administrativo/fichas/administrar.html', fichas=fichas)

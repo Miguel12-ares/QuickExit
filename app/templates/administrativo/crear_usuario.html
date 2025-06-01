@@ -14,7 +14,7 @@
       <form method="POST" action="{{ url_for('main.crear_usuario_avanzado') }}">
         <div class="form-group">
           <label for="documento">Documento</label>
-          <input type="text" id="documento" name="documento" required>
+          <input type="text" id="documento" name="documento" required pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         </div>
         <div class="form-group">
           <label for="nombre">Nombre Completo</label>
@@ -43,4 +43,12 @@
     </div>
   </div>
 </div>
-{% endblock %} 
+{% endblock %}
+
+<script>
+// Validación extra por JS para evitar letras en el input documento
+const docInput = document.getElementById('documento');
+docInput.addEventListener('input', function(e) {
+  this.value = this.value.replace(/[^0-9]/g, '');
+});
+</script> 

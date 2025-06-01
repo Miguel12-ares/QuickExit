@@ -7,10 +7,17 @@
 {% block content %}
 <div class="register-container">
   <h2>Regístrate</h2>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
   <form method="POST" class="register-form">
     <div class="form-group">
       <label for="documento">Documento (DNI/Cédula):</label>
-      <input type="text" id="documento" name="documento" required>
+      <input type="text" id="documento" name="documento" required pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
 
     <div class="form-group">
@@ -26,15 +33,6 @@
     <div class="form-group">
       <label for="password">Contraseña:</label>
       <input type="password" id="password" name="password" required>
-    </div>
-
-    <div class="form-group">
-      <label for="rol">Rol:</label>
-      <select id="rol" name="rol" required>
-        <option value="aprendiz" selected>Aprendiz</option>
-        <option value="instructor">Instructor</option>
-        <option value="porteria">Portería</option>
-      </select>
     </div>
 
     <!-- Campo de Ficha (solo para aprendices) -->
@@ -57,4 +55,11 @@
 {% block extra_js %}
 <!-- Cargamos el JS que controla la visibilidad del campo "ficha" -->
 <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+<script>
+// Validación extra por JS para evitar letras en el input documento
+const docInput = document.getElementById('documento');
+docInput.addEventListener('input', function(e) {
+  this.value = this.value.replace(/[^0-9]/g, '');
+});
+</script>
 {% endblock %}

@@ -17,9 +17,10 @@
     <div class="admin-card">
       <h3>Gestión de Fichas</h3>
       <p>Administrar, crear y deshabilitar fichas.</p>
-      <a href="{{ url_for('main.crear_ficha') }}">Crear Ficha</a>
-      <a href="{{ url_for('main.deshabilitar_fichas') }}" style="margin-left:10px;">Deshabilitar Fichas</a>
-      <a href="{{ url_for('main.administrar_fichas') }}" style="margin-left:10px;">Administrar Fichas</a>
+      <div class="admin-card-btns">
+        <a href="{{ url_for('main.crear_ficha') }}">Crear Ficha</a>
+        <a href="{{ url_for('main.administrar_fichas') }}">Administrar Fichas</a>
+      </div>
     </div>
     <div class="admin-card">
       <h3>Validar Salidas</h3>
