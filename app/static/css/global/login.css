@@ -2,6 +2,27 @@
 
 /* Centrar todo el contenido de la página */
 
+/* Logo del SENA */
+.login-logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-logo img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.login-subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: -10px;
+    margin-bottom: 1.5rem;
+}
 
 /* Tarjeta contenedora del formulario */
 .login-card {

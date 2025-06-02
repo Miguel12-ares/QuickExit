@@ -2,7 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>QuickExit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuickExit - SENA</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/global/style.css') }}">
   {% block extra_css %}{% endblock %}
 </head>
@@ -10,7 +12,7 @@
   <header>
     <div class="navbar">
       <div class="logo">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="QuickExit">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SENA - QuickExit">
         <a href="{{ url_for('main.dashboard') }}">QuickExit</a>
       </div>
       <nav class="desktop-nav" style="margin-left:auto;">

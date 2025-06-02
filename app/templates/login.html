@@ -6,7 +6,11 @@
 
 {% block content %}
   <div class="login-card">
+    <div class="login-logo">
+      <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SENA">
+    </div>
     <h2>Iniciar Sesión</h2>
+    <p class="login-subtitle">Sistema QuickExit - SENA</p>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}

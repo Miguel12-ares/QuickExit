@@ -6,7 +6,11 @@
 
 {% block content %}
 <div class="register-container">
+  <div class="register-logo">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SENA">
+  </div>
   <h2>Regístrate</h2>
+  <p class="register-subtitle">Sistema QuickExit - SENA</p>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
