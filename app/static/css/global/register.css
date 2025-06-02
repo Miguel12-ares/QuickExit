@@ -6,28 +6,6 @@ html {
   box-sizing: inherit;
 }
 
-/* Logo del SENA */
-.register-logo {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-}
-
-.register-logo img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-}
-
-.register-subtitle {
-    text-align: center;
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: -10px;
-    margin-bottom: 1.5rem;
-}
-
 /* Contenedor principal del registro */
 .register-container {
   width: 100%;          /* Ocupa todo el ancho disponible */
