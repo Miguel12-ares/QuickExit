@@ -186,14 +186,12 @@ def instructor_dashboard():
     if current_user.rol.value != 'instructor':
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
-    
     solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
     solicitudes_historial = Solicitud.query.filter(
         Solicitud.estado.in_([EstadoSolicitud.aprobada, EstadoSolicitud.rechazada]),
         Solicitud.id_instructor_aprobador == current_user.id_usuario
     ).all()
-
-    return render_template('instructor/dashboard.html', pendientes=solicitudes_pendientes, historial=solicitudes_historial)
+    return render_template('instructor/instructor.html', pendientes=solicitudes_pendientes, historial=solicitudes_historial)
 
 @main.route('/instructor/gestionar/<int:id_solicitud>/<accion>', methods=['POST'])
 @login_required
@@ -278,6 +276,27 @@ def validar_aprendiz(id_usuario, accion):
     
     db.session.commit()
     return redirect(url_for('main.validar_aprendices'))
+
+@main.route('/instructor/solicitudes_pendientes')
+@login_required
+def instructor_solicitudes_pendientes():
+    if current_user.rol.value != 'instructor':
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    solicitudes_pendientes = Solicitud.query.filter_by(estado=EstadoSolicitud.pendiente).all()
+    return render_template('instructor/solicitudes_pendientes.html', pendientes=solicitudes_pendientes)
+
+@main.route('/instructor/historial')
+@login_required
+def instructor_historial():
+    if current_user.rol.value != 'instructor':
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    solicitudes_historial = Solicitud.query.filter(
+        Solicitud.estado.in_([EstadoSolicitud.aprobada, EstadoSolicitud.rechazada]),
+        Solicitud.id_instructor_aprobador == current_user.id_usuario
+    ).all()
+    return render_template('instructor/historial.html', historial=solicitudes_historial)
 
 # ------------------------------------------
 # Dashboard (Redirección según Rol)

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/instructor.css') }}">
+{% endblock %}
+{% block content %}
+<div class="instructor-panel">
+  <h2>Solicitudes Pendientes</h2>
+  <div class="instructor-card" style="max-width:900px;margin:auto;">
+    <h3 style="color:#2e7d32;">Solicitudes Pendientes</h3>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <div class="table-responsive">
+      <table class="instructor-table">
+        <thead>
+          <tr>
+            <th>Aprendiz</th>
+            <th>Tipo de Salida</th>
+            <th>Hora Salida</th>
+            <th>Hora Reingreso</th>
+            <th>Motivo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for solicitud in pendientes %}
+          <tr>
+            <td>{{ solicitud.aprendiz.nombre }}</td>
+            <td>{{ solicitud.tipo_salida.nombre }}</td>
+            <td>{{ solicitud.hora_salida_estimada.strftime('%H:%M') }}</td>
+            <td>{{ solicitud.hora_reingreso_estimada.strftime('%H:%M') if solicitud.hora_reingreso_estimada else 'N/A' }}</td>
+            <td>{{ solicitud.motivo }}</td>
+            <td>
+              <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="POST" style="display:inline-block;">
+                <button type="submit" class="btn-aprobar">Aprobar</button>
+              </form>
+              <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="POST" style="display:inline-block;">
+                <button type="submit" class="btn-rechazar">Rechazar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% if not pendientes or pendientes|length == 0 %}
+        <div style="text-align:center; color:#888; margin-top:24px; font-size:1.1rem;">No hay solicitudes pendientes.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %} 

@@ -16,88 +16,13 @@
     <div class="instructor-card">
       <h3>Solicitudes Pendientes</h3>
       <p>Gestionar solicitudes de salida pendientes.</p>
-      <a href="#solicitudes-pendientes">Ver Solicitudes</a>
+      <a href="{{ url_for('main.instructor_solicitudes_pendientes') }}">Ver Solicitudes</a>
     </div>
     <div class="instructor-card">
       <h3>Historial de Solicitudes</h3>
       <p>Ver historial de solicitudes gestionadas.</p>
-      <a href="#historial">Ver Historial</a>
+      <a href="{{ url_for('main.instructor_historial') }}">Ver Historial</a>
     </div>
-  </div>
-
-  <div class="mt-4" id="solicitudes-pendientes">
-    <h3 style="margin-bottom:10px; color:#2e7d32;">Solicitudes Pendientes</h3>
-    <table class="instructor-table">
-      <thead>
-        <tr>
-          <th>Aprendiz</th>
-          <th>Tipo de Salida</th>
-          <th>Hora Salida</th>
-          <th>Hora Reingreso</th>
-          <th>Motivo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for solicitud in pendientes %}
-        <tr>
-          <td>{{ solicitud.aprendiz.nombre }}</td>
-          <td>{{ solicitud.tipo_salida.nombre }}</td>
-          <td>{{ solicitud.hora_salida_estimada.strftime('%H:%M') }}</td>
-          <td>{{ solicitud.hora_reingreso_estimada.strftime('%H:%M') if solicitud.hora_reingreso_estimada else 'N/A' }}</td>
-          <td>{{ solicitud.motivo }}</td>
-          <td>
-            <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="POST" style="display:inline-block;">
-              <button type="submit" class="btn-aprobar">Aprobar</button>
-            </form>
-            <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="POST" style="display:inline-block;">
-              <button type="submit" class="btn-rechazar">Rechazar</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% if not pendientes or pendientes|length == 0 %}
-      <div style="text-align:center; color:#888; margin-top:24px; font-size:1.1rem;">No hay solicitudes pendientes.</div>
-    {% endif %}
-  </div>
-
-  <div class="mt-4" id="historial">
-    <h3 style="margin-bottom:10px; color:#2e7d32;">Historial de Solicitudes</h3>
-    <table class="instructor-table">
-      <thead>
-        <tr>
-          <th>Aprendiz</th>
-          <th>Tipo de Salida</th>
-          <th>Hora Salida</th>
-          <th>Hora Reingreso</th>
-          <th>Estado</th>
-          <th>Fecha</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for solicitud in historial %}
-        <tr>
-          <td>{{ solicitud.aprendiz.nombre }}</td>
-          <td>{{ solicitud.tipo_salida.nombre }}</td>
-          <td>{{ solicitud.hora_salida_estimada.strftime('%H:%M') }}</td>
-          <td>{{ solicitud.hora_reingreso_estimada.strftime('%H:%M') if solicitud.hora_reingreso_estimada else 'N/A' }}</td>
-          <td>
-            {% if solicitud.estado.value == 'aprobada' %}
-              <span class="badge-aprobada">{{ solicitud.estado.value }}</span>
-            {% else %}
-              <span class="badge-rechazada">{{ solicitud.estado.value }}</span>
-            {% endif %}
-          </td>
-          <td>{{ solicitud.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% if not historial or historial|length == 0 %}
-      <div style="text-align:center; color:#888; margin-top:24px; font-size:1.1rem;">No hay historial de solicitudes.</div>
-    {% endif %}
   </div>
 </div>
 {% endblock %}
