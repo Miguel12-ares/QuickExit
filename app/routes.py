@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from app import db, bcrypt
 from app.models import Usuario, Ficha, TipoSalida, Solicitud, AuditoriaGeneral, EstadoSolicitud, RolesEnum
 from flask_login import login_user, logout_user, login_required, current_user
@@ -125,23 +125,14 @@ def validar_salidas():
     solicitudes = Solicitud.query.filter_by(estado='aprobada').all()
     return render_template('administrativo/validar_salidas.html', solicitudes=solicitudes)
 
-@main.route('/admin/instructores')
-@login_required
-def administrar_instructores():
-    if current_user.rol.value not in ['admin', 'administrativo']:
-        flash("Acceso no autorizado", "danger")
-        return redirect(url_for('main.dashboard'))
-    instructores = Usuario.query.filter(Usuario.rol == RolesEnum.instructor, Usuario.validado == False).all()
-    return render_template('administrativo/instructores.html', instructores=instructores)
-
 @main.route('/admin/porteros')
 @login_required
 def administrar_porteros():
     if current_user.rol.value not in ['admin', 'administrativo']:
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
-    porteros = Usuario.query.filter(Usuario.rol == RolesEnum.porteria, Usuario.validado == False).all()
-    return render_template('administrativo/porteros.html', porteros=porteros)
+    # Render template vacío; datos vendrán vía AJAX
+    return render_template('administrativo/porteros.html')
 
 @main.route('/admin/validar_usuario/<int:id_usuario>/<accion>', methods=['POST'])
 @login_required
@@ -584,5 +575,154 @@ def administrar_fichas():
             db.session.commit()
             flash('Estado de la ficha actualizado correctamente', 'success')
         return redirect(url_for('main.administrar_fichas'))
+    # No pasar fichas al render, la tabla se llena por AJAX
+    return render_template('administrativo/fichas/administrar.html')
+
+@main.route('/api/buscar_fichas')
+@login_required
+def api_buscar_fichas():
+    if current_user.rol.value not in ['administrativo', 'admin']:
+        return jsonify({'error': 'No autorizado'}), 403
+
+    buscar_id = request.args.get('buscar_id', '').strip()
+    buscar_nombre = request.args.get('buscar_nombre', '').strip()
+    buscar_instructor = request.args.get('buscar_instructor', '').strip()
+
+    query = Ficha.query
+
+    if buscar_id:
+        query = query.filter(Ficha.id_ficha.like(f"%{buscar_id}%"))
+    if buscar_nombre:
+        query = query.filter(Ficha.nombre.ilike(f"%{buscar_nombre}%"))
+    if buscar_instructor:
+        # Filtrar por nombre del instructor líder asociado a la ficha
+        query = query.filter(Ficha.instructor_lider.has(Usuario.nombre.ilike(f"%{buscar_instructor}%")))
+
+    fichas = query.all()
+
+    # Serializar los datos para JSON
+    fichas_json = []
+    for ficha in fichas:
+        fichas_json.append({
+            'id_ficha': ficha.id_ficha,
+            'nombre': ficha.nombre,
+            'instructor_lider': ficha.instructor_lider.nombre if ficha.instructor_lider else 'Sin asignar',
+            'fecha_creacion': ficha.fecha_creacion.strftime('%Y-%m-%d'),
+            'habilitada': ficha.habilitada,
+            'descripcion': ficha.descripcion or '-'
+        })
+
+    return jsonify({'fichas': fichas_json})
+
+@main.route('/api/buscar_porteros')
+@login_required
+def api_buscar_porteros():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        return jsonify({'error': 'No autorizado'}), 403
+    buscar_identificacion = request.args.get('buscar_identificacion', '').strip()
+    buscar_nombre = request.args.get('buscar_nombre', '').strip()
+    buscar_email = request.args.get('buscar_email', '').strip()
+    query = Usuario.query.filter_by(rol=RolesEnum.porteria)
+    if buscar_identificacion:
+        query = query.filter(Usuario.documento.like(f"%{buscar_identificacion}%"))
+    if buscar_nombre:
+        query = query.filter(Usuario.nombre.ilike(f"%{buscar_nombre}%"))
+    if buscar_email:
+        query = query.filter(Usuario.email.ilike(f"%{buscar_email}%"))
+    porteros = query.all()
+    result = []
+    for p in porteros:
+        result.append({
+            'id_usuario': p.id_usuario,
+            'documento': p.documento,
+            'nombre': p.nombre,
+            'email': p.email,
+            'validado': p.validado
+        })
+    return jsonify({'porteros': result})
+
+@main.route('/admin/actualizar_estado_portero/<int:id_usuario>', methods=['POST'])
+@login_required
+def actualizar_estado_portero(id_usuario):
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.administrar_porteros'))
+    usuario = Usuario.query.get_or_404(id_usuario)
+    if usuario.rol != RolesEnum.porteria:
+        flash("Solo se puede actualizar el estado de porteros", "danger")
+        return redirect(url_for('main.administrar_porteros'))
+    validado = request.form.get('validado') == 'true'
+    usuario.validado = validado
+    db.session.commit()
+    flash(f"Estado de portero {usuario.nombre} actualizado", "success")
+    return redirect(url_for('main.administrar_porteros'))
+
+@main.route('/admin/instructores')
+@login_required
+def administrar_instructores():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    # Renderizar el template de gestión de instructores líderes
+    instructores = Usuario.query.filter_by(rol=RolesEnum.instructor, validado=True).all()
     fichas = Ficha.query.all()
-    return render_template('administrativo/fichas/administrar.html', fichas=fichas)
+    return render_template('administrativo/gestionar_instructores_lideres.html', instructores=instructores, fichas=fichas)
+
+@main.route('/api/buscar_instructores')
+@login_required
+def api_buscar_instructores():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        return jsonify({'error': 'No autorizado'}), 403
+    buscar_id = request.args.get('buscar_id', '').strip()
+    buscar_nombre = request.args.get('buscar_nombre', '').strip()
+    buscar_email = request.args.get('buscar_email', '').strip()
+    query = Usuario.query.filter_by(rol=RolesEnum.instructor)
+    if buscar_id:
+        query = query.filter(Usuario.id_usuario.like(f"%{buscar_id}%"))
+    if buscar_nombre:
+        query = query.filter(Usuario.nombre.ilike(f"%{buscar_nombre}%"))
+    if buscar_email:
+        query = query.filter(Usuario.email.ilike(f"%{buscar_email}%"))
+    instructores = query.all()
+    result = []
+    for i in instructores:
+        ficha_nombre = i.ficha.nombre if i.ficha else None
+        result.append({
+            'id_usuario': i.id_usuario,
+            'nombre': i.nombre,
+            'email': i.email,
+            'ficha_nombre': ficha_nombre,
+            'validado': i.validado
+        })
+    return jsonify({'instructores': result})
+
+@main.route('/api/buscar_fichas_lideres')
+@login_required
+def api_buscar_fichas_lideres():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        return jsonify({'error': 'No autorizado'}), 403
+    buscar_id = request.args.get('buscar_id', '').strip()
+    buscar_ficha = request.args.get('buscar_ficha', '').strip()
+    buscar_instructor = request.args.get('buscar_instructor', '').strip()
+    buscar_estado = request.args.get('buscar_estado', '').strip()
+    query = Ficha.query
+    if buscar_id:
+        query = query.filter(Ficha.id_ficha.like(f"%{buscar_id}%"))
+    if buscar_ficha:
+        query = query.filter(Ficha.nombre.ilike(f"%{buscar_ficha}%"))
+    if buscar_instructor:
+        query = query.filter(Ficha.instructor_lider.has(Usuario.nombre.ilike(f"%{buscar_instructor}%")))
+    if buscar_estado == 'asignado':
+        query = query.filter(Ficha.id_instructor_lider.isnot(None))
+    elif buscar_estado == 'sin_asignar':
+        query = query.filter(Ficha.id_instructor_lider.is_(None))
+    fichas = query.all()
+    result = []
+    for ficha in fichas:
+        result.append({
+            'id_ficha': ficha.id_ficha,
+            'nombre': ficha.nombre,
+            'instructor_lider': ficha.instructor_lider.nombre if ficha.instructor_lider else None,
+            'id_instructor_lider': ficha.id_instructor_lider
+        })
+    return jsonify({'fichas': result})

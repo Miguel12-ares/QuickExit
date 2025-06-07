@@ -7,6 +7,13 @@
 {% block content %}
 <div class="fichas-panel">
   <h2>Administrar Fichas</h2>
+  <form id="buscador-fichas" class="mb-3 d-flex flex-wrap" autocomplete="off" style="gap:10px;">
+    <input type="text" name="buscar_id" class="form-control" placeholder="ID de ficha" style="width:150px;">
+    <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre de ficha" style="width:180px;">
+    <input type="text" name="buscar_instructor" class="form-control" placeholder="Instructor líder" style="width:180px;">
+    <button type="button" id="btn-buscar" class="btn btn-primary">Buscar</button>
+    <button type="button" id="btn-limpiar" class="btn btn-secondary">Limpiar</button>
+  </form>
   <table class="fichas-table">
     <thead>
       <tr>
@@ -19,26 +26,12 @@
       </tr>
     </thead>
     <tbody>
-      {% for ficha in fichas %}
-      <tr>
-        <td>{{ ficha.id_ficha }}</td>
-        <td>{{ ficha.nombre }}</td>
-        <td>{{ ficha.instructor_lider.nombre if ficha.instructor_lider else 'Sin asignar' }}</td>
-        <td>{{ ficha.fecha_creacion.strftime('%Y-%m-%d') }}</td>
-        <td>
-          <form method="POST" class="estado-form">
-            <input type="hidden" name="id_ficha" value="{{ ficha.id_ficha }}">
-            <select name="nuevo_estado" class="estado-select">
-              <option value="activa" {% if ficha.habilitada %}selected{% endif %}>Activa</option>
-              <option value="deshabilitada" {% if not ficha.habilitada %}selected{% endif %}>Deshabilitada</option>
-            </select>
-            <button type="submit" class="btn-estado">Guardar</button>
-          </form>
-        </td>
-        <td>{{ ficha.descripcion or '-' }}</td>
-      </tr>
-      {% endfor %}
+      <!-- El cuerpo de la tabla será llenado por JavaScript -->
     </tbody>
   </table>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/administrativo/buscador_ajax/fichas.js') }}"></script>
 {% endblock %}

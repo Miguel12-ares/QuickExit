@@ -50,38 +50,65 @@
 
 /* Estilos para la gestión de porteros */
 .porteros-panel {
-  max-width: 900px;
-  margin: 40px auto 0 auto;
   background: #fff;
-  border-radius: 14px;
+  border-radius: 18px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  padding: 32px 20px;
+  padding: 32px 32px 24px 32px;
+  margin: 32px auto;
+  max-width: 900px;
 }
 .porteros-panel h2 {
-  color: #2e7d32;
-  font-size: 2rem;
+  color: #238636;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
+  text-align: left;
+  font-size: 2.1rem;
+}
+#buscador-porteros {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+#buscador-porteros input.form-control {
+  border-radius: 8px;
+  border: 1px solid #90caf9;
+  padding: 8px 14px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+#buscador-porteros input.form-control:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+#buscador-porteros .btn {
+  background: #43a047;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  color: #fff;
+  transition: background 0.2s;
+}
+#buscador-porteros .btn:hover {
+  background: #1976d2;
 }
 .porteros-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 18px;
-  background: #f7faf7;
-  border-radius: 10px;
-  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
   font-size: 1rem;
-}
-.porteros-table th, .porteros-table td {
-  padding: 14px 10px;
-  text-align: left;
 }
 .porteros-table th {
   background: #1976d2;
   color: #fff;
-  font-weight: 600;
-  font-size: 1.05rem;
-  border-bottom: 2px solid #0d47a1;
+  font-weight: 700;
+  padding: 12px 8px;
+  text-align: left;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 .porteros-table tr:nth-child(even) {
   background: #e3f2fd;
@@ -90,30 +117,34 @@
   background: #fff;
 }
 .porteros-table td {
-  color: #222;
+  padding: 10px 8px;
   vertical-align: middle;
-}
-.btn-aprobar, .btn-rechazar {
-  border: none;
-  border-radius: 5px;
-  padding: 7px 18px;
-  font-weight: 600;
-  font-size: 0.98rem;
-  margin: 2px 4px 2px 0;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: inline-block;
 }
 .btn-aprobar {
   background: #43a047;
   color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: background 0.2s;
 }
 .btn-aprobar:hover {
-  background: #2e7d32;
+  background: #388e3c;
 }
 .btn-rechazar {
   background: #e53935;
   color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 .btn-rechazar:hover {
   background: #b71c1c;
@@ -126,12 +157,47 @@
   font-size: 0.95rem;
   font-weight: 600;
 }
-@media (max-width: 900px) {
-  .porteros-panel { padding: 12px 2vw; }
-  .porteros-table th, .porteros-table td { padding: 10px 4px; font-size: 0.97rem; }
+@media (max-width: 1000px) {
+  .porteros-panel {
+    max-width: 98vw;
+    padding: 12px 2vw;
+  }
+  .porteros-table {
+    min-width: 700px;
+  }
 }
-@media (max-width: 600px) {
-  .porteros-panel { padding: 4px 0; }
-  .porteros-table th, .porteros-table td { font-size: 0.93rem; }
-  .porteros-panel h2 { font-size: 1.2rem; }
+@media (max-width: 700px) {
+  .porteros-table th, .porteros-table td { padding: 8px 4px; font-size: 0.95rem; }
+  .btn-aprobar, .btn-rechazar { padding: 6px 10px; font-size: 0.95rem; }
+}
+
+.estado-select {
+  border-radius: 8px;
+  border: 1.5px solid #43a047;
+  background: #e8f5e9;
+  color: #1976d2;
+  padding: 7px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+  margin: 0;
+}
+.estado-select:focus {
+  border-color: #1976d2;
+  background: #fffde7;
+  color: #388e3c;
+}
+.estado-select option[value="true"] {
+  color: #388e3c;
+  background: #e8f5e9;
+}
+.estado-select option[value="false"] {
+  color: #e53935;
+  background: #ffebee;
+}
+.estado-select.desactivado {
+  background: #ffebee !important;
+  color: #e53935 !important;
+  border-color: #e53935 !important;
 }

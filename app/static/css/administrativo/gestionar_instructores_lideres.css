@@ -1,44 +1,69 @@
 /* Estilos para la gestión de instructores líderes */
 .lideres-panel {
-  max-width: 1100px;
-  margin: 40px auto 0 auto;
   background: #fff;
-  border-radius: 14px;
+  border-radius: 18px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-  padding: 32px 20px;
+  padding: 32px 32px 24px 32px;
+  margin: 32px auto;
+  max-width: 1100px;
 }
 .lideres-panel h2 {
-  color: #2e7d32;
-  font-size: 2rem;
+  color: #238636;
   font-weight: 700;
-  margin-bottom: 0px;
+  margin-bottom: 8px;
+  text-align: left;
+  font-size: 2.1rem;
 }
 .lideres-panel h4 {
   color: #388e3c;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+#buscador-lideres {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 24px;
-  margin-top: 6px;
+  flex-wrap: wrap;
+}
+#buscador-lideres input.form-control, #buscador-lideres select.form-control {
+  border-radius: 8px;
+  border: 1px solid #b2dfdb;
+  padding: 8px 14px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+#buscador-lideres input.form-control:focus, #buscador-lideres select.form-control:focus {
+  border-color: #43a047;
+  outline: none;
+}
+#buscador-lideres .btn {
+  background: #43a047;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  color: #fff;
+  transition: background 0.2s;
+}
+#buscador-lideres .btn:hover {
+  background: #1976d2;
 }
 .lideres-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 18px;
-  background: #f7faf7;
-  border-radius: 10px;
-  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
   font-size: 1rem;
-}
-.lideres-table th, .lideres-table td {
-  padding: 14px 10px;
-  text-align: left;
 }
 .lideres-table th {
   background: #43a047;
   color: #fff;
-  font-weight: 600;
-  font-size: 1.05rem;
-  border-bottom: 2px solid #388e3c;
+  font-weight: 700;
+  padding: 12px 8px;
+  text-align: left;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 .lideres-table tr:nth-child(even) {
   background: #f1f8e9;
@@ -47,48 +72,16 @@
   background: #fff;
 }
 .lideres-table td {
-  color: #222;
+  padding: 10px 8px;
   vertical-align: middle;
 }
-.btn-lider, .btn-remover, .btn-asignar, .btn-cancelar {
-  border: none;
-  border-radius: 5px;
-  padding: 7px 18px;
-  font-weight: 600;
-  font-size: 0.98rem;
-  margin: 2px 4px 2px 0;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: inline-block;
-}
-.btn-lider {
-  background: #1976d2;
-  color: #fff;
-}
-.btn-lider:hover {
-  background: #0d47a1;
-}
-.btn-remover {
-  background: #e53935;
-  color: #fff;
-}
-.btn-remover:hover {
-  background: #b71c1c;
-}
-.btn-asignar {
+.badge-lider {
   background: #43a047;
   color: #fff;
-}
-.btn-asignar:hover {
-  background: #2e7d32;
-}
-.btn-cancelar {
-  background: #bdbdbd;
-  color: #222;
-}
-.btn-cancelar:hover {
-  background: #757575;
-  color: #fff;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 .badge-sin-lider {
   background: #e53935;
@@ -98,13 +91,62 @@
   font-size: 0.95rem;
   font-weight: 600;
 }
-.badge-lider {
-  background: #43a047;
+.btn-lider, .btn-asignar {
+  background: #1976d2;
   color: #fff;
-  border-radius: 4px;
-  padding: 3px 10px;
-  font-size: 0.95rem;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
   font-weight: 600;
+  font-size: 0.98rem;
+  cursor: pointer;
+  margin-right: 4px;
+  transition: background 0.2s;
+}
+.btn-lider:hover, .btn-asignar:hover {
+  background: #1565c0;
+}
+.btn-remover {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-remover:hover {
+  background: #b71c1c;
+}
+.btn-cancelar {
+  background: #bdbdbd;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-cancelar:hover {
+  background: #757575;
+  color: #fff;
+}
+@media (max-width: 1200px) {
+  .lideres-panel {
+    max-width: 98vw;
+    padding: 12px 2vw;
+  }
+  .lideres-table {
+    min-width: 900px;
+  }
+}
+@media (max-width: 700px) {
+  .lideres-table th, .lideres-table td { padding: 8px 4px; font-size: 0.95rem; }
+  .btn-lider, .btn-asignar, .btn-remover, .btn-cancelar { padding: 6px 10px; font-size: 0.95rem; }
 }
 .asignar-modal {
   margin-top: 10px;
@@ -115,12 +157,10 @@
   max-width: 350px;
 }
 @media (max-width: 900px) {
-  .lideres-panel { padding: 12px 2vw; }
   .lideres-table th, .lideres-table td { padding: 10px 4px; font-size: 0.97rem; }
   .asignar-modal { padding: 10px 6px; }
 }
 @media (max-width: 600px) {
-  .lideres-panel { padding: 4px 0; }
   .lideres-table th, .lideres-table td { font-size: 0.93rem; }
   .lideres-panel h2 { font-size: 1.2rem; }
 } 

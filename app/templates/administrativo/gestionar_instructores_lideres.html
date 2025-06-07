@@ -8,18 +8,32 @@
 <div class="lideres-panel">
   <h2>Gestionar Instructores Líderes</h2>
   <h4>Fichas y sus Instructores Líderes</h4>
+  <form id="buscador-lideres" class="mb-3 d-flex flex-wrap" autocomplete="off" style="gap:10px;">
+    <input type="text" name="buscar_id" class="form-control" placeholder="ID de ficha" style="width:120px;">
+    <input type="text" name="buscar_ficha" class="form-control" placeholder="Nombre de ficha" style="width:180px;">
+    <input type="text" name="buscar_instructor" class="form-control" placeholder="Instructor líder" style="width:180px;">
+    <select name="buscar_estado" class="form-control" style="width:160px;">
+      <option value="">Todos</option>
+      <option value="asignado">Con líder asignado</option>
+      <option value="sin_asignar">Sin líder</option>
+    </select>
+    <button type="button" id="btn-buscar-lider" class="btn btn-primary">Buscar</button>
+    <button type="button" id="btn-limpiar-lider" class="btn btn-secondary">Limpiar</button>
+  </form>
   <div class="table-responsive">
     <table class="lideres-table">
       <thead>
         <tr>
+          <th>ID de ficha</th>
           <th>Ficha</th>
           <th>Instructor Líder Actual</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tbody-lideres">
         {% for ficha in fichas %}
         <tr>
+          <td>{{ ficha.id_ficha }}</td>
           <td>{{ ficha.nombre }}</td>
           <td>
             {% if ficha.instructor_lider %}
@@ -72,4 +86,8 @@
     });
   });
 </script>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/administrativo/buscador_ajax/lideres.js') }}"></script>
 {% endblock %} 

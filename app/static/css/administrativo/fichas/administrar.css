@@ -1,37 +1,71 @@
 .fichas-panel {
-  max-width: 1200px;
-  margin: 40px auto 0 auto;
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 16px rgba(46,125,50,0.07);
-  padding: 32px 24px;
-  overflow-x: auto;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 32px 32px 24px 32px;
+  margin: 32px auto;
+  max-width: 1100px;
 }
 .fichas-panel h2 {
   color: #2e7d32;
-  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   text-align: center;
+}
+.fichas-panel form.d-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  justify-content: flex-start;
+}
+.fichas-panel input.form-control {
+  border-radius: 8px;
+  border: 1px solid #b2dfdb;
+  padding: 8px 14px;
+  font-size: 1rem;
+  width: 220px;
+  transition: border-color 0.2s;
+}
+.fichas-panel input.form-control:focus {
+  border-color: #43a047;
+  outline: none;
+}
+.fichas-panel .btn.btn-primary {
+  background: #43a047;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.fichas-panel .btn.btn-primary:hover {
+  background: #388e3c;
+}
+.fichas-panel .btn.btn-secondary {
+  background: #bdbdbd;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  color: #333;
+  margin-left: 5px;
 }
 .fichas-table {
   width: 100%;
-  min-width: 1000px;
-  border-collapse: collapse;
-  background: #f7faf7;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 18px;
-}
-.fichas-table th, .fichas-table td {
-  padding: 12px 10px;
-  text-align: left;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 10px;
+  font-size: 1rem;
 }
 .fichas-table th {
   background: #43a047;
   color: #fff;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  padding: 12px 8px;
+  text-align: left;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 .fichas-table tr:nth-child(even) {
   background: #f1f8e9;
@@ -40,8 +74,8 @@
   background: #fff;
 }
 .fichas-table td {
-  font-size: 1rem;
-  color: #333;
+  padding: 10px 8px;
+  vertical-align: middle;
 }
 .btn-deshabilitar {
   background: #e53935;
@@ -79,9 +113,9 @@
   gap: 8px;
 }
 .estado-select {
-  border-radius: 0.375rem;
-  border: 1px solid #ced4da;
-  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid #b2dfdb;
+  padding: 5px 10px;
   font-size: 1rem;
 }
 .btn-estado {
@@ -89,14 +123,13 @@
   color: #fff;
   border: none;
   border-radius: 6px;
-  padding: 7px 18px;
-  font-size: 1rem;
+  padding: 5px 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s;
 }
 .btn-estado:hover {
-  background: #2e7d32;
+  background: #388e3c;
 }
 @media (max-width: 1300px) {
   .fichas-panel {

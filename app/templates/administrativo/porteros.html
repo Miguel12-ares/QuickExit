@@ -7,46 +7,30 @@
 {% block content %}
 <div class="porteros-panel">
   <h2>Gestionar Porteros</h2>
+  <form id="buscador-porteros" class="mb-3 d-flex flex-wrap" autocomplete="off" style="gap:10px;">
+    <input type="text" name="buscar_identificacion" class="form-control" placeholder="Identificación" style="width:150px;">
+    <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre" style="width:180px;">
+    <input type="text" name="buscar_email" class="form-control" placeholder="Email" style="width:200px;">
+    <button type="button" id="btn-buscar-port" class="btn btn-primary">Buscar</button>
+    <button type="button" id="btn-limpiar-port" class="btn btn-secondary">Limpiar</button>
+  </form>
+
   <table class="porteros-table">
     <thead>
       <tr>
+        <th>Identificación</th>
         <th>Nombre</th>
         <th>Email</th>
-        <th>Estado de Validación</th>
-        <th>Acciones</th>
+        <th>Estado</th>
       </tr>
     </thead>
     <tbody>
-      {% for portero in porteros %}
-      <tr>
-        <td>{{ portero.nombre }}</td>
-        <td>{{ portero.email }}</td>
-        <td>
-          {% if portero.validado %}
-            <span class="badge-validado">Validado</span>
-          {% else %}
-            <span class="badge-pendiente">Pendiente</span>
-          {% endif %}
-        </td>
-        <td>
-          {% if not portero.validado %}
-            <form action="{{ url_for('main.validar_usuario', id_usuario=portero.id_usuario, accion='aprobar') }}" method="post" class="form-inline">
-              <button type="submit" class="btn-aprobar">Aprobar</button>
-            </form>
-            <form action="{{ url_for('main.validar_usuario', id_usuario=portero.id_usuario, accion='rechazar') }}" method="post" class="form-inline">
-              <button type="submit" class="btn-rechazar">Rechazar</button>
-            </form>
-          {% else %}
-            <span class="badge-sin-accion">-</span>
-          {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
+      <!-- llenado JS -->
     </tbody>
   </table>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{{ url_for('static', filename='js/admin_porteros.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/administrativo/buscador_ajax/porteros.js') }}"></script>
 {% endblock %}

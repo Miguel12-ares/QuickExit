@@ -21,8 +21,7 @@
           {% if current_user.is_authenticated %}
             {% if current_user.rol in ['admin', 'administrativo'] %}
               <li><a href="{{ url_for('main.validar_salidas') }}">Validar Salidas</a></li>
-              <li><a href="{{ url_for('main.administrar_instructores') }}">Gestionar Instructores</a></li>
-              <li><a href="{{ url_for('main.administrar_porteros') }}">Gestionar Porteros</a></li>
+              <li><a href="{{ url_for('main.administrar_porteros') }}">Validar Porteros</a></li>
             {% elif current_user.rol == 'instructor' %}
               <li><a href="{{ url_for('main.instructor_dashboard') }}">Panel Instructor</a></li>
               <li><a href="{{ url_for('main.validar_aprendices') }}">Gestionar Aprendices</a></li>
@@ -47,8 +46,7 @@
       {% if current_user.is_authenticated %}
         {% if current_user.rol in ['admin', 'administrativo'] %}
           <li><a href="{{ url_for('main.validar_salidas') }}">Validar Salidas</a></li>
-          <li><a href="{{ url_for('main.administrar_instructores') }}">Gestionar Instructores</a></li>
-          <li><a href="{{ url_for('main.administrar_porteros') }}">Gestionar Porteros</a></li>
+          <li><a href="{{ url_for('main.administrar_porteros') }}">Validar Porteros</a></li>
         {% elif current_user.rol == 'instructor' %}
           <li><a href="{{ url_for('main.instructor_dashboard') }}">Panel Instructor</a></li>
           <li><a href="{{ url_for('main.validar_aprendices') }}">Gestionar Aprendices</a></li>
