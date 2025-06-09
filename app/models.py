@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
 import enum
-from app import db, login_manager
+from app import db, login_manager, bcrypt
 
 class RolesEnum(enum.Enum):
     aprendiz = 'aprendiz'
@@ -41,6 +41,18 @@ class TipoSalida(db.Model):
     nombre = db.Column(db.String(50), nullable=False)
     requiere_reingreso = db.Column(db.Boolean, default=False, nullable=False)
     solicitudes = db.relationship('Solicitud', backref='tipo_salida', lazy=True)
+
+    @classmethod
+    def crear_tipos_por_defecto(cls):
+        tipos = [
+            {'nombre': 'Temporal', 'requiere_reingreso': True},
+            {'nombre': 'Definitiva', 'requiere_reingreso': False}
+        ]
+        for tipo in tipos:
+            if not cls.query.filter_by(nombre=tipo['nombre']).first():
+                nuevo_tipo = cls(nombre=tipo['nombre'], requiere_reingreso=tipo['requiere_reingreso'])
+                db.session.add(nuevo_tipo)
+        db.session.commit()
 
 class Usuario(db.Model, UserMixin):
     __tablename__ = 'USUARIOS'

@@ -2,34 +2,35 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/crear_usuario.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="crear-usuario-panel">
   <div class="crear-usuario-card">
     <div class="crear-usuario-header">
-      <h3>Crear Nuevo Usuario</h3>
+      <h3><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h3>
     </div>
     <div class="crear-usuario-body">
       <form method="POST" action="{{ url_for('main.crear_usuario_avanzado') }}">
-        <div class="form-group">
-          <label for="documento">Documento</label>
-          <input type="text" id="documento" name="documento" required pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-id-card"></i></span>
+          <input type="text" id="documento" name="documento" required pattern="[0-9]+" inputmode="numeric" placeholder="Documento" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         </div>
-        <div class="form-group">
-          <label for="nombre">Nombre Completo</label>
-          <input type="text" id="nombre" name="nombre" required>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-user"></i></span>
+          <input type="text" id="nombre" name="nombre" required placeholder="Nombre Completo">
         </div>
-        <div class="form-group">
-          <label for="email">Correo Electrónico</label>
-          <input type="email" id="email" name="email" required>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-envelope"></i></span>
+          <input type="email" id="email" name="email" required placeholder="Correo Electrónico">
         </div>
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password" required>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-lock"></i></span>
+          <input type="password" id="password" name="password" required placeholder="Contraseña">
         </div>
-        <div class="form-group">
-          <label for="rol">Rol</label>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-user-tag"></i></span>
           <select id="rol" name="rol" required>
             <option value="">Seleccione un rol</option>
             <option value="instructor">Instructor</option>
@@ -37,7 +38,7 @@
           </select>
         </div>
         <div class="form-actions">
-          <button type="submit">Crear Usuario</button>
+          <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Crear Usuario</button>
         </div>
       </form>
     </div>

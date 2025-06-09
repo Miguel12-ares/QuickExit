@@ -3,10 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QuickExit - SENA</title>
+  <title>{% block title %}{% endblock %}</title>
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/global/style.css') }}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   {% block extra_css %}{% endblock %}
+  <!-- Script para asegurar que el menú hamburguesa se cargue correctamente -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Verificar que el menú hamburguesa exista
+      const hamburger = document.getElementById('hamburger');
+      if (hamburger) {
+        // Asegurarse de que sea visible en móviles
+        if (window.innerWidth <= 768) {
+          hamburger.style.display = 'block';
+        }
+      }
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -15,54 +33,54 @@
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SENA - QuickExit">
         <a href="{{ url_for('main.dashboard') }}">QuickExit</a>
       </div>
-      <nav class="desktop-nav" style="margin-left:auto;">
+      <nav class="desktop-nav">
         <ul>
-          <li><a href="{{ url_for('main.dashboard') }}">Inicio</a></li>
+          <li><a href="{{ url_for('main.dashboard') }}"><i class="fas fa-home"></i> Inicio</a></li>
           {% if current_user.is_authenticated %}
             {% if current_user.rol in ['admin', 'administrativo'] %}
-              <li><a href="{{ url_for('main.validar_salidas') }}">Validar Salidas</a></li>
-              <li><a href="{{ url_for('main.administrar_porteros') }}">Validar Porteros</a></li>
+              <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
+              <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
             {% elif current_user.rol == 'instructor' %}
-              <li><a href="{{ url_for('main.instructor_dashboard') }}">Panel Instructor</a></li>
-              <li><a href="{{ url_for('main.validar_aprendices') }}">Gestionar Aprendices</a></li>
+              <li><a href="{{ url_for('main.instructor_dashboard') }}"><i class="fas fa-chalkboard-teacher"></i> Panel Instructor</a></li>
+              <li><a href="{{ url_for('main.validar_aprendices') }}"><i class="fas fa-user-graduate"></i> Gestionar Aprendices</a></li>
             {% endif %}
-            <li><a href="{{ url_for('main.logout') }}">Cerrar sesión</a></li>
+            <li><a href="{{ url_for('main.logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
           {% else %}
-            <li><a href="{{ url_for('main.login') }}">Iniciar sesión</a></li>
-            <li><a href="{{ url_for('main.register') }}">Registrarse</a></li>
+            <li><a href="{{ url_for('main.login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a></li>
+            <li><a href="{{ url_for('main.register') }}"><i class="fas fa-user-plus"></i> Registrarse</a></li>
           {% endif %}
         </ul>
       </nav>
-      <button class="hamburger" id="hamburger">
+      <button class="hamburger" id="hamburger" aria-label="Menú">
         <span></span>
         <span></span>
         <span></span>
       </button>
     </div>
   </header>
+  <div class="overlay" id="overlay"></div>
   <nav id="sidebar" class="sidebar">
     <ul>
-      <li><a href="{{ url_for('main.dashboard') }}">Inicio</a></li>
+      <li><a href="{{ url_for('main.dashboard') }}"><i class="fas fa-home"></i> Inicio</a></li>
       {% if current_user.is_authenticated %}
         {% if current_user.rol in ['admin', 'administrativo'] %}
-          <li><a href="{{ url_for('main.validar_salidas') }}">Validar Salidas</a></li>
-          <li><a href="{{ url_for('main.administrar_porteros') }}">Validar Porteros</a></li>
+          <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
+          <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
         {% elif current_user.rol == 'instructor' %}
-          <li><a href="{{ url_for('main.instructor_dashboard') }}">Panel Instructor</a></li>
-          <li><a href="{{ url_for('main.validar_aprendices') }}">Gestionar Aprendices</a></li>
+          <li><a href="{{ url_for('main.instructor_dashboard') }}"><i class="fas fa-chalkboard-teacher"></i> Panel Instructor</a></li>
+          <li><a href="{{ url_for('main.validar_aprendices') }}"><i class="fas fa-user-graduate"></i> Gestionar Aprendices</a></li>
         {% endif %}
-        <li><a href="{{ url_for('main.logout') }}">Cerrar sesión</a></li>
+        <li><a href="{{ url_for('main.logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
       {% else %}
-        <li><a href="{{ url_for('main.login') }}">Iniciar sesión</a></li>
-        <li><a href="{{ url_for('main.register') }}">Registrarse</a></li>
+        <li><a href="{{ url_for('main.login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a></li>
+        <li><a href="{{ url_for('main.register') }}"><i class="fas fa-user-plus"></i> Registrarse</a></li>
       {% endif %}
     </ul>
   </nav>
   <main>
     {% block content %}{% endblock %}
   </main>
-  {% block extra_js %}
-    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
-  {% endblock %}
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

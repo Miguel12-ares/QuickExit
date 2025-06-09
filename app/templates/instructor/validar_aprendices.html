@@ -1,56 +1,46 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/instructor.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/panel.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="instructor-panel">
-  <h2>Validar Aprendices</h2>
-  <div class="instructor-card" style="max-width:900px;margin:auto;">
-    <h3 style="color:#2e7d32;">Aprendices Pendientes de Validación</h3>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
+  <h2><i class="fas fa-user-check"></i> Validar Aprendices</h2>
+  <div class="table-container">
+    <table class="instructor-table">
+      <thead>
+        <tr>
+          <th><i class="fas fa-user"></i> Nombre</th>
+          <th><i class="fas fa-id-card"></i> Documento</th>
+          <th><i class="fas fa-envelope"></i> Email</th>
+          <th><i class="fas fa-file-alt"></i> Ficha</th>
+          <th><i class="fas fa-calendar-alt"></i> Fecha de Registro</th>
+          <th><i class="fas fa-cogs"></i> Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for aprendiz in aprendices %}
+        <tr>
+          <td>{{ aprendiz.nombre }}</td>
+          <td>{{ aprendiz.documento }}</td>
+          <td>{{ aprendiz.email }}</td>
+          <td>{{ aprendiz.ficha.nombre }}</td>
+          <td>{{ aprendiz.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td>
+            <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST" style="display:inline-block;">
+              <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')"><i class="fas fa-check"></i> Aprobar</button>
+            </form>
+            <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST" style="display:inline-block;">
+              <button type="submit" class="btn btn-secondary" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')"><i class="fas fa-times"></i> Rechazar</button>
+            </form>
+          </td>
+        </tr>
         {% endfor %}
-      {% endif %}
-    {% endwith %}
-    {% if aprendices %}
-      <div class="table-responsive">
-        <table class="instructor-table">
-          <thead>
-            <tr>
-              <th>Nombre</th>
-              <th>Documento</th>
-              <th>Email</th>
-              <th>Ficha</th>
-              <th>Fecha de Registro</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for aprendiz in aprendices %}
-            <tr>
-              <td>{{ aprendiz.nombre }}</td>
-              <td>{{ aprendiz.documento }}</td>
-              <td>{{ aprendiz.email }}</td>
-              <td>{{ aprendiz.ficha.nombre }}</td>
-              <td>{{ aprendiz.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
-              <td>
-                <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST" style="display:inline-block;">
-                  <button type="submit" class="btn-aprobar" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')">Aprobar</button>
-                </form>
-                <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST" style="display:inline-block;">
-                  <button type="submit" class="btn-rechazar" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')">Rechazar</button>
-                </form>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    {% else %}
+      </tbody>
+    </table>
+    {% if not aprendices or aprendices|length == 0 %}
       <div style="text-align:center; color:#888; margin-top:24px; font-size:1.1rem;">No hay aprendices pendientes de validación en tus fichas.</div>
     {% endif %}
   </div>

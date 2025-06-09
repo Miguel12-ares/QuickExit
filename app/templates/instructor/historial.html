@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block extra_css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/instructor.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/panel.css') }}">
 {% endblock %}
 {% block content %}
 <div class="instructor-panel">
-  <h2>Historial de Solicitudes</h2>
+  <h2><i class="fas fa-history"></i> Historial de Solicitudes</h2>
   <div class="instructor-card" style="max-width:900px;margin:auto;">
     <h3 style="color:#2e7d32;">Historial de Solicitudes</h3>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -14,16 +15,16 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-    <div class="table-responsive">
+    <div class="table-container">
       <table class="instructor-table">
         <thead>
           <tr>
-            <th>Aprendiz</th>
-            <th>Tipo de Salida</th>
-            <th>Hora Salida</th>
-            <th>Hora Reingreso</th>
-            <th>Estado</th>
-            <th>Fecha</th>
+            <th><i class="fas fa-user"></i> Aprendiz</th>
+            <th><i class="fas fa-door-open"></i> Tipo de Salida</th>
+            <th><i class="fas fa-clock"></i> Hora Salida</th>
+            <th><i class="fas fa-clock"></i> Hora Reingreso</th>
+            <th><i class="fas fa-check-circle"></i> Estado</th>
+            <th><i class="fas fa-calendar-alt"></i> Fecha</th>
           </tr>
         </thead>
         <tbody>
@@ -35,9 +36,9 @@
             <td>{{ solicitud.hora_reingreso_estimada.strftime('%H:%M') if solicitud.hora_reingreso_estimada else 'N/A' }}</td>
             <td>
               {% if solicitud.estado.value == 'aprobada' %}
-                <span class="badge-aprobada">{{ solicitud.estado.value }}</span>
+                <span class="badge badge-aprobada"><i class="fas fa-check"></i> {{ solicitud.estado.value }}</span>
               {% else %}
-                <span class="badge-rechazada">{{ solicitud.estado.value }}</span>
+                <span class="badge badge-rechazada"><i class="fas fa-times"></i> {{ solicitud.estado.value }}</span>
               {% endif %}
             </td>
             <td>{{ solicitud.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>

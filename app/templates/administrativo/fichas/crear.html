@@ -2,37 +2,44 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/crear.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="fichas-panel">
-  <h2>Crear Nueva Ficha</h2>
-  <form method="POST" class="ficha-form">
-    <div class="form-group">
-      <label for="id_ficha">ID de la Ficha (SENA)</label>
-      <input type="number" id="id_ficha" name="id_ficha" required min="1" step="1" pattern="\\d+" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+<div class="crear-usuario-panel">
+  <div class="crear-usuario-card">
+    <div class="crear-usuario-header">
+      <h3><i class="fas fa-file-alt"></i> Crear Nueva Ficha</h3>
     </div>
-    <div class="form-group">
-      <label for="nombre">Nombre de la Ficha</label>
-      <input type="text" id="nombre" name="nombre" required>
+    <div class="crear-usuario-body">
+      <form method="POST" class="ficha-form">
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-hashtag"></i></span>
+          <input type="number" id="id_ficha" name="id_ficha" required min="1" step="1" pattern="\\d+" placeholder="ID de la Ficha (SENA)" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        </div>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-file-signature"></i></span>
+          <input type="text" id="nombre" name="nombre" required placeholder="Nombre de la Ficha">
+        </div>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-align-left"></i></span>
+          <textarea id="descripcion" name="descripcion" rows="3" placeholder="Observaciones/Descripción"></textarea>
+        </div>
+        <div class="input-group">
+          <span class="input-icon"><i class="fas fa-user-tie"></i></span>
+          <select id="id_instructor_lider" name="id_instructor_lider">
+            <option value="">Seleccione un instructor líder</option>
+            {% for instructor in instructores %}
+            <option value="{{ instructor.id_usuario }}">{{ instructor.nombre }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Crear Ficha</button>
+        </div>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="descripcion">Observaciones/Descripción</label>
-      <textarea id="descripcion" name="descripcion" rows="3"></textarea>
-    </div>
-    <div class="form-group">
-      <label for="id_instructor_lider">Instructor Líder</label>
-      <select id="id_instructor_lider" name="id_instructor_lider">
-        <option value="">Sin instructor líder</option>
-        {% for instructor in instructores %}
-        <option value="{{ instructor.id_usuario }}">{{ instructor.nombre }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-actions">
-      <button type="submit">Crear Ficha</button>
-    </div>
-  </form>
+  </div>
 </div>
 {% endblock %}
 

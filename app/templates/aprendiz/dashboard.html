@@ -6,16 +6,18 @@
 
 {% block content %}
 <div class="aprendiz-panel">
-  <h2>Panel de Aprendiz</h2>
+  <h2><i class="fas fa-user-graduate"></i> Panel de Aprendiz</h2>
+  <div class="separador-panel"></div>
   <div class="solicitudes-section">
-    <h3>Mis Solicitudes</h3>
+    <h3><i class="fas fa-list-alt"></i> Mis Solicitudes</h3>
+    <div class="table-container">
     <table class="solicitudes-table">
       <thead>
         <tr>
-          <th>Tipo de Salida</th>
-          <th>Hora Estimada</th>
-          <th>Motivo</th>
-          <th>Estado</th>
+            <th><i class="fas fa-sign-out-alt"></i> Tipo de Salida</th>
+            <th><i class="fas fa-clock"></i> Hora Estimada</th>
+            <th><i class="fas fa-comment-alt"></i> Motivo</th>
+            <th><i class="fas fa-info-circle"></i> Estado</th>
         </tr>
       </thead>
       <tbody>
@@ -30,33 +32,44 @@
       </tbody>
     </table>
   </div>
+  </div>
+  <div class="separador-panel"></div>
   <div class="nueva-solicitud-section">
-    <h3>Nueva Solicitud</h3>
+    <h3><i class="fas fa-plus-circle"></i> Nueva Solicitud</h3>
     <form action="{{ url_for('main.nueva_solicitud') }}" method="post" class="nueva-solicitud-form">
       <div class="form-group">
-        <label for="tipo_salida">Tipo de Salida</label>
+        <label for="tipo_salida"><i class="fas fa-sign-out-alt"></i> Tipo de Salida</label>
+        {% if tipos_salida and tipos_salida|length > 0 %}
         <select name="tipo_salida" id="tipo_salida" required>
           {% for tipo in tipos_salida %}
           <option value="{{ tipo.id_tipo }}">{{ tipo.nombre }}</option>
           {% endfor %}
         </select>
+        {% else %}
+          <div style="color: #c00; font-weight: bold;">No hay tipos de salida configurados.</div>
+        {% endif %}
       </div>
       <div class="form-group">
-        <label for="hora_salida">Hora de Salida</label>
+        <label for="hora_salida"><i class="fas fa-clock"></i> Hora de Salida</label>
         <input type="time" name="hora_salida" id="hora_salida" required>
       </div>
       <div class="form-group">
-        <label for="hora_reingreso">Hora de Reingreso (opcional)</label>
+        <label for="hora_reingreso"><i class="fas fa-door-open"></i> Hora de Reingreso (opcional)</label>
         <input type="time" name="hora_reingreso" id="hora_reingreso">
       </div>
       <div class="form-group">
-        <label for="motivo">Motivo</label>
+        <label for="motivo"><i class="fas fa-comment-alt"></i> Motivo</label>
         <input type="text" name="motivo" id="motivo" required>
       </div>
       <div class="form-actions">
-        <button type="submit">Enviar Solicitud</button>
+        <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Solicitud</button>
       </div>
     </form>
   </div>
 </div>
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/aprendiz/dashboard.js') }}"></script>
+{% endblock %}
+
 {% endblock %} 
