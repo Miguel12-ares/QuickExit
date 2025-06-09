@@ -1,106 +1,250 @@
 /* Estilos para el dashboard de aprendiz */
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+  font-family: 'Work Sans', Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
 .aprendiz-panel {
-  max-width: 900px;
-  margin: 40px auto 0 auto;
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 16px rgba(46,125,50,0.07);
-  padding: 32px 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(34, 139, 34, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin: 5rem auto 0 auto;
+  max-width: 1100px;
+  animation: zoomIn 1.2s cubic-bezier(.4,0,.2,1);
 }
-.aprendiz-panel h2 {
-  color: #2e7d32;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 18px;
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.aprendiz-panel h1,
+.aprendiz-panel > h2,
+.aprendiz-panel > .section-title {
   text-align: center;
+  margin-bottom: 1.5rem;
 }
+
+.aprendiz-panel h2 {
+  color: #388e3c;
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.aprendiz-panel h2 i {
+  font-size: 1.1em;
+}
+
+.aprendiz-panel .seccion-solicitudes,
+.aprendiz-panel .seccion-nueva-solicitud {
+  margin-bottom: 4rem;
+}
+
 .solicitudes-section {
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
+
 .solicitudes-section h3,
 .nueva-solicitud-section h3 {
   color: #388e3c;
   font-size: 1.2rem;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: unset;
+  gap: 1.1rem;
 }
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
 .solicitudes-table {
   width: 100%;
-  border-collapse: collapse;
-  background: #f7faf7;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 18px;
-}
-.solicitudes-table th, .solicitudes-table td {
-  padding: 12px 10px;
-  text-align: left;
-}
-.solicitudes-table th {
-  background: #43a047;
-  color: #fff;
-  font-weight: 600;
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 1rem;
-}
-.solicitudes-table tr:nth-child(even) {
-  background: #f1f8e9;
-}
-.solicitudes-table tr:nth-child(odd) {
   background: #fff;
 }
+
+.solicitudes-table th {
+  background: #4CAF50;
+  color: #fff;
+  font-weight: 700;
+  padding: 1rem;
+  text-align: left;
+  white-space: nowrap;
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.solicitudes-table th:last-child {
+  border-right: none;
+}
+
+.solicitudes-table th i {
+  margin-right: 0.5rem;
+  font-size: 1.1em;
+}
+
+.solicitudes-table tr:nth-child(even) {
+  background: #f6fef7;
+}
+
 .solicitudes-table td {
-  font-size: 1rem;
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #e8f5e9;
+  border-right: 2px solid #e8f5e9;
   color: #333;
 }
-.nueva-solicitud-section {
-  margin-top: 40px;
+
+.solicitudes-table td:last-child {
+  border-right: none;
 }
+
+.nueva-solicitud-section {
+  margin-top: 2.5rem;
+}
+
 .nueva-solicitud-form {
   max-width: 500px;
   margin: 0 auto;
   background: #f7faf7;
-  border-radius: 10px;
-  padding: 24px 18px;
-  box-shadow: 0 1px 6px rgba(46,125,50,0.07);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(46,125,50,0.07);
 }
+
 .form-group {
   margin-bottom: 1.2rem;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease-in-out;
 }
+
 .form-group label {
   font-weight: 500;
   color: #495057;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
+
 .form-group input,
 .form-group select {
-  border-radius: 0.375rem;
-  border: 1px solid #ced4da;
-  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1.5px solid #a5d6a7;
+  padding: 0.8rem 1rem;
   font-size: 1rem;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: 'Work Sans', Arial, sans-serif;
 }
+
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #43a047;
+  border-color: #388e3c;
   outline: none;
+  box-shadow: 0 0 6px #a5d6a7;
 }
+
 .form-actions {
   display: flex;
   justify-content: center;
   margin-top: 1.5rem;
 }
+
 .form-actions button {
-  background: #43a047;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 28px;
-  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
   font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  outline: none;
   cursor: pointer;
-  transition: background 0.2s;
+  background: #4CAF50;
+  color: #fff;
+  transition: background 0.25s, box-shadow 0.25s, transform 0.18s;
+  font-family: 'Work Sans', Arial, sans-serif;
+  letter-spacing: 0.5px;
+  gap: 0.5rem;
 }
+
 .form-actions button:hover {
-  background: #2e7d32;
+  background: #388E3C;
+  box-shadow: 0 4px 12px rgba(76,175,80,0.15);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1300px) {
+  .aprendiz-panel {
+    max-width: 98vw;
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .aprendiz-panel {
+    padding: 1.2rem 1rem;
+  }
+  
+  .solicitudes-table th, 
+  .solicitudes-table td {
+    padding: 0.8rem 0.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .nueva-solicitud-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .form-actions button {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .aprendiz-panel .seccion-solicitudes,
+  .aprendiz-panel .seccion-nueva-solicitud {
+    margin-bottom: 5.5rem;
+  }
+  .aprendiz-panel h1,
+  .aprendiz-panel > h2,
+  .aprendiz-panel > .section-title {
+    margin-bottom: 1.2rem;
+  }
+}
+
+.aprendiz-panel > h1 {
+  margin-bottom: 2.8rem !important;
+}
+
+.separador-panel {
+  height: 2rem;
+  width: 100%;
+  display: block;
 } 
