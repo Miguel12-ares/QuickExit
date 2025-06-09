@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block extra_css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/instructor.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/panel.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 {% block content %}
 <div class="instructor-panel">
-  <h2>Solicitudes Pendientes</h2>
-  <div class="instructor-card" style="max-width:900px;margin:auto;">
-    <h3 style="color:#2e7d32;">Solicitudes Pendientes</h3>
+  <h2><i class="fas fa-clipboard-list"></i> Solicitudes Pendientes</h2>
+  <div class="instructor-card">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
@@ -14,16 +14,16 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
-    <div class="table-responsive">
+    <div class="table-container">
       <table class="instructor-table">
         <thead>
           <tr>
-            <th>Aprendiz</th>
-            <th>Tipo de Salida</th>
-            <th>Hora Salida</th>
-            <th>Hora Reingreso</th>
-            <th>Motivo</th>
-            <th>Acciones</th>
+            <th><i class="fas fa-user"></i> Aprendiz</th>
+            <th><i class="fas fa-door-open"></i> Tipo de Salida</th>
+            <th><i class="fas fa-clock"></i> Hora Salida</th>
+            <th><i class="fas fa-clock"></i> Hora Reingreso</th>
+            <th><i class="fas fa-align-left"></i> Motivo</th>
+            <th><i class="fas fa-cogs"></i> Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -34,20 +34,25 @@
             <td>{{ solicitud.hora_salida_estimada.strftime('%H:%M') }}</td>
             <td>{{ solicitud.hora_reingreso_estimada.strftime('%H:%M') if solicitud.hora_reingreso_estimada else 'N/A' }}</td>
             <td>{{ solicitud.motivo }}</td>
-            <td>
-              <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="POST" style="display:inline-block;">
-                <button type="submit" class="btn-aprobar">Aprobar</button>
-              </form>
-              <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="POST" style="display:inline-block;">
-                <button type="submit" class="btn-rechazar">Rechazar</button>
-              </form>
+            <td class="actions-cell">
+              <div class="form-actions">
+                <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="POST">
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Aprobar</button>
+                </form>
+                <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="POST">
+                  <button type="submit" class="btn btn-secondary"><i class="fas fa-times"></i> Rechazar</button>
+                </form>
+              </div>
             </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
       {% if not pendientes or pendientes|length == 0 %}
-        <div style="text-align:center; color:#888; margin-top:24px; font-size:1.1rem;">No hay solicitudes pendientes.</div>
+        <div class="empty-state">
+          <i class="fas fa-inbox"></i>
+          <p>No hay solicitudes pendientes.</p>
+        </div>
       {% endif %}
     </div>
   </div>
