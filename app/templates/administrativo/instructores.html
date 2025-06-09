@@ -2,33 +2,52 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/instructores.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="instructores-panel">
-  <h2>Gestionar Instructores</h2>
-  <form id="buscador-instructores" class="mb-3 d-flex flex-wrap" autocomplete="off" style="gap:10px;">
-    <input type="text" name="buscar_id" class="form-control" placeholder="ID usuario" style="width:120px;">
-    <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre" style="width:180px;">
-    <input type="text" name="buscar_email" class="form-control" placeholder="Email" style="width:200px;">
-    <button type="button" id="btn-buscar-inst" class="btn btn-primary">Buscar</button>
-    <button type="button" id="btn-limpiar-inst" class="btn btn-secondary">Limpiar</button>
+  <h2><i class="fas fa-users-cog"></i> Gestionar Instructores</h2>
+  
+  <form id="buscador-instructores" class="search-form" autocomplete="off">
+    <div class="input-group">
+      <span class="input-icon"><i class="fas fa-hashtag"></i></span>
+      <input type="text" name="buscar_id" placeholder="ID usuario">
+    </div>
+    <div class="input-group">
+      <span class="input-icon"><i class="fas fa-user"></i></span>
+      <input type="text" name="buscar_nombre" placeholder="Nombre">
+    </div>
+    <div class="input-group">
+      <span class="input-icon"><i class="fas fa-envelope"></i></span>
+      <input type="text" name="buscar_email" placeholder="Email">
+    </div>
+    <div class="form-actions">
+      <button type="button" id="btn-buscar-inst" class="btn btn-primary">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+      <button type="button" id="btn-limpiar-inst" class="btn btn-secondary">
+        <i class="fas fa-eraser"></i> Limpiar
+      </button>
+    </div>
   </form>
 
+  <div class="table-container">
   <table class="instructores-table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Ficha</th>
-        <th>Estado</th>
+          <th><i class="fas fa-hashtag"></i> ID</th>
+          <th><i class="fas fa-user"></i> Nombre</th>
+          <th><i class="fas fa-envelope"></i> Email</th>
+          <th><i class="fas fa-file-alt"></i> Ficha</th>
+          <th><i class="fas fa-toggle-on"></i> Estado</th>
       </tr>
     </thead>
     <tbody>
       <!-- llenado JS -->
     </tbody>
   </table>
+  </div>
 </div>
 {% endblock %}
 

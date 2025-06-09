@@ -2,33 +2,47 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/administrar.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 {% endblock %}
 
 {% block content %}
 <div class="fichas-panel">
-  <h2>Administrar Fichas</h2>
-  <form id="buscador-fichas" class="mb-3 d-flex flex-wrap" autocomplete="off" style="gap:10px;">
-    <input type="text" name="buscar_id" class="form-control" placeholder="ID de ficha" style="width:150px;">
-    <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre de ficha" style="width:180px;">
-    <input type="text" name="buscar_instructor" class="form-control" placeholder="Instructor líder" style="width:180px;">
-    <button type="button" id="btn-buscar" class="btn btn-primary">Buscar</button>
-    <button type="button" id="btn-limpiar" class="btn btn-secondary">Limpiar</button>
+  <h2><i class="fas fa-file-alt"></i> Administrar Fichas</h2>
+  <form id="buscador-fichas" class="search-form" autocomplete="off">
+    <div class="input-group">
+      <span class="input-icon"><i class="fas fa-hashtag"></i></span>
+      <input type="text" name="buscar_id" placeholder="ID de ficha">
+    </div>
+    <div class="input-group">
+      <span class="input-icon"><i class="fas fa-file-signature"></i></span>
+      <input type="text" name="buscar_nombre" placeholder="Nombre de ficha">
+    </div>
+    <div class="input-group">
+      <span class="input-icon"><i class="fas fa-user-tie"></i></span>
+      <input type="text" name="buscar_instructor" placeholder="Instructor líder">
+    </div>
+    <div class="form-actions">
+      <button type="button" id="btn-buscar" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+      <button type="button" id="btn-limpiar" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpiar</button>
+    </div>
   </form>
-  <table class="fichas-table">
-    <thead>
-      <tr>
-        <th>ID Ficha</th>
-        <th>Nombre</th>
-        <th>Instructor Líder</th>
-        <th>Fecha de Creación</th>
-        <th>Estado</th>
-        <th>Observaciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- El cuerpo de la tabla será llenado por JavaScript -->
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table class="fichas-table">
+      <thead>
+        <tr>
+          <th><i class="fas fa-hashtag"></i> ID Ficha</th>
+          <th><i class="fas fa-file-signature"></i> Nombre</th>
+          <th><i class="fas fa-user-tie"></i> Instructor Líder</th>
+          <th><i class="fas fa-calendar-alt"></i> Fecha de Creación</th>
+          <th><i class="fas fa-toggle-on"></i> Estado</th>
+          <th><i class="fas fa-comment-alt"></i> Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- El cuerpo de la tabla será llenado por JavaScript -->
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}
 

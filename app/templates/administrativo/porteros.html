@@ -1,33 +1,54 @@
 {% extends "base.html" %}
 
+{% block title %}Gestionar Porteros - QuickExit{% endblock %}
+
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/porteros.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="porteros-panel">
-  <h2>Gestionar Porteros</h2>
-  <form id="buscador-porteros" class="mb-3 d-flex flex-wrap" autocomplete="off" style="gap:10px;">
-    <input type="text" name="buscar_identificacion" class="form-control" placeholder="Identificación" style="width:150px;">
-    <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre" style="width:180px;">
-    <input type="text" name="buscar_email" class="form-control" placeholder="Email" style="width:200px;">
-    <button type="button" id="btn-buscar-port" class="btn btn-primary">Buscar</button>
-    <button type="button" id="btn-limpiar-port" class="btn btn-secondary">Limpiar</button>
+  <h2><i class="fas fa-user-shield"></i> Gestionar Porteros</h2>
+  
+  <form id="buscador-porteros" class="search-form">
+    <div class="input-group">
+      <i class="fas fa-id-card input-icon"></i>
+      <input type="text" name="buscar_identificacion" placeholder="Identificación">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-user input-icon"></i>
+      <input type="text" name="buscar_nombre" placeholder="Nombre">
+    </div>
+    <div class="input-group">
+      <i class="fas fa-envelope input-icon"></i>
+      <input type="text" name="buscar_email" placeholder="Email">
+    </div>
+    <div class="form-actions">
+      <button type="button" id="btn-buscar-port" class="btn btn-primary">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+      <button type="button" id="btn-limpiar-port" class="btn btn-secondary">
+        <i class="fas fa-eraser"></i> Limpiar
+      </button>
+    </div>
   </form>
 
-  <table class="porteros-table">
-    <thead>
-      <tr>
-        <th>Identificación</th>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- llenado JS -->
-    </tbody>
-  </table>
+  <div class="table-container">
+    <table class="porteros-table">
+      <thead>
+        <tr>
+          <th><i class="fas fa-id-card"></i> Identificación</th>
+          <th><i class="fas fa-user"></i> Nombre</th>
+          <th><i class="fas fa-envelope"></i> Email</th>
+          <th><i class="fas fa-toggle-on"></i> Estado</th>
+          <th><i class="fas fa-cogs"></i> Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- llenado JS -->
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}
 

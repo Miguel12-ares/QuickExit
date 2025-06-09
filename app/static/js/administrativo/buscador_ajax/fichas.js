@@ -31,10 +31,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         <form method="POST" class="estado-form">
                             <input type="hidden" name="id_ficha" value="${ficha.id_ficha}">
                             <select name="nuevo_estado" class="estado-select">
-                                <option value="activa" ${ficha.habilitada ? 'selected' : ''}>Activa</option>
-                                <option value="deshabilitada" ${!ficha.habilitada ? 'selected' : ''}>Deshabilitada</option>
+                                <option value="activa" ${ficha.habilitada ? 'selected' : ''}>
+                                    <i class="fas fa-check-circle"></i> Activa
+                                </option>
+                                <option value="deshabilitada" ${!ficha.habilitada ? 'selected' : ''}>
+                                    <i class="fas fa-times-circle"></i> Deshabilitada
+                                </option>
                             </select>
-                            <button type="submit" class="btn-estado">Guardar</button>
+                            <button type="submit" class="btn-estado">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
                         </form>
                     </td>
                     <td>${ficha.descripcion}</td>
@@ -58,22 +64,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Buscar al escribir con keyup 
-    [inputBuscar, inputNombre, inputInstructor].forEach(el => {
-        el.addEventListener('keyup', debounceBuscarFichas);
-        el.addEventListener('keydown', function(e){
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                buscarFichas();
-            }
-        });
-    });
-
-    // Buscar al hacer click en el botón
-    btnBuscar.addEventListener('click', function() {
-        buscarFichas();
-    });
-
+    // Event listeners
+    inputBuscar.addEventListener('input', debounceBuscarFichas);
+    inputNombre.addEventListener('input', debounceBuscarFichas);
+    inputInstructor.addEventListener('input', debounceBuscarFichas);
+    
+    btnBuscar.addEventListener('click', buscarFichas);
     btnLimpiar.addEventListener('click', function() {
         inputBuscar.value = '';
         inputNombre.value = '';
@@ -81,6 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
         buscarFichas();
     });
 
-    // Al cargar la página, mostrar todas las fichas
+    // Búsqueda inicial
     buscarFichas();
 });
