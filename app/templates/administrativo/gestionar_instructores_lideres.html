@@ -4,6 +4,26 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/gestionar_instructores_lideres.css') }}">
+  <!-- Asegurar que Font Awesome se cargue correctamente -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Meta tags para rutas -->
+  <meta name="route-asignar" content="{{ url_for('main.asignar_instructor_lider', id_ficha=0) }}">
+  <meta name="route-remover" content="{{ url_for('main.remover_instructor_lider', id_ficha=0) }}">
+  <script>
+    // Procesar las rutas para reemplazar el ID de ficha con un placeholder
+    document.addEventListener('DOMContentLoaded', function() {
+      const metaAsignar = document.querySelector('meta[name="route-asignar"]');
+      const metaRemover = document.querySelector('meta[name="route-remover"]');
+      
+      if (metaAsignar) {
+        metaAsignar.content = metaAsignar.content.replace('/0', '/');
+      }
+      
+      if (metaRemover) {
+        metaRemover.content = metaRemover.content.replace('/0', '/');
+      }
+    });
+  </script>
 {% endblock %}
 
 {% block content %}
@@ -58,9 +78,9 @@
             {% endif %}
           </td>
           <td>
-            <div style="margin-bottom: 6px;">
+            <div style="margin-bottom: 6px;" class="botones-container">
               {% if ficha.instructor_lider %}
-                <button type="button" class="btn-lider" onclick="document.getElementById('modal-{{ ficha.id_ficha }}').style.display='block'">
+                <button type="button" class="btn-lider" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('modal-{{ ficha.id_ficha }}'); modal.classList.remove('closing'); modal.style.display='block'">
                   <i class="fas fa-exchange-alt"></i> Cambiar Instructor
                 </button>
                 <form action="{{ url_for('main.remover_instructor_lider', id_ficha=ficha.id_ficha) }}" method="POST" style="display:inline-block;">
@@ -69,7 +89,7 @@
                   </button>
                 </form>
               {% else %}
-                <button type="button" class="btn-asignar" onclick="document.getElementById('modal-{{ ficha.id_ficha }}').style.display='block'">
+                <button type="button" class="btn-asignar" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('modal-{{ ficha.id_ficha }}'); modal.classList.remove('closing'); modal.style.display='block'">
                   <i class="fas fa-user-plus"></i> Asignar Instructor
                 </button>
               {% endif %}
@@ -77,7 +97,7 @@
             <!-- Modal de asignación -->
             <div id="modal-{{ ficha.id_ficha }}" class="asignar-modal" style="display:none;">
               <form action="{{ url_for('main.asignar_instructor_lider', id_ficha=ficha.id_ficha) }}" method="POST">
-                <div style="font-weight:600;margin-bottom:6px;">
+                <div class="modal-title">
                   <i class="fas fa-user-plus"></i> Asignar Instructor Líder - {{ ficha.nombre }}
                 </div>
                 <select name="id_instructor" required class="form-control">
@@ -86,8 +106,8 @@
                   <option value="{{ instructor.id_usuario }}" {% if ficha.instructor_lider and ficha.instructor_lider.id_usuario == instructor.id_usuario %}selected{% endif %}>{{ instructor.nombre }}</option>
                   {% endfor %}
                 </select>
-                <div class="form-actions" style="margin-top: 1rem;">
-                  <button type="button" class="btn-cancelar" onclick="document.getElementById('modal-{{ ficha.id_ficha }}').style.display='none'">
+                <div class="form-actions" style="margin-top: 1rem; text-align: center; display: flex; justify-content: center;">
+                  <button type="button" class="btn-cancelar" onclick="event.preventDefault(); cerrarModal('modal-{{ ficha.id_ficha }}')">
                     <i class="fas fa-times"></i> Cancelar
                   </button>
                   <button type="submit" class="btn-asignar">
@@ -104,11 +124,38 @@
   </div>
 </div>
 <script>
+  // Función para cerrar modales con animación
+  function cerrarModal(modalId) {
+    const modal = document.getElementById(modalId);
+    const botonesContainer = modal.parentNode.querySelector('.botones-container');
+    
+    modal.classList.add('closing');
+    
+    setTimeout(() => {
+      modal.style.display = 'none';
+      modal.classList.remove('closing');
+      if (botonesContainer) {
+        botonesContainer.style.display = 'flex';
+      }
+    }, 300); // Tiempo igual a la duración de la animación
+  }
+
   // Cierra todos los modales al hacer clic fuera
   document.addEventListener('click', function(e) {
     document.querySelectorAll('.asignar-modal').forEach(function(modal) {
-      if (!modal.contains(e.target) && e.target.type !== 'button') {
-        modal.style.display = 'none';
+      if (modal.style.display === 'block' && !modal.contains(e.target) && e.target.type !== 'button') {
+        // Cerrar con animación
+        modal.classList.add('closing');
+        
+        setTimeout(() => {
+          modal.style.display = 'none';
+          modal.classList.remove('closing');
+          // Mostrar los botones nuevamente
+          const botonesContainer = modal.parentNode.querySelector('.botones-container');
+          if (botonesContainer) {
+            botonesContainer.style.display = 'flex';
+          }
+        }, 300);
       }
     });
   });
