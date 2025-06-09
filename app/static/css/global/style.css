@@ -94,23 +94,39 @@ body::-webkit-scrollbar{
 /* Botón hamburguesa */
 .hamburger {
   display: none;
-  background: none;
+  background: rgba(255, 255, 255, 0.1);
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 8px;
   z-index: 2000;
   position: relative;
   transition: transform 0.3s ease;
+  width: 44px;
+  height: 44px;
+  outline: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: 4px;
+}
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hamburger:focus {
+  outline: none;
 }
 
 .hamburger span {
   display: block;
-  width: 24px;
-  height: 2px;
+  width: 28px;
+  height: 3px;
   background: #fff;
-  margin: 5px 0;
+  margin: 5px auto;
   transition: all 0.3s ease;
-  border-radius: 2px;
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .hamburger.active span:nth-child(1) {
@@ -123,6 +139,13 @@ body::-webkit-scrollbar{
 
 .hamburger.active span:nth-child(3) {
   transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Estilo para asegurar que el botón hamburguesa sea visible en móviles */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block !important;
+  }
 }
 
 /* Menú lateral (sidebar) */
@@ -140,6 +163,7 @@ body::-webkit-scrollbar{
   transition: right 0.3s ease;
   max-height: calc(100vh - 60px);
   overflow-y: auto;
+  height: auto;
 }
 
 .sidebar.active {
@@ -193,12 +217,12 @@ main {
 
 /* Responsivo */
 @media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+  
   .desktop-nav {
     display: none;
-  }
-
-  .hamburger {
-    display: block;
   }
 
   .logo a {
@@ -212,6 +236,16 @@ main {
 
   main {
     padding: 15px;
+    max-width: 100%;
+  }
+  
+  body.menu-open {
+    overflow: hidden;
+  }
+  
+  .sidebar {
+    width: 280px;
+    padding: 1.2rem;
   }
 }
 
@@ -233,8 +267,19 @@ main {
   .sidebar {
     width: 100%;
     border-radius: 0;
+    padding: 1rem;
   }
+  
+  .hamburger {
+    width: 40px;
+    height: 40px;
+    padding: 6px;
   }
+  
+  .hamburger span {
+    width: 24px;
+  }
+}
 
 /* Overlay para el menú móvil */
 .overlay {
@@ -248,9 +293,11 @@ main {
   z-index: 998;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
 .overlay.active {
   display: block;
   opacity: 1;
+  pointer-events: auto;
 }
