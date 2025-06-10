@@ -30,32 +30,44 @@
   <header>
     <div class="navbar">
       <div class="logo">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SENA - QuickExit">
-        <a href="{{ url_for('main.dashboard') }}">QuickExit</a>
+        <a href="{% if current_user.is_authenticated %}{{ url_for('main.dashboard') }}{% else %}/{% endif %}">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo SENA - QuickExit">
+          QuickExit
+        </a>
       </div>
-      <nav class="desktop-nav">
-        <ul>
-          <li><a href="{{ url_for('main.dashboard') }}"><i class="fas fa-home"></i> Inicio</a></li>
-          {% if current_user.is_authenticated %}
-            {% if current_user.rol in ['admin', 'administrativo'] %}
-              <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
-              <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
-            {% elif current_user.rol == 'instructor' %}
-              <li><a href="{{ url_for('main.instructor_dashboard') }}"><i class="fas fa-chalkboard-teacher"></i> Panel Instructor</a></li>
-              <li><a href="{{ url_for('main.validar_aprendices') }}"><i class="fas fa-user-graduate"></i> Gestionar Aprendices</a></li>
+      <div class="navbar-right">
+        <nav class="desktop-nav">
+          <ul>
+            <li><a href="/"><i class="fas fa-home"></i> Inicio</a></li>
+            {% if current_user.is_authenticated %}
+              {% if current_user.rol in ['admin', 'administrativo'] %}
+                <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
+                <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
+              {% elif current_user.rol == 'instructor' %}
+                <li><a href="{{ url_for('main.instructor_dashboard') }}"><i class="fas fa-chalkboard-teacher"></i> Panel Instructor</a></li>
+                <li><a href="{{ url_for('main.validar_aprendices') }}"><i class="fas fa-user-graduate"></i> Gestionar Aprendices</a></li>
+              {% endif %}
+              <li><a href="{{ url_for('main.logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+            {% else %}
+              <li><a href="{{ url_for('main.login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a></li>
+              <li><a href="{{ url_for('main.register') }}"><i class="fas fa-user-plus"></i> Registrarse</a></li>
             {% endif %}
-            <li><a href="{{ url_for('main.logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-          {% else %}
-            <li><a href="{{ url_for('main.login') }}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a></li>
-            <li><a href="{{ url_for('main.register') }}"><i class="fas fa-user-plus"></i> Registrarse</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-      <button class="hamburger" id="hamburger" aria-label="Menú">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+          </ul>
+        </nav>
+        {% if current_user.is_authenticated %}
+        <div class="user-info-header">
+          <a href="{{ url_for('main.mi_cuenta') }}">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <span class="user-name">{{ current_user.nombre }}</span>
+          </a>
+        </div>
+        {% endif %}
+        <button class="hamburger" id="hamburger" aria-label="Menú">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
     </div>
   </header>
   <div class="overlay" id="overlay"></div>

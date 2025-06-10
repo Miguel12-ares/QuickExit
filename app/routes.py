@@ -726,3 +726,37 @@ def api_buscar_fichas_lideres():
             'id_instructor_lider': ficha.id_instructor_lider
         })
     return jsonify({'fichas': result})
+
+# ------------------------------------------
+# Página Mi Cuenta
+# ------------------------------------------
+@main.route('/cuenta', methods=['GET', 'POST'])
+@login_required
+def mi_cuenta():
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip().lower()
+        current_password = request.form.get('current_password', '').strip()
+        password = request.form.get('password', '').strip()
+        cambios = False
+
+        # Verificar la contraseña actual
+        if not bcrypt.check_password_hash(current_user.password_hash, current_password):
+            flash('La contraseña actual es incorrecta.', 'danger')
+            return redirect(url_for('main.mi_cuenta'))
+
+        if email and email != current_user.email:
+            if Usuario.query.filter(Usuario.email == email, Usuario.id_usuario != current_user.id_usuario).first():
+                flash('El correo electrónico ya está en uso.', 'danger')
+            else:
+                current_user.email = email
+                cambios = True
+        if password:
+            current_user.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+            cambios = True
+        if cambios:
+            db.session.commit()
+            flash('Datos actualizados correctamente.', 'success')
+        else:
+            flash('No se realizaron cambios.', 'info')
+        return redirect(url_for('main.mi_cuenta'))
+    return render_template('cuenta/mi_cuenta.html', usuario=current_user)

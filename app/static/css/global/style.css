@@ -71,6 +71,7 @@ body::-webkit-scrollbar{
   margin: 0;
   padding: 0;
   gap: 1rem;
+  align-items: center;
 }
 
 .desktop-nav ul li a {
@@ -300,4 +301,40 @@ main {
   display: block;
   opacity: 1;
   pointer-events: auto;
+}
+
+.user-info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1.5rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+  text-decoration: none;
+}
+
+.user-info-header .fa-user-circle {
+  color: #fff;
+}
+
+.user-info-header .user-name {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .user-info-header {
+    display: none;
+  }
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 1.5rem;
 }
