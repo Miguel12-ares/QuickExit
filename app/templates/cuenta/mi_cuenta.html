@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Mi Cuenta{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/global/cuenta/mi_cuenta.css') }}">
+{% endblock %}
+{% block content %}
+<div class="account-container">
+    <div class="account-card">
+        <div class="account-header">
+            <i class="fas fa-user-circle"></i>
+            <h4>Mi Cuenta</h4>
+        </div>
+        <div class="account-body">
+            <form method="POST" autocomplete="off">
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Documento</label>
+                    <input type="text" class="form-input" value="{{ usuario.documento }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nombre</label>
+                    <input type="text" class="form-input" value="{{ usuario.nombre }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Correo electrónico</label>
+                    <input type="email" class="form-input" name="email" value="{{ usuario.email }}" required>
+                </div>
+                
+                {% if usuario.ficha %}
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> Ficha</label>
+                    <input type="text" class="form-input" value="{{ usuario.ficha.nombre }}" readonly>
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Contraseña actual</label>
+                    <input type="password" class="form-input" name="current_password" placeholder="Se requiere al hacer cambios" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> Nueva contraseña</label>
+                    <input type="password" class="form-input" name="password" placeholder="Dejar en blanco para no cambiar">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn-save"><i class="fas fa-save"></i> Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 
