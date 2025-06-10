@@ -18,6 +18,8 @@ def home():
 # ------------------------------------------
 @main.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
     fichas = Ficha.query.all()  # Obtener todas las fichas (solo para aprendices)
 
     if request.method == 'POST':
@@ -81,6 +83,8 @@ def register():
 # ------------------------------------------
 @main.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '').strip()
