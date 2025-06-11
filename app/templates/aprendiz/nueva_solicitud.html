@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aprendiz/nueva_solicitud.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3><i class="fas fa-plus-circle"></i> Nueva Solicitud de Salida</h3>
+            <a href="{{ url_for('main.aprendiz_dashboard') }}" class="btn-back"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a>
+        </div>
+        <div class="panel-body">
+            <form action="{{ url_for('main.aprendiz_nueva_solicitud') }}" method="post" class="form-nueva-solicitud">
+                <div class="form-group">
+                    <label for="tipo_salida"><i class="fas fa-tag"></i> Tipo de Salida</label>
+                    {% if tipos_salida and tipos_salida|length > 0 %}
+                    <select name="tipo_salida" id="tipo_salida" required>
+                        {% for tipo in tipos_salida %}
+                        <option value="{{ tipo.id_tipo }}">{{ tipo.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    {% else %}
+                        <div class="alert alert-warning">No hay tipos de salida configurados. Contacte al administrador.</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="hora_salida"><i class="fas fa-clock"></i> Hora de Salida Estimada</label>
+                    <input type="time" name="hora_salida" id="hora_salida" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="hora_reingreso"><i class="fas fa-redo"></i> Hora de Reingreso Estimada (Opcional)</label>
+                    <input type="time" name="hora_reingreso" id="hora_reingreso" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="motivo_predeterminado"><i class="fas fa-list-ul"></i> Motivo Principal</label>
+                    <select name="motivo_predeterminado" id="motivo_predeterminado" class="form-control" required>
+                        <option value="">Seleccione un motivo</option>
+                        <option value="Cita/Incapacidad Médica">Cita/Incapacidad Médica</option>
+                        <option value="Diligencias Electorales/Gubernamentales">Diligencias Electorales/Gubernamentales</option>
+                        <option value="Trámites Etapa Productiva">Trámites Etapa Productiva</option>
+                        <option value="Requerimientos Laborales">Requerimientos Laborales</option>
+                        <option value="Casos Fortuitos/Fuerza Mayor">Casos Fortuitos/Fuerza Mayor</option>
+                        <option value="Representación SENA (Académica/Cultural/Deportiva)">Representación SENA (Académica/Cultural/Deportiva)</option>
+                        <option value="Diligencias Judiciales">Diligencias Judiciales</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group" id="motivo_especificacion_group" style="display: none;">
+                    <label for="motivo_especificacion"><i class="fas fa-pencil-alt"></i> Especificar Motivo</label>
+                    <textarea name="motivo_especificacion" id="motivo_especificacion" class="form-control" rows="4"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar Solicitud</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{{ url_for('static', filename='js/aprendiz/nueva_solicitud.js') }}"></script>
+{% endblock %}

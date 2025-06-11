@@ -300,9 +300,7 @@ def instructor_historial():
 @login_required
 def dashboard():
     if current_user.rol.value == 'aprendiz':
-        solicitudes = Solicitud.query.filter_by(id_aprendiz=current_user.id_usuario).all()
-        tipos_salida = TipoSalida.query.all()
-        return render_template('aprendiz/dashboard.html', solicitudes=solicitudes, tipos_salida=tipos_salida)
+        return redirect(url_for('main.aprendiz_dashboard'))
     elif current_user.rol.value == 'instructor':
         return redirect(url_for('main.instructor_dashboard'))
     elif current_user.rol.value in ['administrativo', 'admin']:
@@ -314,27 +312,49 @@ def dashboard():
         return redirect(url_for('main.logout'))
 
 # ------------------------------------------
-# Nueva Solicitud de Salida (POST)
+# Área del Aprendiz
 # ------------------------------------------
-@main.route('/nueva_solicitud', methods=['POST'])
+@main.route('/aprendiz/dashboard')
 @login_required
-def nueva_solicitud():
+def aprendiz_dashboard():
     if current_user.rol.value != 'aprendiz':
         flash('Acceso no autorizado', 'danger')
         return redirect(url_for('main.dashboard'))
+    return render_template('aprendiz/dashboard.html')
+
+@main.route('/aprendiz/nueva_solicitud', methods=['GET', 'POST'])
+@login_required
+def aprendiz_nueva_solicitud():
+    if current_user.rol.value != 'aprendiz':
+        flash('Acceso no autorizado', 'danger')
+        return redirect(url_for('main.dashboard'))
+
+    tipos_salida = TipoSalida.query.all()
+
+    if request.method == 'POST':
+        nueva_solicitud_obj = Solicitud(
+            id_aprendiz=current_user.id_usuario,
+            id_tipo_salida=request.form.get('tipo_salida'),
+            hora_salida_estimada=request.form.get('hora_salida'),
+            hora_reingreso_estimada=request.form.get('hora_reingreso'),
+            motivo=request.form.get('motivo'),
+            estado=EstadoSolicitud.pendiente
+        )
+        db.session.add(nueva_solicitud_obj)
+        db.session.commit()
+        flash('Solicitud creada exitosamente', 'success')
+        return redirect(url_for('main.aprendiz_dashboard'))
     
-    nueva_solicitud = Solicitud(
-        id_aprendiz=current_user.id_usuario,
-        id_tipo_salida=request.form.get('tipo_salida'),
-        hora_salida_estimada=request.form.get('hora_salida'),
-        hora_reingreso_estimada=request.form.get('hora_reingreso'),
-        motivo=request.form.get('motivo'),
-        estado=EstadoSolicitud.pendiente
-    )
-    db.session.add(nueva_solicitud)
-    db.session.commit()
-    flash('Solicitud creada', 'success')
-    return redirect(url_for('main.dashboard'))
+    return render_template('aprendiz/nueva_solicitud.html', tipos_salida=tipos_salida)
+
+@main.route('/aprendiz/historial')
+@login_required
+def aprendiz_historial():
+    if current_user.rol.value != 'aprendiz':
+        flash('Acceso no autorizado', 'danger')
+        return redirect(url_for('main.dashboard'))
+    solicitudes = Solicitud.query.filter_by(id_aprendiz=current_user.id_usuario).all()
+    return render_template('aprendiz/historial.html', solicitudes=solicitudes)
 
 @main.route('/admin/gestionar_solicitud/<int:id_solicitud>/<accion>', methods=['POST'])
 @login_required
@@ -367,22 +387,32 @@ def porteria_dashboard():
     if current_user.rol.value != 'porteria':
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
+    # Estas variables ya no se usarán directamente aquí, pero se mantienen para referencia
+    # solicitudes_salida = Solicitud.query.filter_by(estado=EstadoSolicitud.aprobada_instructor).all()
+    # solicitudes_reingreso = Solicitud.query.filter_by(estado=EstadoSolicitud.salida_registrada).all()
+    return render_template('porteria/dashboard.html')
 
-    # Mostrar todas las solicitudes aprobadas y pendientes de salida
-    solicitudes_salida = Solicitud.query.filter(
-        Solicitud.estado == EstadoSolicitud.completada,
-        Solicitud.hora_exacta_salida == None
-    ).all()
+@main.route('/porteria/solicitudes_salida')
+@login_required
+def porteria_solicitudes_salida():
+    if current_user.rol.value != 'porteria':
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    solicitudes_salida = Solicitud.query.filter_by(estado=EstadoSolicitud.aprobada).all()
+    return render_template('porteria/registrar_salida.html', solicitudes_salida=solicitudes_salida)
 
-    # Mostrar todas las temporales con salida registrada pero sin reingreso
+@main.route('/porteria/solicitudes_reingreso')
+@login_required
+def porteria_solicitudes_reingreso():
+    if current_user.rol.value != 'porteria':
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
     solicitudes_reingreso = Solicitud.query.filter(
         Solicitud.estado == EstadoSolicitud.completada,
-        Solicitud.hora_exacta_salida != None,
         Solicitud.hora_exacta_reingreso == None,
         Solicitud.tipo_salida.has(nombre='Temporal')
     ).all()
-
-    return render_template('porteria/dashboard.html', solicitudes_salida=solicitudes_salida, solicitudes_reingreso=solicitudes_reingreso)
+    return render_template('porteria/registrar_reingreso.html', solicitudes_reingreso=solicitudes_reingreso)
 
 @main.route('/porteria/registrar_reingreso/<int:id_solicitud>', methods=['POST'])
 @login_required
@@ -737,6 +767,10 @@ def api_buscar_fichas_lideres():
 @main.route('/cuenta', methods=['GET', 'POST'])
 @login_required
 def mi_cuenta():
+    instructor_lider = None
+    if current_user.rol == RolesEnum.aprendiz and current_user.ficha:
+        instructor_lider = current_user.ficha.instructor_lider
+
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
         current_password = request.form.get('current_password', '').strip()
@@ -763,4 +797,4 @@ def mi_cuenta():
         else:
             flash('No se realizaron cambios.', 'info')
         return redirect(url_for('main.mi_cuenta'))
-    return render_template('cuenta/mi_cuenta.html', usuario=current_user)
+    return render_template('cuenta/mi_cuenta.html', usuario=current_user, instructor_lider=instructor_lider)

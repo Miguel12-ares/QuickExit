@@ -1,0 +1,209 @@
+/* Estilos para la página de Historial de Solicitudes */
+body {
+    font-family: 'Work Sans', Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e0e4eb 100%);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Alinea al inicio para dejar espacio en la parte superior */
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo para la tabla */
+    margin-top: 30px; /* Margen superior para separarlo del navbar */
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panel {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.panel-heading {
+    background: linear-gradient(45deg, #4CAF50, #66BB6A);
+    color: #fff;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.panel-heading h3 {
+    margin: 0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.panel-heading h3 i {
+    font-size: 1.2em;
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.panel-body {
+    padding: 2rem;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #555;
+    white-space: nowrap; /* Evita que los encabezados se envuelvan */
+}
+
+.table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e8f5e9; /* Un verde muy suave al pasar el ratón */
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.alert-info {
+    background-color: #e0f2f7;
+    color: #016b8e;
+    border: 1px solid #b3e5fc;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 992px) {
+    .panel-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+    .panel-heading h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .btn-back {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 0.8rem;
+    }
+    .panel-body {
+        padding: 1rem;
+    }
+    .table th,
+    .table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    .table thead {
+        display: none; /* Oculta el thead en móviles para transformar la tabla */
+    }
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+    .table tr {
+        margin-bottom: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .table td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%; /* Espacio para el pseudo-elemento */
+        text-align: right;
+    }
+    .table td:before {
+        content: attr(data-label); /* Usa el atributo data-label */
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 15px;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
+        color: #555;
+    }
+    /* Reglas específicas para cada columna con data-label */
+    .table td:nth-of-type(1):before { content: "ID Solicitud:"; }
+    .table td:nth-of-type(2):before { content: "Tipo de Salida:"; }
+    .table td:nth-of-type(3):before { content: "Hora Salida Estimada:"; }
+    .table td:nth-of-type(4):before { content: "Hora Reingreso Estimada:"; }
+    .table td:nth-of-type(5):before { content: "Motivo:"; }
+    .table td:nth-of-type(6):before { content: "Estado:"; }
+    .table td:nth-of-type(7):before { content: "Fecha Solicitud:"; }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin-top: 15px;
+        padding: 0 10px;
+    }
+    .panel-heading h3 {
+        font-size: 1.3rem;
+    }
+}

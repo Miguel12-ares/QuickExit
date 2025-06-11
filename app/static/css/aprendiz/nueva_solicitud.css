@@ -1,0 +1,210 @@
+/* Estilos para la página de Nueva Solicitud */
+body {
+    font-family: 'Work Sans', Arial, sans-serif;
+    background: linear-gradient(135deg, #f0f2f5 0%, #e0e4eb 100%);
+    margin: 0;
+    padding-top: 60px; /* Ajustado para el header fijo */
+}
+
+.container {
+    width: 100%;
+    max-width: 800px; /* Ancho máximo para el formulario */
+    margin: 20px auto; /* Centrado horizontal y margen superior/inferior */
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panel {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Para que el borde redondeado se aplique a todo */
+}
+
+.panel-heading {
+    background: linear-gradient(45deg, #4CAF50, #66BB6A); /* Degradado verde */
+    color: #fff;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.panel-heading h3 {
+    margin: 0;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.panel-heading h3 i {
+    font-size: 1.2em;
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.panel-body {
+    padding: 2rem;
+}
+
+.form-nueva-solicitud .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-nueva-solicitud label {
+    display: block;
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.05rem;
+}
+
+.form-nueva-solicitud label i {
+    color: #4CAF50;
+    font-size: 1.1em;
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #c8e6c9;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f8fff8;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea { /* Añadido textarea y select aquí */
+    border-radius: 8px;
+    border: 1.5px solid #a5d6a7;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: 'Work Sans', Arial, sans-serif;
+    width: 100%; /* Asegura que select y textarea ocupen el 100% */
+}
+
+.form-control:focus {
+    border-color: #66BB6A;
+    box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.3);
+    outline: none;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-weight: 500;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.form-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-primary {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+}
+
+.btn-primary:hover {
+    background: #388E3C;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .panel-heading {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+    .panel-heading h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .btn-back {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 0.8rem;
+    }
+    .panel-body {
+        padding: 1.5rem;
+    }
+    .form-control {
+        padding: 0.8rem;
+    }
+    .btn-primary {
+        width: 100%;
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin-top: 15px;
+        padding: 0 10px; /* Añade un poco de padding lateral */
+    }
+    .panel-heading h3 {
+        font-size: 1.3rem;
+    }
+    .form-nueva-solicitud label {
+        font-size: 0.95rem;
+    }
+}

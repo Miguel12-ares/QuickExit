@@ -30,6 +30,16 @@
                     <label><i class="fas fa-users"></i> Ficha</label>
                     <input type="text" class="form-input" value="{{ usuario.ficha.nombre }}" readonly>
                 </div>
+                {% if instructor_lider %}
+                <div class="form-group">
+                    <label><i class="fas fa-user-tie"></i> Instructor Líder</label>
+                    <input type="text" class="form-input" value="{{ instructor_lider.nombre }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Correo Instructor</label>
+                    <input type="email" class="form-input" value="{{ instructor_lider.email }}" readonly>
+                </div>
+                {% endif %}
                 {% endif %}
                 <div class="form-group">
                     <label><i class="fas fa-lock"></i> Contraseña actual</label>
