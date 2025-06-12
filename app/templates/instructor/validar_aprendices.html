@@ -3,6 +3,7 @@
 {% block extra_css %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/panel.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/modal.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -45,4 +46,28 @@
     {% endif %}
   </div>
 </div>
+
+<!-- Modal para mensaje de no fichas asignadas -->
+{% with messages = get_flashed_messages() %}
+<div id="noFichasModal" class="modal-overlay" data-show="{{ 'true' if 'No tienes fichas asignadas como instructor líder' in messages else 'false' }}">
+  <div class="modal-container">
+    <div class="modal-header">
+      <i class="fas fa-exclamation-circle"></i>
+      <h3>Aviso</h3>
+    </div>
+    <div class="modal-body">
+      No tienes fichas asignadas como instructor líder.
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn" data-url="{{ url_for('main.dashboard') }}">
+        <i class="fas fa-home"></i> Volver al Inicio
+      </button>
+    </div>
+  </div>
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/instructor/validar_aprendices.js') }}"></script>
 {% endblock %} 

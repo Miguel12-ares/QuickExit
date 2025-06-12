@@ -225,11 +225,17 @@ def validar_aprendices():
     # Obtener las fichas donde el instructor es líder
     fichas_lider = Ficha.query.filter_by(id_instructor_lider=current_user.id_usuario).all()
     
+    # Obtener aprendices pendientes de validación de las fichas del instructor
+    aprendices_pendientes = []
+    
+    # Si no hay fichas, mostrar el mensaje
     if not fichas_lider:
         flash("No tienes fichas asignadas como instructor líder", "warning")
-        return redirect(url_for('main.dashboard'))
+        return render_template('instructor/validar_aprendices.html', 
+                            aprendices=aprendices_pendientes,
+                            fichas=fichas_lider)
     
-    # Obtener aprendices pendientes de validación de las fichas del instructor
+    # Si hay fichas, buscar aprendices pendientes
     aprendices_pendientes = Usuario.query.filter(
         Usuario.rol == RolesEnum.aprendiz,
         Usuario.validado == False,
