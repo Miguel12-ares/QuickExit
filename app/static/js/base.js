@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
     menuLinks.forEach(link => {
         ['click', 'touchend'].forEach(eventType => {
             link.addEventListener(eventType, () => {
-                if (sidebar.classList.contains('active')) {
-                    toggleMenu();
-                }
+            if (sidebar.classList.contains('active')) {
+                toggleMenu();
+            }
             }, { passive: true });
         });
     });
