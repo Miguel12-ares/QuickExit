@@ -1,0 +1,276 @@
+/* static/css/administrativo/gestionar_usuarios.css */
+.gestion-usuarios-panel {
+    padding: 20px;
+}
+  
+.gestion-usuarios-panel h2 {
+    color: #388e3c;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    justify-content: center;
+}
+
+.gestion-usuarios-panel h2 i {
+    font-size: 1.1em;
+}
+
+#buscador-usuarios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.input-group {
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    background: #f6fef7;
+    border-radius: 8px;
+    border: 1.5px solid #a5d6a7;
+    margin-bottom: 1rem;
+    padding: 0.1rem 0.8rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    min-width: 200px;
+}
+
+.input-group:focus-within {
+    border-color: #388e3c;
+    box-shadow: 0 0 6px #a5d6a7;
+}
+
+.input-icon {
+    color: #4CAF50;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    min-width: 1rem;
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+}
+
+.input-group input, .input-group select {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    padding: 0.7rem 0.2rem;
+    width: 100%;
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: #333;
+}
+
+.input-group input::placeholder {
+    color: #a5d6a7;
+    opacity: 1;
+    font-weight: 400;
+}
+
+.input-group select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.input-group select option {
+    background-color: #ffffff;
+    color: #333;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(76,175,80,0.08);
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+    font-family: 'Work Sans', Arial, sans-serif;
+    letter-spacing: 0.3px;
+    gap: 0.8rem;
+}
+
+.btn i {
+    font-size: 1em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-primary {
+    background: var(--primary-green, #4CAF50);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--dark-green, #388E3C);
+    box-shadow: 0 6px 18px rgba(76,175,80,0.18);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.btn-secondary {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background: #c7c7c7;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+.btn-delete:hover {
+    background-color: #d32f2f;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    background-color: #fff;
+}
+
+.usuarios-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 800px;
+}
+
+.usuarios-table thead {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.usuarios-table th {
+    padding: 1.2rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 2px solid #388E3C;
+}
+
+.usuarios-table th:first-child {
+    border-top-left-radius: 12px;
+}
+
+.usuarios-table th:last-child {
+    border-top-right-radius: 12px;
+}
+
+.usuarios-table th i {
+    margin-right: 0.5rem;
+}
+
+.usuarios-table tbody tr:nth-child(even) {
+    background-color: #f6fef7;
+}
+
+.usuarios-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.usuarios-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.badge {
+    padding: 0.4em 0.7em;
+    border-radius: 15px;
+    font-size: 0.8em;
+    font-weight: 600;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.badge-activo {
+    background-color: #e8f5e9; /* Light green */
+    color: #2e7d32; /* Dark green */
+}
+
+.badge-inactivo {
+    background-color: #ffebee; /* Light red */
+    color: #c62828; /* Dark red */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1300px) {
+    .gestion-usuarios-panel {
+        margin: 3rem auto 0 auto;
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .gestion-usuarios-panel h2 {
+        font-size: 1.3rem;
+        flex-direction: column;
+        text-align: center;
+    }
+    .gestion-usuarios-panel h2 i {
+        font-size: 1em;
+        margin-bottom: 0.5rem;
+    }
+    #buscador-usuarios {
+        flex-direction: column;
+        align-items: center;
+    }
+    .input-group {
+        max-width: 90%;
+    }
+    .btn {
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gestion-usuarios-panel h2 {
+        font-size: 1.1rem;
+    }
+    .gestion-usuarios-panel h2 i {
+        font-size: 0.9em;
+    }
+    .usuarios-table th, .usuarios-table td {
+        font-size: 0.8rem;
+        padding: 0.8rem;
+    }
+    .btn-delete {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+} 
