@@ -61,7 +61,10 @@
               <span class="user-name">{{ current_user.nombre }}</span>
             </a>
           </div>
-          <a href="{{ url_for('main.logout') }}" class="logout-icon-header"><i class="fas fa-sign-out-alt"></i></a>
+          <a href="{{ url_for('main.logout') }}" class="logout-icon-header">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar sesión</span>
+          </a>
         </div>
         {% endif %}
         <button class="hamburger" id="hamburger" aria-label="Menú">
@@ -77,6 +80,12 @@
     <ul>
       <li><a href="{{ url_for('main.dashboard') }}"><i class="fas fa-home"></i> Inicio</a></li>
       {% if current_user.is_authenticated %}
+        <li class="sidebar-user-info">
+          <a href="{{ url_for('main.mi_cuenta') }}">
+            <i class="fas fa-user-circle"></i>
+            <span>{{ current_user.nombre }}</span>
+          </a>
+        </li>
         {% if current_user.rol in ['admin', 'administrativo'] %}
           <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
           <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
