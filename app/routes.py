@@ -869,10 +869,20 @@ def eliminar_usuario(id_usuario):
             return jsonify({'success': False, 'message': mensaje}), 400
 
         # Limpiar relaciones seguras antes de eliminar
-        if fichas_lider > 0:
-            print(f"[TEMP DEBUG] Limpiando {fichas_lider} fichas como instructor líder")
+        if usuario.rol == RolesEnum.instructor:
+            print(f"[TEMP DEBUG] Procesando eliminación de instructor: {usuario.nombre}")
+            
             # Remover como instructor líder de fichas
-            Ficha.query.filter_by(id_instructor_lider=id_usuario).update({'id_instructor_lider': None})
+            fichas_lideradas = Ficha.query.filter_by(id_instructor_lider=id_usuario)
+            if fichas_lideradas.count() > 0:
+                print(f"[TEMP DEBUG] Limpiando {fichas_lideradas.count()} fichas como instructor líder")
+                fichas_lideradas.update({'id_instructor_lider': None}, synchronize_session=False)
+
+            # Limpiar solicitudes donde el instructor es aprobador
+            solicitudes_aprobadas = Solicitud.query.filter_by(id_instructor_aprobador=id_usuario)
+            if solicitudes_aprobadas.count() > 0:
+                print(f"[TEMP DEBUG] Limpiando {solicitudes_aprobadas.count()} solicitudes aprobadas por instructor {usuario.nombre}")
+                solicitudes_aprobadas.update({'id_instructor_aprobador': None}, synchronize_session=False)
         
         # Eliminar el usuario
         nombre_usuario = usuario.nombre
