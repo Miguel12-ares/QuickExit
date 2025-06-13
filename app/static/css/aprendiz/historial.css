@@ -167,6 +167,7 @@ body {
   border-right: 1px solid var(--border-green);
   color: #333;
   font-weight: 500;
+  transition: background-color 0.3s ease;
 }
 
 .solicitudes-table td:last-child {
@@ -185,10 +186,17 @@ body {
   border-bottom-right-radius: 12px;
 }
 
+/* Mejorar el hover sin transform scale para evitar ciclos */
+.solicitudes-table tbody tr {
+  transition: background-color 0.3s ease;
+}
+
 .solicitudes-table tbody tr:hover {
-  background: #e8f5e9;
-  transform: scale(1.01);
-  transition: all 0.2s ease;
+  background: #e8f5e9 !important;
+}
+
+.solicitudes-table tbody tr:hover td {
+  background: transparent;
 }
 
 .motivo-cell {
@@ -370,41 +378,42 @@ body {
   }
   
   .solicitudes-table tr {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(34, 139, 34, 0.1);
+    border: 1px solid var(--border-green);
+    border-radius: 8px;
     margin-bottom: 1rem;
     padding: 1rem;
-    border: 2px solid var(--border-green);
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
   
+  /* Remover hover en móviles para evitar problemas */
   .solicitudes-table tr:hover {
-    transform: none;
-    box-shadow: 0 6px 20px rgba(34, 139, 34, 0.15);
+    background: #fff !important;
   }
   
   .solicitudes-table td {
-    border: none;
-    border-bottom: 1px solid var(--border-green);
-    position: relative;
-    padding: 0.8rem 0.8rem 0.8rem 40%;
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+    padding: 0.5rem 0;
     text-align: right;
+    position: relative;
+    padding-left: 40%;
   }
   
   .solicitudes-table td:last-child {
-    border-bottom: none;
+    border-bottom: none !important;
   }
   
   .solicitudes-table td:before {
     content: attr(data-label);
     position: absolute;
-    left: 0.8rem;
+    left: 0;
     width: 35%;
     padding-right: 10px;
     white-space: nowrap;
-    font-weight: 700;
-    color: var(--dark-green);
     text-align: left;
+    font-weight: 600;
+    color: var(--dark-green);
   }
   
   .solicitudes-table td:nth-of-type(1):before { content: "ID:"; }
@@ -438,8 +447,8 @@ body {
   }
   
   .btn {
+    padding: 0.8rem 1.2rem;
     font-size: 1rem;
-    padding: 0.8rem 1.5rem;
   }
 }
 
@@ -450,7 +459,6 @@ body {
   
   .admin-panel h2 {
     font-size: 1.2rem;
-    gap: 0.2rem;
   }
   
   .admin-panel h2 i {
@@ -459,7 +467,7 @@ body {
   
   .btn-back {
     padding: 0.7rem 1rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   
   .solicitudes-table tr {
@@ -467,13 +475,11 @@ body {
   }
   
   .solicitudes-table td {
-    padding: 0.6rem 0.6rem 0.6rem 35%;
+    padding: 0.4rem 0;
   }
   
   .solicitudes-table td:before {
-    left: 0.6rem;
-    width: 30%;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
   
   .empty-state {
@@ -493,7 +499,7 @@ body {
   }
   
   .btn {
-    font-size: 0.9rem;
-    padding: 0.7rem 1.2rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
   }
 }
