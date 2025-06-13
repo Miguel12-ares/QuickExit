@@ -110,14 +110,14 @@ QuickExit/
 │   │   │       ├── crear_usuario.css
 │   │   │       ├── dashboard.css
 │   │   │       ├── gestionar_instructores_lideres.css
-│   │   │       ├── gestionar_usuarios.css  <-- Nuevo
+│   │   │       ├── gestionar_usuarios.css  
 │   │   │       ├── instructores.css
 │   │   │       ├── porteros.css
 │   │   │       └── validar_salidas.css
 │   │   └── js/
 │   │       └── administrativo/
 │   │           └── buscador_ajax/
-│   │               ├── gestionar_usuarios.js  <-- Nuevo
+│   │               ├── gestionar_usuarios.js 
 │   │               └── porteros.js
 │   ├── templates/
 │   │   ├── administrativo/
@@ -125,7 +125,7 @@ QuickExit/
 │   │   │   ├── dashboard.html
 │   │   │   ├── fichas/
 │   │   │   ├── gestionar_instructores_lideres.html
-│   │   │   ├── gestionar_usuarios.html  <-- Nuevo
+│   │   │   ├── gestionar_usuarios.html  
 │   │   │   ├── instructores.html
 │   │   │   ├── porteros.html
 │   │   │   └── validar_salidas.html
