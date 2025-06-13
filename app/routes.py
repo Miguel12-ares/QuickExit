@@ -3,6 +3,7 @@ from app import db, bcrypt
 from app.models import Usuario, Ficha, TipoSalida, Solicitud, AuditoriaGeneral, EstadoSolicitud, RolesEnum
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date
+from sqlalchemy import select
 
 main = Blueprint('main', __name__)
 
@@ -804,3 +805,97 @@ def mi_cuenta():
             flash('No se realizaron cambios.', 'info')
         return redirect(url_for('main.mi_cuenta'))
     return render_template('cuenta/mi_cuenta.html', usuario=current_user, instructor_lider=instructor_lider)
+
+@main.route('/administrativo/gestionar_usuarios')
+@login_required
+def gestionar_usuarios():
+    if current_user.rol.value not in ['administrativo', 'admin']:
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    return render_template('administrativo/gestionar_usuarios.html')
+
+@main.route('/api/buscar_usuarios')
+@login_required
+def api_buscar_usuarios():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        return jsonify({'error': 'No autorizado'}), 403
+
+    buscar_documento = request.args.get('buscar_documento', '').strip()
+    buscar_nombre = request.args.get('buscar_nombre', '').strip()
+    buscar_email = request.args.get('buscar_email', '').strip()
+    buscar_ficha = request.args.get('buscar_ficha', '').strip()
+    buscar_rol = request.args.get('buscar_rol', '').strip()
+
+    # Excluir usuarios con rol 'admin' y 'administrativo'
+    query = Usuario.query.filter(
+        (Usuario.rol != RolesEnum.admin) &
+        (Usuario.rol != RolesEnum.administrativo)
+    )
+
+    if buscar_documento:
+        query = query.filter(Usuario.documento.like(f"%{buscar_documento}%"))
+    if buscar_nombre:
+        query = query.filter(Usuario.nombre.ilike(f"%{buscar_nombre}%"))
+    if buscar_email:
+        query = query.filter(Usuario.email.ilike(f"%{buscar_email}%"))
+    
+    if buscar_ficha:
+        # Buscar por ID o nombre de ficha para aprendices e instructores
+        subquery_fichas = Ficha.query.filter(
+            (Ficha.id_ficha.like(f"%{buscar_ficha}%")) |
+            (Ficha.nombre.ilike(f"%{buscar_ficha}%"))
+        ).subquery()
+        query = query.filter(
+            (Usuario.id_ficha.in_(select(subquery_fichas.c.id_ficha))) |
+            (Usuario.rol == RolesEnum.instructor).and_(
+                Usuario.id_usuario.in_(select(Usuario.id_usuario).join(Ficha, Ficha.id_instructor_lider == Usuario.id_usuario).filter(Ficha.id_ficha.in_(select(subquery_fichas.c.id_ficha))))
+            )
+        )
+
+    if buscar_rol:
+        query = query.filter(Usuario.rol == RolesEnum(buscar_rol))
+
+    usuarios = query.all()
+
+    usuarios_json = []
+    for usr in usuarios:
+        ficha_info = None
+        if usr.id_ficha:
+            ficha = Ficha.query.get(usr.id_ficha)
+            if ficha:
+                ficha_info = {'id_ficha': ficha.id_ficha, 'nombre': ficha.nombre}
+        
+        usuarios_json.append({
+            'id_usuario': usr.id_usuario,
+            'documento': usr.documento,
+            'nombre': usr.nombre,
+            'email': usr.email,
+            'rol': usr.rol.value,
+            'ficha': ficha_info,
+            'validado': usr.validado
+        })
+    return jsonify({'usuarios': usuarios_json})
+
+@main.route('/admin/eliminar_usuario/<int:id_usuario>', methods=['POST'])
+@login_required
+def eliminar_usuario(id_usuario):
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        flash("Acceso no autorizado", "danger")
+        return jsonify({'success': False, 'message': 'Acceso no autorizado'}), 403
+    
+    usuario = Usuario.query.get_or_404(id_usuario)
+
+    # No permitir eliminar administradores
+    if usuario.rol == RolesEnum.admin:
+        flash("No se puede eliminar un usuario con rol de administrador.", "danger")
+        return jsonify({'success': False, 'message': 'No se puede eliminar un usuario con rol de administrador.'}), 400
+
+    try:
+        db.session.delete(usuario)
+        db.session.commit()
+        flash(f"Usuario {usuario.nombre} eliminado exitosamente.", "success")
+        return jsonify({'success': True, 'message': f'Usuario {usuario.nombre} eliminado exitosamente.'})
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error al eliminar el usuario: {str(e)}", "danger")
+        return jsonify({'success': False, 'message': f'Error al eliminar el usuario: {str(e)}'}), 500

@@ -43,6 +43,12 @@
       <p>Aprueba o rechaza porteros registrados.</p>
       <a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-check"></i> Validar</a>
     </div>
+    <div class="admin-card">
+      <div class="admin-icon"><i class="fas fa-users"></i></div>
+      <h3>Gestionar Usuarios</h3>
+      <p>Administrar todos los usuarios del sistema.</p>
+      <a href="{{ url_for('main.gestionar_usuarios') }}"><i class="fas fa-users"></i> Ver Usuarios</a>
+    </div>
   </div>
 </div>
 {% endblock %}
