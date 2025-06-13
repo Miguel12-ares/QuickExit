@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aprendiz/historial.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+    <h2><i class="fas fa-history"></i> Historial de Solicitudes</h2>
+    
+    <div class="panel-actions">
+        <a href="{{ url_for('main.aprendiz_dashboard') }}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver al Dashboard
+        </a>
+    </div>
+    
+    <div class="table-section">
+        {% if solicitudes %}
+        <div class="table-container">
+            <table class="solicitudes-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-tag"></i> Tipo</th>
+                        <th><i class="fas fa-clock"></i> Hora Salida</th>
+                        <th><i class="fas fa-redo"></i> Hora Reingreso</th>
+                        <th><i class="fas fa-comment"></i> Motivo</th>
+                        <th><i class="fas fa-info-circle"></i> Estado</th>
+                        <th><i class="fas fa-calendar"></i> Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitud in solicitudes %}
+                    <tr>
+                        <td>{{ solicitud.id_solicitud }}</td>
+                        <td>{{ solicitud.tipo_salida.nombre }}</td>
+                        <td>{{ solicitud.hora_salida_estimada }}</td>
+                        <td>{{ solicitud.hora_reingreso_estimada if solicitud.hora_reingreso_estimada else 'N/A' }}</td>
+                        <td class="motivo-cell">{{ solicitud.motivo }}</td>
+                        <td>
+                            <span class="estado-badge estado-{{ solicitud.estado.value.lower() }}">
+                                {{ solicitud.estado.value|capitalize }}
+                            </span>
+                        </td>
+                        <td>{{ solicitud.fecha_creacion.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-inbox"></i>
+            </div>
+            <h3>No hay solicitudes</h3>
+            <p>No tienes solicitudes de salida registradas aún.</p>
+            <a href="{{ url_for('main.aprendiz_nueva_solicitud') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Crear Primera Solicitud
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

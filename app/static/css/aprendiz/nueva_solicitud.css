@@ -1,0 +1,372 @@
+/* Estilos para Nueva Solicitud de Aprendiz */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-green: #4CAF50;
+  --dark-green: #388E3C;
+  --light-green: #a5d6a7;
+  --bg-light-green: #f6fef7;
+  --border-green: #e8f5e9;
+  --white: #fff;
+  --off-white: #f9f9f9;
+}
+
+/* Ajuste universal para box-sizing */
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--white, #fff) 0%, var(--off-white, #f9f9f9) 100%);
+    font-family: 'Work Sans', Arial, sans-serif;
+    margin: 0;
+}
+
+main {
+  width: 100vw;
+    display: flex;
+    align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Contenedor principal del formulario */
+.register-container {
+  width: 100%;
+  max-width: 460px;
+  margin: 0;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px 0 rgba(34, 139, 34, 0.12), 0 1px 4px 0 rgba(0,0,0,0.08);
+  position: relative;
+  z-index: 1;
+  font-family: 'Work Sans', Arial, sans-serif;
+  animation: zoomIn 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+}
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.register-container h2 {
+  text-align: center;
+  color: #388e3c;
+  margin-bottom: 2.2rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+  gap: 0.2rem;
+  justify-content: center;
+}
+
+.register-container h2 i {
+  font-size: 1em;
+}
+
+.input-group {
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    background: #f6fef7;
+    border-radius: 8px;
+    border: 1.5px solid #a5d6a7;
+    margin-bottom: 1rem;
+    padding: 0.1rem 0.8rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group:focus-within {
+    border-color: #388e3c;
+    box-shadow: 0 0 6px #a5d6a7;
+}
+
+/* Optimización específica para el campo de hora de reingreso */
+#hora-reingreso-group {
+  max-height: 100px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top center;
+  opacity: 1;
+  margin-bottom: 1rem;
+  transform: scaleY(1);
+}
+
+/* Estados para animaciones controladas por JavaScript */
+#hora-reingreso-group.hiding {
+  opacity: 0;
+  max-height: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transform: scaleY(0.8);
+}
+
+#hora-reingreso-group.showing {
+  opacity: 1;
+  max-height: 100px;
+  margin-bottom: 1rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+  transform: scaleY(1);
+}
+
+#hora-reingreso-group.hidden {
+  display: none !important;
+}
+
+.input-icon {
+    color: #4CAF50;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    min-width: 1rem;
+    text-align: center;
+}
+
+.input-group input,
+.input-group select {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    padding: 0.7rem 0.2rem;
+    width: 100%;
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: #333;
+}
+
+.input-group input::placeholder {
+    color: #a5d6a7;
+    opacity: 1;
+    font-weight: 400;
+}
+
+.input-group select {
+    color: #333;
+    font-weight: 500;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Estilos especiales para textarea */
+.textarea-group {
+  align-items: flex-start;
+  min-height: 120px;
+}
+
+.textarea-group .input-icon {
+  margin-top: 0.7rem;
+  align-self: flex-start;
+}
+
+.input-group textarea {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.95rem;
+  padding: 0.7rem 0.2rem;
+  width: 100%;
+  font-family: 'Work Sans', Arial, sans-serif;
+  color: #333;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.input-group textarea::placeholder {
+  color: #a5d6a7;
+  opacity: 1;
+  font-weight: 400;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin: 1.6rem auto 0 auto;
+    padding: 0.9rem 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(76,175,80,0.08);
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+    font-family: 'Work Sans', Arial, sans-serif;
+    letter-spacing: 0.3px;
+    background: var(--primary-green, #4CAF50);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--dark-green, #388E3C);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(76,175,80,0.18);
+    transform: translateY(-2px) scale(1.04);
+}
+
+.btn:active {
+    animation: btnPop 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes btnPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+}
+
+.btn i {
+  margin-left: 0.5rem;
+}
+
+.register-container p {
+  text-align: center;
+  margin-top: 1.8rem;
+  font-size: 0.95rem;
+}
+
+.register-container p a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s, transform 0.1s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.register-container p a:hover {
+  color: #388e3c;
+  transform: translateX(-2px);
+}
+
+/* Estilos para alertas */
+.alert {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alert-danger {
+  background: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+.alert-warning {
+  background: #fff3cd;
+  color: #856404;
+  border-color: #ffeaa7;
+}
+
+.alert-info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border-color: #bee5eb;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+/* Animación hover sutil para el contenedor */
+.register-container:hover {
+  box-shadow: 0 8px 28px 0 rgba(34, 139, 34, 0.16), 0 2px 6px 0 rgba(0,0,0,0.10);
+  transition: box-shadow 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .register-container {
+    max-width: 95%;
+    padding: 1.8rem 1.2rem 1.2rem 1.2rem;
+    margin: 1rem;
+    }
+    
+  .register-container h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1.8rem;
+  }
+  
+  .register-container h2 i {
+    font-size: 0.9em;
+    }
+    
+    .input-group {
+        max-width: 100%;
+    margin-bottom: 1rem;
+    }
+    
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+        font-size: 0.9rem;
+    padding: 0.65rem 0.2rem;
+    }
+    
+    .input-icon {
+    font-size: 0.85rem;
+    }
+    
+  .btn {
+    max-width: 100%;
+        font-size: 1rem;
+    padding: 0.85rem 0;
+    margin-top: 1.4rem;
+    }
+    
+    .alert {
+        max-width: 100%;
+        font-size: 0.85rem;
+    padding: 0.85rem;
+  }
+  
+  .register-container p {
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 1.5rem 1rem;
+    }
+    
+  .register-container h2 {
+    font-size: 1rem;
+    }
+}

@@ -1,45 +1,64 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/validar_salidas.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="validar-salidas-panel">
-  <h2>Validar Salidas de Aprendices</h2>
+<div class="admin-panel">
+  <h2><i class="fas fa-check-circle"></i> Validar Salidas de Aprendices</h2>
+  
+  <div class="panel-actions">
+    <a href="{{ url_for('main.administrativo_dashboard') }}" class="btn-back">
+      <i class="fas fa-arrow-left"></i> Volver al Dashboard
+    </a>
+  </div>
+  
   {% if solicitudes and solicitudes|length > 0 %}
-  <table class="validar-salidas-table">
-    <thead>
-      <tr>
-        <th>Aprendiz</th>
-        <th>Fecha/Hora Salida Estimada</th>
-        <th>Tipo de Salida</th>
-        <th>Motivo</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for solicitud in solicitudes %}
-      <tr>
-        <td>{{ solicitud.aprendiz.nombre }}</td>
-        <td>{{ solicitud.hora_salida_estimada }}</td>
-        <td>{{ solicitud.tipo_salida.nombre }}</td>
-        <td>{{ solicitud.motivo }}</td>
-        <td>
-          <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="post" style="display:inline;">
-            <button type="submit" class="btn-aprobar">Aprobar</button>
-          </form>
-          <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="post" style="display:inline;">
-            <button type="submit" class="btn-rechazar">Rechazar</button>
-          </form>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-    <div class="no-solicitudes">
-      No hay solicitudes de salida pendientes para validar.
+    <div class="table-container">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th><i class="fas fa-user-graduate"></i> Aprendiz</th>
+            <th><i class="fas fa-clock"></i> Fecha/Hora Salida Estimada</th>
+            <th><i class="fas fa-tag"></i> Tipo de Salida</th>
+            <th><i class="fas fa-comment-alt"></i> Motivo</th>
+            <th><i class="fas fa-cogs"></i> Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for solicitud in solicitudes %}
+          <tr>
+            <td>{{ solicitud.aprendiz.nombre }}</td>
+            <td>{{ solicitud.hora_salida_estimada }}</td>
+            <td>{{ solicitud.tipo_salida.nombre }}</td>
+            <td>{{ solicitud.motivo }}</td>
+            <td>
+              <div class="botones-container">
+                <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                </form>
+                <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="post" style="display:inline;">
+                  <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  
+  {% if not solicitudes or solicitudes|length == 0 %}
+    <div class="empty-state">
+      <i class="fas fa-inbox"></i>
+      <p>No hay solicitudes de salida pendientes para validar.</p>
     </div>
   {% endif %}
 </div>

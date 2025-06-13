@@ -3,6 +3,7 @@ from app import db, bcrypt
 from app.models import Usuario, Ficha, TipoSalida, Solicitud, AuditoriaGeneral, EstadoSolicitud, RolesEnum
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date
+from sqlalchemy import select
 
 main = Blueprint('main', __name__)
 
@@ -18,6 +19,8 @@ def home():
 # ------------------------------------------
 @main.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
     fichas = Ficha.query.all()  # Obtener todas las fichas (solo para aprendices)
 
     if request.method == 'POST':
@@ -81,6 +84,8 @@ def register():
 # ------------------------------------------
 @main.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
     if request.method == 'POST':
         email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '').strip()
@@ -125,15 +130,6 @@ def validar_salidas():
     solicitudes = Solicitud.query.filter_by(estado='aprobada').all()
     return render_template('administrativo/validar_salidas.html', solicitudes=solicitudes)
 
-@main.route('/admin/porteros')
-@login_required
-def administrar_porteros():
-    if current_user.rol.value not in ['admin', 'administrativo']:
-        flash("Acceso no autorizado", "danger")
-        return redirect(url_for('main.dashboard'))
-    # Render template vacío; datos vendrán vía AJAX
-    return render_template('administrativo/porteros.html')
-
 @main.route('/admin/validar_usuario/<int:id_usuario>/<accion>', methods=['POST'])
 @login_required
 def validar_usuario(id_usuario, accion):
@@ -153,10 +149,11 @@ def validar_usuario(id_usuario, accion):
         return redirect(url_for('main.dashboard'))
     
     db.session.commit()
+    # Después de validar un usuario (especialmente porteros), redirigir al nuevo dashboard unificado de gestión de usuarios.
     if usuario.rol == RolesEnum.instructor:
         return redirect(url_for('main.administrar_instructores'))
     elif usuario.rol == RolesEnum.porteria:
-        return redirect(url_for('main.administrar_porteros'))
+        return redirect(url_for('main.gestionar_usuarios_dashboard'))
     else:
         return redirect(url_for('main.dashboard'))
 
@@ -166,7 +163,18 @@ def administrativo_dashboard():
     if current_user.rol.value not in ['administrativo', 'admin']:
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
+    # Este es el dashboard administrativo principal. Los enlaces a la gestión de usuarios ahora apuntan al nuevo dashboard unificado.
     return render_template('administrativo/dashboard.html')
+
+# Nueva ruta para el dashboard de gestión de usuarios unificado
+# Este panel ahora agrupa las funcionalidades de crear usuarios, validar porteros y gestionar usuarios.
+@main.route('/administrativo/usuarios/dashboard')
+@login_required
+def gestionar_usuarios_dashboard():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    return render_template('administrativo/usuarios/dashboard.html') # Renderiza el nuevo dashboard unificado
 
 # ------------------------------------------
 # Área del Instructor
@@ -221,11 +229,17 @@ def validar_aprendices():
     # Obtener las fichas donde el instructor es líder
     fichas_lider = Ficha.query.filter_by(id_instructor_lider=current_user.id_usuario).all()
     
+    # Obtener aprendices pendientes de validación de las fichas del instructor
+    aprendices_pendientes = []
+    
+    # Si no hay fichas, mostrar el mensaje
     if not fichas_lider:
         flash("No tienes fichas asignadas como instructor líder", "warning")
-        return redirect(url_for('main.dashboard'))
+        return render_template('instructor/validar_aprendices.html', 
+                            aprendices=aprendices_pendientes,
+                            fichas=fichas_lider)
     
-    # Obtener aprendices pendientes de validación de las fichas del instructor
+    # Si hay fichas, buscar aprendices pendientes
     aprendices_pendientes = Usuario.query.filter(
         Usuario.rol == RolesEnum.aprendiz,
         Usuario.validado == False,
@@ -296,9 +310,7 @@ def instructor_historial():
 @login_required
 def dashboard():
     if current_user.rol.value == 'aprendiz':
-        solicitudes = Solicitud.query.filter_by(id_aprendiz=current_user.id_usuario).all()
-        tipos_salida = TipoSalida.query.all()
-        return render_template('aprendiz/dashboard.html', solicitudes=solicitudes, tipos_salida=tipos_salida)
+        return redirect(url_for('main.aprendiz_dashboard'))
     elif current_user.rol.value == 'instructor':
         return redirect(url_for('main.instructor_dashboard'))
     elif current_user.rol.value in ['administrativo', 'admin']:
@@ -310,27 +322,49 @@ def dashboard():
         return redirect(url_for('main.logout'))
 
 # ------------------------------------------
-# Nueva Solicitud de Salida (POST)
+# Área del Aprendiz
 # ------------------------------------------
-@main.route('/nueva_solicitud', methods=['POST'])
+@main.route('/aprendiz/dashboard')
 @login_required
-def nueva_solicitud():
+def aprendiz_dashboard():
     if current_user.rol.value != 'aprendiz':
         flash('Acceso no autorizado', 'danger')
         return redirect(url_for('main.dashboard'))
+    return render_template('aprendiz/dashboard.html')
+
+@main.route('/aprendiz/nueva_solicitud', methods=['GET', 'POST'])
+@login_required
+def aprendiz_nueva_solicitud():
+    if current_user.rol.value != 'aprendiz':
+        flash('Acceso no autorizado', 'danger')
+        return redirect(url_for('main.dashboard'))
+
+    tipos_salida = TipoSalida.query.all()
+
+    if request.method == 'POST':
+        nueva_solicitud_obj = Solicitud(
+            id_aprendiz=current_user.id_usuario,
+            id_tipo_salida=request.form.get('tipo_salida'),
+            hora_salida_estimada=request.form.get('hora_salida'),
+            hora_reingreso_estimada=request.form.get('hora_reingreso'),
+            motivo=request.form.get('motivo'),
+            estado=EstadoSolicitud.pendiente
+        )
+        db.session.add(nueva_solicitud_obj)
+        db.session.commit()
+        flash('Solicitud creada exitosamente', 'success')
+        return redirect(url_for('main.aprendiz_dashboard'))
     
-    nueva_solicitud = Solicitud(
-        id_aprendiz=current_user.id_usuario,
-        id_tipo_salida=request.form.get('tipo_salida'),
-        hora_salida_estimada=request.form.get('hora_salida'),
-        hora_reingreso_estimada=request.form.get('hora_reingreso'),
-        motivo=request.form.get('motivo'),
-        estado=EstadoSolicitud.pendiente
-    )
-    db.session.add(nueva_solicitud)
-    db.session.commit()
-    flash('Solicitud creada', 'success')
-    return redirect(url_for('main.dashboard'))
+    return render_template('aprendiz/nueva_solicitud.html', tipos_salida=tipos_salida)
+
+@main.route('/aprendiz/historial')
+@login_required
+def aprendiz_historial():
+    if current_user.rol.value != 'aprendiz':
+        flash('Acceso no autorizado', 'danger')
+        return redirect(url_for('main.dashboard'))
+    solicitudes = Solicitud.query.filter_by(id_aprendiz=current_user.id_usuario).all()
+    return render_template('aprendiz/historial.html', solicitudes=solicitudes)
 
 @main.route('/admin/gestionar_solicitud/<int:id_solicitud>/<accion>', methods=['POST'])
 @login_required
@@ -363,22 +397,32 @@ def porteria_dashboard():
     if current_user.rol.value != 'porteria':
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
+    # Estas variables ya no se usarán directamente aquí, pero se mantienen para referencia
+    # solicitudes_salida = Solicitud.query.filter_by(estado=EstadoSolicitud.aprobada_instructor).all()
+    # solicitudes_reingreso = Solicitud.query.filter_by(estado=EstadoSolicitud.salida_registrada).all()
+    return render_template('porteria/dashboard.html')
 
-    # Mostrar todas las solicitudes aprobadas y pendientes de salida
-    solicitudes_salida = Solicitud.query.filter(
-        Solicitud.estado == EstadoSolicitud.completada,
-        Solicitud.hora_exacta_salida == None
-    ).all()
+@main.route('/porteria/solicitudes_salida')
+@login_required
+def porteria_solicitudes_salida():
+    if current_user.rol.value != 'porteria':
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    solicitudes_salida = Solicitud.query.filter_by(estado=EstadoSolicitud.aprobada).all()
+    return render_template('porteria/registrar_salida.html', solicitudes_salida=solicitudes_salida)
 
-    # Mostrar todas las temporales con salida registrada pero sin reingreso
+@main.route('/porteria/solicitudes_reingreso')
+@login_required
+def porteria_solicitudes_reingreso():
+    if current_user.rol.value != 'porteria':
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
     solicitudes_reingreso = Solicitud.query.filter(
         Solicitud.estado == EstadoSolicitud.completada,
-        Solicitud.hora_exacta_salida != None,
         Solicitud.hora_exacta_reingreso == None,
         Solicitud.tipo_salida.has(nombre='Temporal')
     ).all()
-
-    return render_template('porteria/dashboard.html', solicitudes_salida=solicitudes_salida, solicitudes_reingreso=solicitudes_reingreso)
+    return render_template('porteria/registrar_reingreso.html', solicitudes_reingreso=solicitudes_reingreso)
 
 @main.route('/porteria/registrar_reingreso/<int:id_solicitud>', methods=['POST'])
 @login_required
@@ -416,22 +460,6 @@ def porteria_registrar_salida(id_solicitud):
     flash("Hora de salida registrada correctamente.", "success")
     return redirect(url_for('main.porteria_dashboard'))
 
-@main.route('/admin/gestionar_instructores_lideres')
-@login_required
-def gestionar_instructores_lideres():
-    if current_user.rol.value not in ['admin', 'administrativo']:
-        flash("Acceso no autorizado", "danger")
-        return redirect(url_for('main.dashboard'))
-    
-    # Obtener todos los instructores
-    instructores = Usuario.query.filter_by(rol=RolesEnum.instructor).all()
-    # Obtener todas las fichas
-    fichas = Ficha.query.all()
-    
-    return render_template('administrativo/gestionar_instructores_lideres.html', 
-                         instructores=instructores, 
-                         fichas=fichas)
-
 @main.route('/admin/asignar_instructor_lider/<int:id_ficha>', methods=['POST'])
 @login_required
 def asignar_instructor_lider(id_ficha):
@@ -444,18 +472,18 @@ def asignar_instructor_lider(id_ficha):
     
     if not id_instructor:
         flash("Debe seleccionar un instructor", "danger")
-        return redirect(url_for('main.gestionar_instructores_lideres'))
+        return redirect(url_for('main.administrar_fichas'))
     
     instructor = Usuario.query.get_or_404(id_instructor)
     if instructor.rol != RolesEnum.instructor:
         flash("El usuario seleccionado no es un instructor", "danger")
-        return redirect(url_for('main.gestionar_instructores_lideres'))
+        return redirect(url_for('main.administrar_fichas'))
     
     ficha.id_instructor_lider = instructor.id_usuario
     db.session.commit()
     
     flash(f"Instructor {instructor.nombre} asignado como líder de la ficha {ficha.nombre}", "success")
-    return redirect(url_for('main.gestionar_instructores_lideres'))
+    return redirect(url_for('main.administrar_fichas'))
 
 @main.route('/admin/remover_instructor_lider/<int:id_ficha>', methods=['POST'])
 @login_required
@@ -469,20 +497,21 @@ def remover_instructor_lider(id_ficha):
     db.session.commit()
     
     flash(f"Instructor líder removido de la ficha {ficha.nombre}", "success")
-    return redirect(url_for('main.gestionar_instructores_lideres'))
+    return redirect(url_for('main.administrar_fichas'))
 
 @main.route('/administrativo/crear_usuario', methods=['GET'])
 @login_required
 def crear_usuario_avanzado_form():
-    if current_user.rol.value not in ['administrativo', 'admin']:
+    if current_user.rol.value not in ['admin', 'administrativo']:
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
-    return render_template('administrativo/crear_usuario.html')
+    # Esta ruta ahora renderiza la plantilla de creación de usuario desde su nueva ubicación.
+    return render_template('administrativo/usuarios/crear_usuario.html')
 
 @main.route('/administrativo/crear_usuario', methods=['POST'])
 @login_required
 def crear_usuario_avanzado():
-    if current_user.rol.value not in ['administrativo', 'admin']:
+    if current_user.rol.value not in ['admin', 'administrativo']:
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
 
@@ -521,7 +550,7 @@ def crear_usuario_avanzado():
     db.session.commit()
 
     flash(f'Usuario {nombre} creado exitosamente', 'success')
-    return redirect(url_for('main.administrativo_dashboard'))
+    return redirect(url_for('main.gestionar_usuarios_dashboard'))
 
 # ------------------------------------------
 # Gestión de Fichas (Administrativo)
@@ -607,6 +636,7 @@ def api_buscar_fichas():
             'id_ficha': ficha.id_ficha,
             'nombre': ficha.nombre,
             'instructor_lider': ficha.instructor_lider.nombre if ficha.instructor_lider else 'Sin asignar',
+            'id_instructor_lider': ficha.id_instructor_lider,
             'fecha_creacion': ficha.fecha_creacion.strftime('%Y-%m-%d'),
             'habilitada': ficha.habilitada,
             'descripcion': ficha.descripcion or '-'
@@ -614,59 +644,23 @@ def api_buscar_fichas():
 
     return jsonify({'fichas': fichas_json})
 
-@main.route('/api/buscar_porteros')
+# Nueva ruta para actualizar el estado de validación de cualquier usuario (Activo/Inactivo)
+@main.route('/admin/actualizar_estado_usuario/<int:id_usuario>', methods=['POST'])
 @login_required
-def api_buscar_porteros():
-    if current_user.rol.value not in ['admin', 'administrativo']:
-        return jsonify({'error': 'No autorizado'}), 403
-    buscar_identificacion = request.args.get('buscar_identificacion', '').strip()
-    buscar_nombre = request.args.get('buscar_nombre', '').strip()
-    buscar_email = request.args.get('buscar_email', '').strip()
-    query = Usuario.query.filter_by(rol=RolesEnum.porteria)
-    if buscar_identificacion:
-        query = query.filter(Usuario.documento.like(f"%{buscar_identificacion}%"))
-    if buscar_nombre:
-        query = query.filter(Usuario.nombre.ilike(f"%{buscar_nombre}%"))
-    if buscar_email:
-        query = query.filter(Usuario.email.ilike(f"%{buscar_email}%"))
-    porteros = query.all()
-    result = []
-    for p in porteros:
-        result.append({
-            'id_usuario': p.id_usuario,
-            'documento': p.documento,
-            'nombre': p.nombre,
-            'email': p.email,
-            'validado': p.validado
-        })
-    return jsonify({'porteros': result})
-
-@main.route('/admin/actualizar_estado_portero/<int:id_usuario>', methods=['POST'])
-@login_required
-def actualizar_estado_portero(id_usuario):
-    if current_user.rol.value not in ['admin', 'administrativo']:
-        flash("Acceso no autorizado", "danger")
-        return redirect(url_for('main.administrar_porteros'))
-    usuario = Usuario.query.get_or_404(id_usuario)
-    if usuario.rol != RolesEnum.porteria:
-        flash("Solo se puede actualizar el estado de porteros", "danger")
-        return redirect(url_for('main.administrar_porteros'))
-    validado = request.form.get('validado') == 'true'
-    usuario.validado = validado
-    db.session.commit()
-    flash(f"Estado de portero {usuario.nombre} actualizado", "success")
-    return redirect(url_for('main.administrar_porteros'))
-
-@main.route('/admin/instructores')
-@login_required
-def administrar_instructores():
+def actualizar_estado_usuario(id_usuario):
     if current_user.rol.value not in ['admin', 'administrativo']:
         flash("Acceso no autorizado", "danger")
         return redirect(url_for('main.dashboard'))
-    # Renderizar el template de gestión de instructores líderes
-    instructores = Usuario.query.filter_by(rol=RolesEnum.instructor, validado=True).all()
-    fichas = Ficha.query.all()
-    return render_template('administrativo/gestionar_instructores_lideres.html', instructores=instructores, fichas=fichas)
+    
+    usuario = Usuario.query.get_or_404(id_usuario)
+    validado_str = request.form.get('validado')
+    usuario.validado = (validado_str == 'true')
+    
+    db.session.commit()
+    flash(f"Estado de usuario {usuario.nombre} actualizado a {'Activo' if usuario.validado else 'Inactivo'}.", "success")
+    # Como esta ruta es llamada desde el JS que recarga la tabla, no es necesario un redirect directo a la misma página.
+    # Sin embargo, devolvemos un JSON para indicar éxito.
+    return jsonify(message="Estado actualizado con éxito."), 200
 
 @main.route('/api/buscar_instructores')
 @login_required
@@ -696,33 +690,183 @@ def api_buscar_instructores():
         })
     return jsonify({'instructores': result})
 
-@main.route('/api/buscar_fichas_lideres')
+# ------------------------------------------
+# Página Mi Cuenta
+# ------------------------------------------
+@main.route('/cuenta', methods=['GET', 'POST'])
 @login_required
-def api_buscar_fichas_lideres():
+def mi_cuenta():
+    instructor_lider = None
+    if current_user.rol == RolesEnum.aprendiz and current_user.ficha:
+        instructor_lider = current_user.ficha.instructor_lider
+
+    if request.method == 'POST':
+        email = request.form.get('email', '').strip().lower()
+        current_password = request.form.get('current_password', '').strip()
+        password = request.form.get('password', '').strip()
+        cambios = False
+
+        # Verificar la contraseña actual
+        if not bcrypt.check_password_hash(current_user.password_hash, current_password):
+            flash('La contraseña actual es incorrecta.', 'danger')
+            return redirect(url_for('main.mi_cuenta'))
+
+        if email and email != current_user.email:
+            if Usuario.query.filter(Usuario.email == email, Usuario.id_usuario != current_user.id_usuario).first():
+                flash('El correo electrónico ya está en uso.', 'danger')
+            else:
+                current_user.email = email
+                cambios = True
+        if password:
+            current_user.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+            cambios = True
+        if cambios:
+            db.session.commit()
+            flash('Datos actualizados correctamente.', 'success')
+        else:
+            flash('No se realizaron cambios.', 'info')
+        return redirect(url_for('main.mi_cuenta'))
+    return render_template('cuenta/mi_cuenta.html', usuario=current_user, instructor_lider=instructor_lider)
+
+@main.route('/administrativo/gestionar_usuarios')
+@login_required
+def gestionar_usuarios():
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        flash("Acceso no autorizado", "danger")
+        return redirect(url_for('main.dashboard'))
+    return render_template('administrativo/usuarios/gestionar_usuarios.html')
+
+@main.route('/api/buscar_usuarios')
+@login_required
+def api_buscar_usuarios():
     if current_user.rol.value not in ['admin', 'administrativo']:
         return jsonify({'error': 'No autorizado'}), 403
-    buscar_id = request.args.get('buscar_id', '').strip()
+
+    buscar_documento = request.args.get('buscar_documento', '').strip()
+    buscar_nombre = request.args.get('buscar_nombre', '').strip()
+    buscar_email = request.args.get('buscar_email', '').strip()
     buscar_ficha = request.args.get('buscar_ficha', '').strip()
-    buscar_instructor = request.args.get('buscar_instructor', '').strip()
-    buscar_estado = request.args.get('buscar_estado', '').strip()
-    query = Ficha.query
-    if buscar_id:
-        query = query.filter(Ficha.id_ficha.like(f"%{buscar_id}%"))
+    buscar_rol = request.args.get('buscar_rol', '').strip()
+
+    # Excluir usuarios con rol 'admin' y 'administrativo'
+    query = Usuario.query.filter(
+        (Usuario.rol != RolesEnum.admin) &
+        (Usuario.rol != RolesEnum.administrativo)
+    )
+
+    if buscar_documento:
+        query = query.filter(Usuario.documento.like(f"%{buscar_documento}%"))
+    if buscar_nombre:
+        query = query.filter(Usuario.nombre.ilike(f"%{buscar_nombre}%"))
+    if buscar_email:
+        query = query.filter(Usuario.email.ilike(f"%{buscar_email}%"))
+    
     if buscar_ficha:
-        query = query.filter(Ficha.nombre.ilike(f"%{buscar_ficha}%"))
-    if buscar_instructor:
-        query = query.filter(Ficha.instructor_lider.has(Usuario.nombre.ilike(f"%{buscar_instructor}%")))
-    if buscar_estado == 'asignado':
-        query = query.filter(Ficha.id_instructor_lider.isnot(None))
-    elif buscar_estado == 'sin_asignar':
-        query = query.filter(Ficha.id_instructor_lider.is_(None))
-    fichas = query.all()
-    result = []
-    for ficha in fichas:
-        result.append({
-            'id_ficha': ficha.id_ficha,
-            'nombre': ficha.nombre,
-            'instructor_lider': ficha.instructor_lider.nombre if ficha.instructor_lider else None,
-            'id_instructor_lider': ficha.id_instructor_lider
+        # Buscar por ID o nombre de ficha para aprendices e instructores
+        subquery_fichas = Ficha.query.filter(
+            (Ficha.id_ficha.like(f"%{buscar_ficha}%")) |
+            (Ficha.nombre.ilike(f"%{buscar_ficha}%"))
+        ).subquery()
+        query = query.filter(
+            (Usuario.id_ficha.in_(select(subquery_fichas.c.id_ficha))) |
+            (Usuario.rol == RolesEnum.instructor).and_(
+                Usuario.id_usuario.in_(select(Usuario.id_usuario).join(Ficha, Ficha.id_instructor_lider == Usuario.id_usuario).filter(Ficha.id_ficha.in_(select(subquery_fichas.c.id_ficha))))
+            )
+        )
+
+    if buscar_rol:
+        query = query.filter(Usuario.rol == RolesEnum(buscar_rol))
+
+    usuarios = query.all()
+
+    usuarios_json = []
+    for usr in usuarios:
+        ficha_info = None
+        if usr.id_ficha:
+            ficha = Ficha.query.get(usr.id_ficha)
+            if ficha:
+                ficha_info = {'id_ficha': ficha.id_ficha, 'nombre': ficha.nombre}
+        
+        usuarios_json.append({
+            'id_usuario': usr.id_usuario,
+            'documento': usr.documento,
+            'nombre': usr.nombre,
+            'email': usr.email,
+            'rol': usr.rol.value,
+            'ficha': ficha_info,
+            'validado': usr.validado
         })
-    return jsonify({'fichas': result})
+    return jsonify({'usuarios': usuarios_json})
+
+@main.route('/admin/eliminar_usuario/<int:id_usuario>', methods=['POST'])
+@login_required
+def eliminar_usuario(id_usuario):
+    print(f"[TEMP DEBUG] === INICIO ELIMINACIÓN USUARIO {id_usuario} ===")
+    
+    if current_user.rol.value not in ['admin', 'administrativo']:
+        print(f"[TEMP DEBUG] Acceso denegado para rol: {current_user.rol.value}")
+        flash("Acceso no autorizado", "danger")
+        return jsonify({'success': False, 'message': 'Acceso no autorizado'}), 403
+    
+    usuario = Usuario.query.get(id_usuario)
+    if not usuario:
+        print(f"[TEMP DEBUG] Usuario {id_usuario} no encontrado")
+        return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
+
+    print(f"[TEMP DEBUG] Usuario encontrado: {usuario.nombre} - Rol: {usuario.rol.value} - Validado: {usuario.validado}")
+
+    # No permitir eliminar administradores
+    if usuario.rol == RolesEnum.admin:
+        print(f"[TEMP DEBUG] Bloqueado: es administrador")
+        flash("No se puede eliminar un usuario con rol de administrador.", "danger")
+        return jsonify({'success': False, 'message': 'No se puede eliminar un usuario con rol de administrador.'}), 400
+
+    try:
+        # Verificar dependencias críticas
+        solicitudes_aprendiz = Solicitud.query.filter_by(id_aprendiz=id_usuario).count()
+        solicitudes_instructor = Solicitud.query.filter_by(id_instructor_aprobador=id_usuario).count()
+        fichas_lider = Ficha.query.filter_by(id_instructor_lider=id_usuario).count()
+
+        print(f"[TEMP DEBUG] Dependencias - Solicitudes aprendiz: {solicitudes_aprendiz}, Solicitudes instructor: {solicitudes_instructor}, Fichas líder: {fichas_lider}")
+
+        # Si tiene solicitudes, no permitir eliminar (mantiene integridad de datos históricos)
+        if solicitudes_aprendiz > 0 or solicitudes_instructor > 0:
+            mensaje = f"No se puede eliminar a {usuario.nombre} porque tiene solicitudes asociadas como "
+            if solicitudes_aprendiz > 0 and solicitudes_instructor > 0:
+                mensaje += f"aprendiz ({solicitudes_aprendiz}) e instructor ({solicitudes_instructor}). "
+            elif solicitudes_aprendiz > 0:
+                mensaje += f"aprendiz ({solicitudes_aprendiz}). "
+            else:
+                mensaje += f"instructor ({solicitudes_instructor}). "
+            
+            # Sugerir alternativa para usuarios inactivos
+            if not usuario.validado:
+                mensaje += "Como el usuario está inactivo, considere mantenerlo deshabilitado en lugar de eliminarlo."
+            else:
+                mensaje += "Considere desactivar el usuario en lugar de eliminarlo para preservar el historial."
+            
+            print(f"[TEMP DEBUG] Bloqueado por dependencias: {mensaje}")
+            return jsonify({'success': False, 'message': mensaje}), 400
+
+        # Limpiar relaciones seguras antes de eliminar
+        if fichas_lider > 0:
+            print(f"[TEMP DEBUG] Limpiando {fichas_lider} fichas como instructor líder")
+            # Remover como instructor líder de fichas
+            Ficha.query.filter_by(id_instructor_lider=id_usuario).update({'id_instructor_lider': None})
+        
+        # Eliminar el usuario
+        nombre_usuario = usuario.nombre
+        print(f"[TEMP DEBUG] Procediendo a eliminar usuario: {nombre_usuario}")
+        db.session.delete(usuario)
+        db.session.commit()
+        
+        print(f"[TEMP DEBUG] ✅ Usuario {nombre_usuario} eliminado exitosamente")
+        flash(f"Usuario {nombre_usuario} eliminado exitosamente.", "success")
+        return jsonify({'success': True, 'message': f'Usuario {nombre_usuario} eliminado exitosamente.'})
+        
+    except Exception as e:
+        print(f"[TEMP DEBUG] ❌ Excepción: {str(e)}")
+        db.session.rollback()
+        error_msg = f"Error al eliminar el usuario: {str(e)}"
+        flash(error_msg, "danger")
+        return jsonify({'success': False, 'message': error_msg}), 500

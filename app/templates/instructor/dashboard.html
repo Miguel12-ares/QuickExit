@@ -2,6 +2,7 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/dashboard.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 {% endblock %}
 
 {% block content %}
@@ -9,60 +10,66 @@
   <h2>Panel de Instructor</h2>
   <div class="solicitudes-section">
     <h3>Solicitudes Pendientes</h3>
-    <table class="solicitudes-table">
-      <thead>
-        <tr>
-          <th>Aprendiz</th>
-          <th>Tipo de Salida</th>
-          <th>Hora Estimada</th>
-          <th>Motivo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for solicitud in pendientes %}
-        <tr>
-          <td>{{ solicitud.aprendiz.nombre }}</td>
-          <td>{{ solicitud.tipo_salida.nombre }}</td>
-          <td>{{ solicitud.hora_salida_estimada }}</td>
-          <td>{{ solicitud.motivo }}</td>
-          <td>
-            <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="post" class="form-inline">
-              <button type="submit" class="btn-aprobar">Aprobar</button>
-            </form>
-            <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="post" class="form-inline">
-              <button type="submit" class="btn-rechazar">Rechazar</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="solicitudes-table">
+        <thead>
+          <tr>
+            <th>Aprendiz</th>
+            <th>Tipo de Salida</th>
+            <th>Hora Estimada</th>
+            <th>Motivo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for solicitud in pendientes %}
+          <tr>
+            <td>{{ solicitud.aprendiz.nombre }}</td>
+            <td>{{ solicitud.tipo_salida.nombre }}</td>
+            <td>{{ solicitud.hora_salida_estimada }}</td>
+            <td>{{ solicitud.motivo }}</td>
+            <td>
+              <div class="botones-container">
+                <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="post" class="form-inline">
+                  <button type="submit" class="btn-aprobar">Aprobar</button>
+                </form>
+                <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="post" class="form-inline">
+                  <button type="submit" class="btn-rechazar">Rechazar</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
   <div class="solicitudes-section">
     <h3>Historial de Solicitudes</h3>
-    <table class="solicitudes-table">
-      <thead>
-        <tr>
-          <th>Aprendiz</th>
-          <th>Tipo de Salida</th>
-          <th>Hora Estimada</th>
-          <th>Motivo</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for solicitud in historial %}
-        <tr>
-          <td>{{ solicitud.aprendiz.nombre }}</td>
-          <td>{{ solicitud.tipo_salida.nombre }}</td>
-          <td>{{ solicitud.hora_salida_estimada }}</td>
-          <td>{{ solicitud.motivo }}</td>
-          <td>{{ solicitud.estado.value|capitalize }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="solicitudes-table">
+        <thead>
+          <tr>
+            <th>Aprendiz</th>
+            <th>Tipo de Salida</th>
+            <th>Hora Estimada</th>
+            <th>Motivo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for solicitud in historial %}
+          <tr>
+            <td>{{ solicitud.aprendiz.nombre }}</td>
+            <td>{{ solicitud.tipo_salida.nombre }}</td>
+            <td>{{ solicitud.hora_salida_estimada }}</td>
+            <td>{{ solicitud.motivo }}</td>
+            <td>{{ solicitud.estado.value|capitalize }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% endblock %} 

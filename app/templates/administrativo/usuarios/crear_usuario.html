@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{# Este archivo ha sido movido a la carpeta 'usuarios' para centralizar la gestión de usuarios. #}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/usuarios/crear_usuario.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="crear-usuario-panel">
+  <h2><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h2>
+  
+  <form method="POST" action="{{ url_for('main.crear_usuario_avanzado') }}" class="usuario-form">
+    <div class="input-group">
+      <i class="fas fa-id-card input-icon"></i>
+      <input type="text" id="documento" name="documento" required pattern="[0-9]+" inputmode="numeric" placeholder="Documento" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-user input-icon"></i>
+      <input type="text" id="nombre" name="nombre" required placeholder="Nombre Completo">
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-envelope input-icon"></i>
+      <input type="email" id="email" name="email" required placeholder="Correo Electrónico">
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-lock input-icon"></i>
+      <input type="password" id="password" name="password" required placeholder="Contraseña">
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-user-tag input-icon"></i>
+      <select id="rol" name="rol" required>
+        <option value="">Seleccione un rol</option>
+        <option value="instructor">Instructor</option>
+        <option value="porteria">Portería</option>
+      </select>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-user-plus"></i> Crear Usuario
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Validación extra por JS para evitar letras en el input documento
+const docInput = document.getElementById('documento');
+docInput.addEventListener('input', function(e) {
+  this.value = this.value.replace(/[^0-9]/g, '');
+});
+</script>
+{% endblock %} 

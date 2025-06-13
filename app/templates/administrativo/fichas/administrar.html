@@ -2,30 +2,37 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/administrar.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta name="route-asignar" content="{{ url_for('main.asignar_instructor_lider', id_ficha=0) }}">
+  <meta name="route-remover" content="{{ url_for('main.remover_instructor_lider', id_ficha=0) }}">
 {% endblock %}
 
 {% block content %}
 <div class="fichas-panel">
   <h2><i class="fas fa-file-alt"></i> Administrar Fichas</h2>
-  <form id="buscador-fichas" class="search-form" autocomplete="off">
+  <form id="buscador-fichas" class="mb-3 d-flex flex-wrap" autocomplete="off">
     <div class="input-group">
-      <span class="input-icon"><i class="fas fa-hashtag"></i></span>
-      <input type="text" name="buscar_id" placeholder="ID de ficha">
+      <i class="fas fa-hashtag input-icon"></i>
+      <input type="text" name="buscar_id" class="form-control" placeholder="ID de ficha">
     </div>
     <div class="input-group">
-      <span class="input-icon"><i class="fas fa-file-signature"></i></span>
-      <input type="text" name="buscar_nombre" placeholder="Nombre de ficha">
+      <i class="fas fa-file-signature input-icon"></i>
+      <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre de ficha">
     </div>
     <div class="input-group">
-      <span class="input-icon"><i class="fas fa-user-tie"></i></span>
-      <input type="text" name="buscar_instructor" placeholder="Instructor líder">
+      <i class="fas fa-user-tie input-icon"></i>
+      <input type="text" name="buscar_instructor" class="form-control" placeholder="Instructor líder">
     </div>
-    <div class="form-actions">
-      <button type="button" id="btn-buscar" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
-      <button type="button" id="btn-limpiar" class="btn btn-secondary"><i class="fas fa-eraser"></i> Limpiar</button>
+    <div class="botones-busqueda">
+      <button type="button" id="btn-buscar" class="btn btn-primary">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+      <button type="button" id="btn-limpiar" class="btn btn-secondary">
+        <i class="fas fa-broom"></i> Limpiar
+      </button>
     </div>
   </form>
+
   <div class="table-container">
     <table class="fichas-table">
       <thead>
@@ -33,8 +40,8 @@
           <th><i class="fas fa-hashtag"></i> ID Ficha</th>
           <th><i class="fas fa-file-signature"></i> Nombre</th>
           <th><i class="fas fa-user-tie"></i> Instructor Líder</th>
-          <th><i class="fas fa-calendar-alt"></i> Fecha de Creación</th>
           <th><i class="fas fa-toggle-on"></i> Estado</th>
+          <th><i class="fas fa-cogs"></i> Acciones</th>
           <th><i class="fas fa-comment-alt"></i> Observaciones</th>
         </tr>
       </thead>
@@ -44,6 +51,26 @@
     </table>
   </div>
 </div>
+
+<!-- Contenedor para modales generados dinámicamente -->
+<div id="modals-container"></div>
+
+<script>
+  function abrirModal(idModal) {
+    document.getElementById(idModal).style.display = 'flex';
+  }
+
+  function cerrarModal(idModal) {
+    document.getElementById(idModal).style.display = 'none';
+  }
+
+  // Cerrar modal al hacer clic en el overlay (shared logic)
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.style.display = 'none';
+    }
+  });
+</script>
 {% endblock %}
 
 {% block extra_js %}
