@@ -42,7 +42,8 @@
             {% if current_user.is_authenticated %}
               {% if current_user.rol in ['admin', 'administrativo'] %}
                 <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
-                <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
+                {# ENLACE ACTUALIZADO: Redirige al nuevo dashboard unificado de gestión de usuarios #}
+                <li><a href="{{ url_for('main.gestionar_usuarios_dashboard') }}"><i class="fas fa-users-cog"></i> Gestionar Usuarios</a></li>
               {% elif current_user.rol == 'instructor' %}
                 <li><a href="{{ url_for('main.instructor_dashboard') }}"><i class="fas fa-chalkboard-teacher"></i> Panel Instructor</a></li>
                 <li><a href="{{ url_for('main.validar_aprendices') }}"><i class="fas fa-user-graduate"></i> Gestionar Aprendices</a></li>
@@ -88,10 +89,14 @@
         </li>
         {% if current_user.rol in ['admin', 'administrativo'] %}
           <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
-          <li><a href="{{ url_for('main.administrar_porteros') }}"><i class="fas fa-user-shield"></i> Validar Porteros</a></li>
+          {# ENLACE ACTUALIZADO: Redirige al nuevo dashboard unificado de gestión de usuarios #}
+          <li><a href="{{ url_for('main.gestionar_usuarios_dashboard') }}"><i class="fas fa-users-cog"></i> Gestionar Usuarios</a></li>
         {% elif current_user.rol == 'instructor' %}
           <li><a href="{{ url_for('main.instructor_dashboard') }}"><i class="fas fa-chalkboard-teacher"></i> Panel Instructor</a></li>
           <li><a href="{{ url_for('main.validar_aprendices') }}"><i class="fas fa-user-graduate"></i> Gestionar Aprendices</a></li>
+          <li><a href="{{ url_for('main.validar_salidas') }}"><i class="fas fa-check-circle"></i> Validar Salidas</a></li>
+          {# ENLACE ACTUALIZADO: Redirige al nuevo dashboard unificado de gestión de usuarios #}
+          <li><a href="{{ url_for('main.gestionar_usuarios_dashboard') }}"><i class="fas fa-users-cog"></i> Gestionar Usuarios</a></li>
         {% endif %}
         <li><a href="{{ url_for('main.logout') }}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
       {% else %}

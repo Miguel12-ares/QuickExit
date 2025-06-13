@@ -1,3 +1,4 @@
+/* Este archivo JavaScript ha sido movido a la carpeta 'usuarios' para centralizar la lógica de búsqueda y gestión de usuarios. */
 document.addEventListener('DOMContentLoaded', function() {
     const buscadorForm = document.getElementById('buscador-usuarios');
     const tablaBody = document.querySelector('.admin-table tbody');
@@ -25,11 +26,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         row.insertCell().textContent = usuario.email;
                         row.insertCell().textContent = usuario.rol;
                         row.insertCell().textContent = usuario.ficha ? `${usuario.ficha.nombre} (${usuario.ficha.id_ficha})` : 'N/A';
-                        row.insertCell().innerHTML = `
-                            <span class="badge ${usuario.validado ? 'badge-activo' : 'badge-inactivo'}">
-                                ${usuario.validado ? 'Activo' : 'Inactivo'}
-                            </span>
+                        // Selector para cambiar el estado de validación del usuario
+                        const validadoCell = row.insertCell();
+                        validadoCell.innerHTML = `
+                            <select name="validado" class="estado-select${!usuario.validado ? ' desactivado' : ''}" data-user-id="${usuario.id_usuario}">
+                                <option value="true" ${usuario.validado ? 'selected' : ''}>Activo</option>
+                                <option value="false" ${!usuario.validado ? 'selected' : ''}>Inactivo</option>
+                            </select>
                         `;
+                        // Añadir event listener al select después de que se ha añadido al DOM
+                        const estadoSelect = validadoCell.querySelector('.estado-select');
+                        estadoSelect.addEventListener('change', function() {
+                            const userId = this.dataset.userId;
+                            const newStatus = this.value;
+                            actualizarEstadoUsuario(userId, newStatus);
+                        });
+
                         const accionesCell = row.insertCell();
                         // Botón de eliminar
                         const deleteButton = document.createElement('button');
@@ -87,6 +99,30 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error al eliminar usuario:', error);
             alert(`Ocurrió un error al intentar eliminar el usuario: ${error.message}`);
+        });
+    }
+
+    function actualizarEstadoUsuario(id_usuario, nuevo_estado) {
+        fetch(`/admin/actualizar_estado_usuario/${id_usuario}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded', // Para enviar como form data
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: `validado=${nuevo_estado}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                cargarUsuarios(); // Recargar la tabla para reflejar los cambios
+            } else if (data.error) {
+                alert(`Error: ${data.error}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error al actualizar estado:', error);
+            alert('Ocurrió un error al actualizar el estado del usuario.');
         });
     }
 

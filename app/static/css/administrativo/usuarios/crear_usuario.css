@@ -1,4 +1,5 @@
-/* Estilos para gestión de usuarios - administrativo */
+/* Estilos para crear usuario */
+/* Este archivo CSS ha sido movido a la carpeta 'usuarios' para centralizar los estilos relacionados con la gestión de usuarios. */
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
 
 :root {
@@ -20,15 +21,15 @@ body {
   justify-content: center;
 }
 
-.admin-panel {
+.crear-usuario-panel {
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 8px 32px 0 rgba(34, 139, 34, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
-  padding: 2.5rem 2rem 2rem 2rem;
-  margin: 0 auto;
-  max-width: 1100px;
-  width: 100%;
+  padding: 2rem 2rem 1.5rem 2rem;
+  width: 90%;
+  max-width: 600px;
   animation: zoomIn 1.2s cubic-bezier(.4,0,.2,1);
+  margin: 0 auto;
 }
 
 @keyframes zoomIn {
@@ -42,7 +43,7 @@ body {
   }
 }
 
-.admin-panel h2 {
+.crear-usuario-panel h2 {
   color: var(--dark-green);
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -55,26 +56,23 @@ body {
   justify-content: center;
 }
 
-.admin-panel h2 i {
+.crear-usuario-panel h2 i {
   font-size: 1.1em;
 }
 
-.filtros-busqueda {
-  margin-bottom: 2.5rem;
-}
-
-.search-form {
+.usuario-form {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   padding: 0 1rem;
 }
 
 .input-group {
   width: 100%;
-  max-width: 250px;
+  max-width: 400px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -130,12 +128,10 @@ body {
   background-repeat: no-repeat;
   background-position: calc(100% - 0.5rem) center;
   padding-right: 2rem;
-  cursor: pointer;
 }
 
-.botones-busqueda {
+.form-actions {
   display: flex;
-  gap: 1rem;
   justify-content: center;
   width: 100%;
   margin-top: 1rem;
@@ -158,6 +154,7 @@ body {
   font-family: 'Work Sans', Arial, sans-serif;
   letter-spacing: 0.3px;
   gap: 0.8rem;
+  min-width: 200px;
 }
 
 .btn i {
@@ -175,17 +172,6 @@ body {
   transform: translateY(-2px) scale(1.04);
 }
 
-.btn-secondary {
-  background: #e0e0e0;
-  color: #333;
-}
-
-.btn-secondary:hover {
-  background: #bdbdbd;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-  transform: translateY(-2px) scale(1.04);
-}
-
 .btn:active {
   animation: btnPop 0.18s cubic-bezier(.4,0,.2,1);
 }
@@ -194,108 +180,6 @@ body {
   0% { transform: scale(1); }
   50% { transform: scale(0.96); }
   100% { transform: scale(1); }
-}
-
-#btn-buscar-usr,
-#btn-limpiar-usr {
-  min-width: 130px;
-  max-width: 180px;
-  flex: 1;
-}
-
-.btn-delete {
-  background: #f44336;
-  color: #fff;
-  padding: 0.5rem 0.8rem;
-  font-size: 0.85rem;
-  box-shadow: 0 2px 6px rgba(244,67,54,0.08);
-}
-
-.btn-delete:hover {
-  background: #d32f2f;
-  box-shadow: 0 6px 18px rgba(244,67,54,0.18);
-  transform: translateY(-2px) scale(1.04);
-}
-
-.table-container {
-  overflow-x: auto;
-  margin-top: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.admin-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 1rem;
-  background: #fff;
-  font-family: 'Work Sans', Arial, sans-serif;
-}
-
-.admin-table th {
-  background: var(--primary-green);
-  color: #fff;
-  font-weight: 700;
-  padding: 1rem;
-  text-align: left;
-  white-space: nowrap;
-  border-right: 2px solid rgba(255, 255, 255, 0.2);
-  font-family: 'Work Sans', Arial, sans-serif;
-}
-
-.admin-table th:last-child {
-  border-right: none;
-}
-
-.admin-table th i {
-  margin-right: 0.5rem;
-  font-size: 1.1em;
-}
-
-.admin-table tr:nth-child(even) {
-  background: var(--bg-light-green);
-}
-
-.admin-table td {
-  padding: 1rem;
-  vertical-align: middle;
-  border-bottom: 1px solid var(--border-green);
-  border-right: 2px solid var(--border-green);
-  font-family: 'Work Sans', Arial, sans-serif;
-  color: #333;
-}
-
-.admin-table td:last-child {
-  border-right: none;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.admin-table td:nth-child(6) {
-  text-align: center;
-}
-
-.badge {
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-family: 'Work Sans', Arial, sans-serif;
-  justify-content: center;
-}
-
-.badge-activo {
-  background: var(--primary-green);
-  color: #fff;
-}
-
-.badge-inactivo {
-  background: #f44336;
-  color: #fff;
 }
 
 /* Asegurarse de que los iconos de Font Awesome se muestren correctamente */
@@ -312,7 +196,6 @@ body {
   font-family: "Font Awesome 6 Brands" !important;
 }
 
-/* Media queries */
 @media (max-width: 700px) {
   body {
     padding: 60px 15px 15px 15px;
@@ -321,24 +204,24 @@ body {
     justify-content: center;
   }
   
-  .admin-panel {
-    margin: 0;
-    padding: 2rem 1.5rem;
+  .crear-usuario-panel {
     width: 100%;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
   }
   
-  .admin-panel h2 {
+  .crear-usuario-panel h2 {
     font-size: 1.3rem;
     gap: 0.3rem;
     flex-wrap: wrap;
     line-height: 1.4;
   }
   
-  .admin-panel h2 i {
+  .crear-usuario-panel h2 i {
     font-size: 1em;
   }
   
-  .search-form {
+  .usuario-form {
     gap: 1rem;
     padding: 0;
   }
@@ -364,37 +247,8 @@ body {
   .btn {
     font-size: 1rem;
     padding: 0.8rem 1.2rem;
-    width: 100%;
-  }
-
-  .botones-busqueda {
-    width: 100%;
-    margin-top: 1rem;
-  }
-  
-  #btn-buscar-usr,
-  #btn-limpiar-usr {
-    flex: 1;
     min-width: unset;
-    max-width: unset;
-  }
-  
-  .admin-table {
-    font-size: 0.9rem;
-  }
-  
-  .admin-table th,
-  .admin-table td {
-    padding: 0.7rem 0.5rem;
-  }
-  
-  .btn-delete {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.7rem;
-  }
-  
-  .badge {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.6rem;
+    width: 100%;
+    max-width: 250px;
   }
 } 

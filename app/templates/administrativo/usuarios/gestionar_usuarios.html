@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
+{# Este archivo ha sido movido a la carpeta 'usuarios' para centralizar la gestión de usuarios dentro del módulo de usuarios. #}
+
 {% block title %}Gestionar Usuarios - QuickExit{% endblock %}
 
 {% block extra_css %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/gestionar_usuarios.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/usuarios/gestionar_usuarios.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -72,5 +74,5 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{{ url_for('static', filename='js/administrativo/buscador_ajax/gestionar_usuarios.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/administrativo/usuarios/gestionar_usuarios.js') }}"></script>
 {% endblock %} 

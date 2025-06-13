@@ -3,6 +3,8 @@
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/administrar.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <meta name="route-asignar" content="{{ url_for('main.asignar_instructor_lider', id_ficha=0) }}">
+  <meta name="route-remover" content="{{ url_for('main.remover_instructor_lider', id_ficha=0) }}">
 {% endblock %}
 
 {% block content %}
@@ -38,8 +40,8 @@
           <th><i class="fas fa-hashtag"></i> ID Ficha</th>
           <th><i class="fas fa-file-signature"></i> Nombre</th>
           <th><i class="fas fa-user-tie"></i> Instructor Líder</th>
-          <th><i class="fas fa-calendar-alt"></i> Fecha de Creación</th>
           <th><i class="fas fa-toggle-on"></i> Estado</th>
+          <th><i class="fas fa-cogs"></i> Acciones</th>
           <th><i class="fas fa-comment-alt"></i> Observaciones</th>
         </tr>
       </thead>
@@ -49,6 +51,26 @@
     </table>
   </div>
 </div>
+
+<!-- Contenedor para modales generados dinámicamente -->
+<div id="modals-container"></div>
+
+<script>
+  function abrirModal(idModal) {
+    document.getElementById(idModal).style.display = 'flex';
+  }
+
+  function cerrarModal(idModal) {
+    document.getElementById(idModal).style.display = 'none';
+  }
+
+  // Cerrar modal al hacer clic en el overlay (shared logic)
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.style.display = 'none';
+    }
+  });
+</script>
 {% endblock %}
 
 {% block extra_js %}
