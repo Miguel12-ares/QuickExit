@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         deleteButton.classList.add('btn', 'btn-delete');
                         deleteButton.dataset.id = usuario.id_usuario;
                         deleteButton.addEventListener('click', function() {
+                            console.log(`Intentando eliminar usuario ${usuario.id_usuario}: ${usuario.nombre}`);
                             if (confirm(`¿Estás seguro de que quieres eliminar a ${usuario.nombre}?`)) {
                                 eliminarUsuario(usuario.id_usuario);
                             }
@@ -54,30 +55,43 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.style.padding = '2rem';
                 }
             })
-            .catch(error => console.error('Error al cargar usuarios:', error));
+            .catch(error => {
+                console.error('Error al cargar usuarios:', error);
+                alert('Error al cargar usuarios. Revisa la consola para más detalles.');
+            });
     }
 
     function eliminarUsuario(id_usuario) {
+        console.log(`Iniciando eliminación del usuario con ID: ${id_usuario}`);
+        
         fetch(`/admin/eliminar_usuario/${id_usuario}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
             },
-            // Si necesitas enviar datos en el cuerpo, hazlo aquí
-            // body: JSON.stringify({ key: 'value' }),
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log(`Respuesta del servidor: ${response.status} ${response.statusText}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return response.json();
+        })
         .then(data => {
+            console.log('Datos recibidos:', data);
             if (data.success) {
                 alert(data.message);
                 cargarUsuarios(); // Recargar la tabla después de eliminar
             } else {
-                alert(data.message);
+                alert(data.message || 'Error desconocido al eliminar usuario');
             }
         })
         .catch(error => {
             console.error('Error al eliminar usuario:', error);
-            alert('Ocurrió un error al intentar eliminar el usuario.');
+            alert(`Ocurrió un error al intentar eliminar el usuario: ${error.message}`);
         });
     }
 

@@ -879,23 +879,36 @@ def api_buscar_usuarios():
 @main.route('/admin/eliminar_usuario/<int:id_usuario>', methods=['POST'])
 @login_required
 def eliminar_usuario(id_usuario):
+    print(f"[DEBUG] Intentando eliminar usuario con ID: {id_usuario}")
+    print(f"[DEBUG] Usuario actual: {current_user.nombre} (rol: {current_user.rol.value})")
+    
     if current_user.rol.value not in ['admin', 'administrativo']:
+        print(f"[DEBUG] Acceso denegado - rol no autorizado: {current_user.rol.value}")
         flash("Acceso no autorizado", "danger")
         return jsonify({'success': False, 'message': 'Acceso no autorizado'}), 403
     
-    usuario = Usuario.query.get_or_404(id_usuario)
+    usuario = Usuario.query.get(id_usuario)
+    if not usuario:
+        print(f"[DEBUG] Usuario con ID {id_usuario} no encontrado")
+        return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
+
+    print(f"[DEBUG] Usuario encontrado: {usuario.nombre} (rol: {usuario.rol.value})")
 
     # No permitir eliminar administradores
     if usuario.rol == RolesEnum.admin:
+        print(f"[DEBUG] Intento de eliminar administrador bloqueado")
         flash("No se puede eliminar un usuario con rol de administrador.", "danger")
         return jsonify({'success': False, 'message': 'No se puede eliminar un usuario con rol de administrador.'}), 400
 
     try:
+        print(f"[DEBUG] Procediendo a eliminar usuario {usuario.nombre}")
         db.session.delete(usuario)
         db.session.commit()
+        print(f"[DEBUG] Usuario {usuario.nombre} eliminado exitosamente")
         flash(f"Usuario {usuario.nombre} eliminado exitosamente.", "success")
         return jsonify({'success': True, 'message': f'Usuario {usuario.nombre} eliminado exitosamente.'})
     except Exception as e:
+        print(f"[DEBUG] Error al eliminar usuario: {str(e)}")
         db.session.rollback()
         flash(f"Error al eliminar el usuario: {str(e)}", "danger")
         return jsonify({'success': False, 'message': f'Error al eliminar el usuario: {str(e)}'}), 500
