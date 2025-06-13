@@ -45,20 +45,20 @@ document.addEventListener('DOMContentLoaded', () => {
   // Cargar instructores al inicio
   cargarInstructores();
 
-  // Función para cerrar modales con animación
+  // Función para cerrar modales (global)
   window.cerrarModal = function(modalId) {
     const modal = document.getElementById(modalId);
-    const botonesContainer = modal.parentNode.querySelector('.botones-container');
-    
-    modal.classList.add('closing');
-    
-    setTimeout(() => {
+    if (modal) {
       modal.style.display = 'none';
-      modal.classList.remove('closing');
-      if (botonesContainer) {
-        botonesContainer.style.display = 'flex';
-      }
-    }, 300); // Tiempo igual a la duración de la animación
+    }
+  };
+
+  // Función para abrir modales (global)
+  window.abrirModal = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+      modal.style.display = 'block';
+    }
   };
 
   function render(fichas) {
@@ -99,13 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Contenedor de botones
       const divBotones = document.createElement('div');
-      divBotones.style.marginBottom = '6px';
       divBotones.className = 'botones-container';
       
       if (ficha.instructor_lider) {
         // Botón Cambiar Instructor
         divBotones.innerHTML = `
-          <button type="button" class="btn-lider" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('${modalId}'); modal.classList.remove('closing'); modal.style.display = 'block';">
+          <button type="button" class="btn-lider" onclick="abrirModal('${modalId}')">
             <i class="fas fa-exchange-alt"></i> Cambiar Instructor
           </button>
           <form action="${routeRemover}${ficha.id_ficha}" method="POST" style="display:inline-block;">
@@ -117,19 +116,28 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // Botón Asignar Instructor
         divBotones.innerHTML = `
-          <button type="button" class="btn-asignar" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('${modalId}'); modal.classList.remove('closing'); modal.style.display = 'block';">
+          <button type="button" class="btn-asignar" onclick="abrirModal('${modalId}')">
             <i class="fas fa-user-plus"></i> Asignar Instructor
           </button>
         `;
       }
       
       tdAcciones.appendChild(divBotones);
-      
-      // Crear el modal
-      const divModal = document.createElement('div');
-      divModal.id = modalId;
-      divModal.className = 'asignar-modal';
-      divModal.style.display = 'none';
+      row.appendChild(tdAcciones);
+      tbody.appendChild(row);
+    });
+
+    // Crear los modales fuera de la tabla
+    crearModales(fichas);
+  }
+
+  // Función para crear los modales
+  function crearModales(fichas) {
+    // Limpiar modales existentes
+    document.querySelectorAll('.modal-overlay').forEach(modal => modal.remove());
+    
+    fichas.forEach(ficha => {
+      const modalId = `modal-${ficha.id_ficha}`;
       
       // Crear el contenido del modal
       let instructoresOptions = '<option value="">Seleccione un instructor...</option>';
@@ -138,49 +146,35 @@ document.addEventListener('DOMContentLoaded', () => {
         instructoresOptions += `<option value="${instructor.id_usuario}" ${selected}>${instructor.nombre}</option>`;
       });
       
-      divModal.innerHTML = `
-        <form action="${routeAsignar}${ficha.id_ficha}" method="POST">
-          <div class="modal-title">
-            <i class="fas fa-user-plus"></i> Asignar Instructor Líder - ${ficha.nombre}
+      // Crear el modal
+      const modalHTML = `
+        <div id="${modalId}" class="modal-overlay">
+          <div class="modal-container">
+            <div class="modal-header">
+              <i class="fas fa-user-plus"></i>
+              <h3>Asignar Instructor Líder - ${ficha.nombre}</h3>
+            </div>
+            <form action="${routeAsignar}${ficha.id_ficha}" method="POST">
+              <div class="modal-body">
+                <select name="id_instructor" required>
+                  ${instructoresOptions}
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="modal-btn btn-secondary" onclick="cerrarModal('${modalId}')">
+                  <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="submit" class="modal-btn">
+                  <i class="fas fa-check"></i> Asignar
+                </button>
+              </div>
+            </form>
           </div>
-          <select name="id_instructor" required class="form-control">
-            ${instructoresOptions}
-          </select>
-          <div class="form-actions" style="margin-top: 1rem; text-align: center; display: flex; justify-content: center;">
-            <button type="button" class="btn-cancelar" onclick="event.preventDefault(); cerrarModal('${modalId}')">
-              <i class="fas fa-times"></i> Cancelar
-            </button>
-            <button type="submit" class="btn-asignar">
-              <i class="fas fa-check"></i> Asignar
-            </button>
-          </div>
-        </form>
+        </div>
       `;
       
-      tdAcciones.appendChild(divModal);
-      row.appendChild(tdAcciones);
-      
-      tbody.appendChild(row);
-    });
-    
-    // Agregar listener para cerrar modales al hacer clic fuera
-    document.addEventListener('click', function(e) {
-      document.querySelectorAll('.asignar-modal').forEach(function(modal) {
-        if (modal.style.display === 'block' && !modal.contains(e.target) && e.target.type !== 'button') {
-          // Cerrar con animación
-          modal.classList.add('closing');
-          
-          setTimeout(() => {
-            modal.style.display = 'none';
-            modal.classList.remove('closing');
-            // Mostrar los botones nuevamente
-            const botonesContainer = modal.parentNode.querySelector('.botones-container');
-            if (botonesContainer) {
-              botonesContainer.style.display = 'flex';
-            }
-          }, 300);
-        }
-      });
+      // Añadir al final del body
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
     });
   }
 

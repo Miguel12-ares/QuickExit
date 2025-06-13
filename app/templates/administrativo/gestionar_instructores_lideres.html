@@ -87,7 +87,7 @@
           <td>
             <div class="botones-container">
               {% if ficha.instructor_lider %}
-                <button type="button" class="btn-lider" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('modal-{{ ficha.id_ficha }}'); modal.classList.remove('closing'); modal.style.display='block'">
+                <button type="button" class="btn-lider" onclick="abrirModal('modal-{{ ficha.id_ficha }}')">
                   <i class="fas fa-exchange-alt"></i> Cambiar Instructor
                 </button>
                 <form action="{{ url_for('main.remover_instructor_lider', id_ficha=ficha.id_ficha) }}" method="POST" style="display:inline-block;">
@@ -96,32 +96,10 @@
                   </button>
                 </form>
               {% else %}
-                <button type="button" class="btn-asignar" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('modal-{{ ficha.id_ficha }}'); modal.classList.remove('closing'); modal.style.display='block'">
+                <button type="button" class="btn-asignar" onclick="abrirModal('modal-{{ ficha.id_ficha }}')">
                   <i class="fas fa-user-plus"></i> Asignar Instructor
                 </button>
               {% endif %}
-            </div>
-            <!-- Modal de asignación -->
-            <div id="modal-{{ ficha.id_ficha }}" class="asignar-modal" style="display:none;">
-              <form action="{{ url_for('main.asignar_instructor_lider', id_ficha=ficha.id_ficha) }}" method="POST">
-                <div class="modal-title">
-                  <i class="fas fa-user-plus"></i> Asignar Instructor Líder - {{ ficha.nombre }}
-                </div>
-                <select name="id_instructor" required>
-                  <option value="">Seleccione un instructor...</option>
-                  {% for instructor in instructores %}
-                  <option value="{{ instructor.id_usuario }}" {% if ficha.instructor_lider and ficha.instructor_lider.id_usuario == instructor.id_usuario %}selected{% endif %}>{{ instructor.nombre }}</option>
-                  {% endfor %}
-                </select>
-                <div class="form-actions">
-                  <button type="button" class="btn-cancelar" onclick="event.preventDefault(); cerrarModal('modal-{{ ficha.id_ficha }}')">
-                    <i class="fas fa-times"></i> Cancelar
-                  </button>
-                  <button type="submit" class="btn-asignar">
-                    <i class="fas fa-check"></i> Asignar
-                  </button>
-                </div>
-              </form>
             </div>
           </td>
         </tr>
@@ -131,39 +109,42 @@
   </div>
 </div>
 
-<script>
-  // Función para cerrar modales con animación
-  function cerrarModal(modalId) {
-    const modal = document.getElementById(modalId);
-    const botonesContainer = modal.parentNode.querySelector('.botones-container');
-    
-    modal.classList.add('closing');
-    
-    setTimeout(() => {
-      modal.style.display = 'none';
-      modal.classList.remove('closing');
-      if (botonesContainer) {
-        botonesContainer.style.display = 'flex';
-      }
-    }, 300);
-  }
+<!-- Modales de asignación -->
+{% for ficha in fichas %}
+<div id="modal-{{ ficha.id_ficha }}" class="modal-overlay">
+  <div class="modal-container">
+    <div class="modal-header">
+      <i class="fas fa-user-plus"></i>
+      <h3>Asignar Instructor Líder - {{ ficha.nombre }}</h3>
+    </div>
+    <form action="{{ url_for('main.asignar_instructor_lider', id_ficha=ficha.id_ficha) }}" method="POST">
+      <div class="modal-body">
+        <select name="id_instructor" required>
+          <option value="">Seleccione un instructor...</option>
+          {% for instructor in instructores %}
+          <option value="{{ instructor.id_usuario }}" {% if ficha.instructor_lider and ficha.instructor_lider.id_usuario == instructor.id_usuario %}selected{% endif %}>{{ instructor.nombre }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="modal-btn btn-secondary" onclick="cerrarModal('modal-{{ ficha.id_ficha }}')">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button type="submit" class="modal-btn">
+          <i class="fas fa-check"></i> Asignar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endfor %}
 
-  // Cierra todos los modales al hacer clic fuera
+<script>
+  // Cerrar modal al hacer clic en el overlay
   document.addEventListener('click', function(e) {
-    document.querySelectorAll('.asignar-modal').forEach(function(modal) {
-      if (modal.style.display === 'block' && !modal.contains(e.target) && e.target.type !== 'button') {
-        modal.classList.add('closing');
-        
-        setTimeout(() => {
-        modal.style.display = 'none';
-          modal.classList.remove('closing');
-          const botonesContainer = modal.parentNode.querySelector('.botones-container');
-          if (botonesContainer) {
-            botonesContainer.style.display = 'flex';
-          }
-        }, 300);
-      }
-    });
+    if (e.target.classList.contains('modal-overlay')) {
+      e.target.style.display = 'none';
+    }
   });
 </script>
 {% endblock %}
