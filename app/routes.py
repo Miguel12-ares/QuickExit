@@ -879,16 +879,23 @@ def api_buscar_usuarios():
 @main.route('/admin/eliminar_usuario/<int:id_usuario>', methods=['POST'])
 @login_required
 def eliminar_usuario(id_usuario):
+    print(f"[TEMP DEBUG] === INICIO ELIMINACIÓN USUARIO {id_usuario} ===")
+    
     if current_user.rol.value not in ['admin', 'administrativo']:
+        print(f"[TEMP DEBUG] Acceso denegado para rol: {current_user.rol.value}")
         flash("Acceso no autorizado", "danger")
         return jsonify({'success': False, 'message': 'Acceso no autorizado'}), 403
     
     usuario = Usuario.query.get(id_usuario)
     if not usuario:
+        print(f"[TEMP DEBUG] Usuario {id_usuario} no encontrado")
         return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
+
+    print(f"[TEMP DEBUG] Usuario encontrado: {usuario.nombre} - Rol: {usuario.rol.value} - Validado: {usuario.validado}")
 
     # No permitir eliminar administradores
     if usuario.rol == RolesEnum.admin:
+        print(f"[TEMP DEBUG] Bloqueado: es administrador")
         flash("No se puede eliminar un usuario con rol de administrador.", "danger")
         return jsonify({'success': False, 'message': 'No se puede eliminar un usuario con rol de administrador.'}), 400
 
@@ -897,6 +904,8 @@ def eliminar_usuario(id_usuario):
         solicitudes_aprendiz = Solicitud.query.filter_by(id_aprendiz=id_usuario).count()
         solicitudes_instructor = Solicitud.query.filter_by(id_instructor_aprobador=id_usuario).count()
         fichas_lider = Ficha.query.filter_by(id_instructor_lider=id_usuario).count()
+
+        print(f"[TEMP DEBUG] Dependencias - Solicitudes aprendiz: {solicitudes_aprendiz}, Solicitudes instructor: {solicitudes_instructor}, Fichas líder: {fichas_lider}")
 
         # Si tiene solicitudes, no permitir eliminar (mantiene integridad de datos históricos)
         if solicitudes_aprendiz > 0 or solicitudes_instructor > 0:
@@ -914,22 +923,27 @@ def eliminar_usuario(id_usuario):
             else:
                 mensaje += "Considere desactivar el usuario en lugar de eliminarlo para preservar el historial."
             
+            print(f"[TEMP DEBUG] Bloqueado por dependencias: {mensaje}")
             return jsonify({'success': False, 'message': mensaje}), 400
 
         # Limpiar relaciones seguras antes de eliminar
         if fichas_lider > 0:
+            print(f"[TEMP DEBUG] Limpiando {fichas_lider} fichas como instructor líder")
             # Remover como instructor líder de fichas
             Ficha.query.filter_by(id_instructor_lider=id_usuario).update({'id_instructor_lider': None})
         
         # Eliminar el usuario
         nombre_usuario = usuario.nombre
+        print(f"[TEMP DEBUG] Procediendo a eliminar usuario: {nombre_usuario}")
         db.session.delete(usuario)
         db.session.commit()
         
+        print(f"[TEMP DEBUG] ✅ Usuario {nombre_usuario} eliminado exitosamente")
         flash(f"Usuario {nombre_usuario} eliminado exitosamente.", "success")
         return jsonify({'success': True, 'message': f'Usuario {nombre_usuario} eliminado exitosamente.'})
         
     except Exception as e:
+        print(f"[TEMP DEBUG] ❌ Excepción: {str(e)}")
         db.session.rollback()
         error_msg = f"Error al eliminar el usuario: {str(e)}"
         flash(error_msg, "danger")

@@ -69,17 +69,19 @@ document.addEventListener('DOMContentLoaded', function() {
             },
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
+            // Intentar obtener el JSON incluso si hay error
+            return response.json().then(data => {
+                return { status: response.status, ok: response.ok, data: data };
+            });
         })
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
+        .then(result => {
+            if (result.ok) {
+                alert(result.data.message);
                 cargarUsuarios(); // Recargar la tabla después de eliminar
             } else {
-                alert(data.message || 'Error desconocido al eliminar usuario');
+                // Mostrar el mensaje específico del servidor
+                console.error(`Error ${result.status}:`, result.data);
+                alert(result.data.message || `Error ${result.status}: ${result.data.error || 'Error desconocido'}`);
             }
         })
         .catch(error => {
