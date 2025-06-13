@@ -108,6 +108,7 @@ body::-webkit-scrollbar{
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 
 .hamburger:hover {
@@ -147,6 +148,10 @@ body::-webkit-scrollbar{
   .hamburger {
     display: block !important;
   }
+  
+  .desktop-nav {
+    display: none !important;
+  }
 }
 
 /* Menú lateral (sidebar) */
@@ -165,10 +170,12 @@ body::-webkit-scrollbar{
   max-height: calc(100vh - 60px);
   overflow-y: auto;
   height: auto;
+  transform: translateX(0);
 }
 
 .sidebar.active {
   right: 0;
+  transform: translateX(0);
 }
 
 .sidebar ul {
@@ -240,7 +247,11 @@ main {
   }
   
   .desktop-nav {
-    display: none;
+    display: none !important;
+  }
+
+  .hamburger {
+    display: block !important;
   }
 
   .logo a {
@@ -264,6 +275,19 @@ main {
   .sidebar {
     width: 280px;
     padding: 1.2rem;
+  }
+  
+  .navbar {
+    padding: 0 15px;
+  }
+  
+  .navbar-right {
+    gap: 0.3rem;
+  }
+  
+  .user-info-header,
+  .logout-icon-header {
+    display: none;
   }
 }
 
@@ -399,4 +423,5 @@ main {
   align-items: center;
   margin-left: auto;
   gap: 0.5rem;
+  flex-shrink: 0;
 }

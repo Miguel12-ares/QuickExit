@@ -2,47 +2,49 @@
 
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/crear.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="crear-usuario-panel">
-  <div class="crear-usuario-card">
-    <div class="crear-usuario-header">
-      <h3><i class="fas fa-file-alt"></i> Crear Nueva Ficha</h3>
+<div class="crear-ficha-panel">
+  <h2><i class="fas fa-file-alt"></i> Crear Nueva Ficha</h2>
+  
+  <form method="POST" class="ficha-form">
+    <div class="input-group">
+      <i class="fas fa-hashtag input-icon"></i>
+      <input type="number" id="id_ficha" name="id_ficha" required min="1" step="1" pattern="\\d+" placeholder="ID de la Ficha (SENA)" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
-    <div class="crear-usuario-body">
-      <form method="POST" class="ficha-form">
-        <div class="input-group">
-          <span class="input-icon"><i class="fas fa-hashtag"></i></span>
-          <input type="number" id="id_ficha" name="id_ficha" required min="1" step="1" pattern="\\d+" placeholder="ID de la Ficha (SENA)" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        </div>
-        <div class="input-group">
-          <span class="input-icon"><i class="fas fa-file-signature"></i></span>
-          <input type="text" id="nombre" name="nombre" required placeholder="Nombre de la Ficha">
-        </div>
-        <div class="input-group">
-          <span class="input-icon"><i class="fas fa-align-left"></i></span>
-          <textarea id="descripcion" name="descripcion" rows="3" placeholder="Observaciones/Descripción"></textarea>
-        </div>
-        <div class="input-group">
-          <span class="input-icon"><i class="fas fa-user-tie"></i></span>
-          <select id="id_instructor_lider" name="id_instructor_lider">
-            <option value="">Seleccione un instructor líder</option>
-            {% for instructor in instructores %}
-            <option value="{{ instructor.id_usuario }}">{{ instructor.nombre }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Crear Ficha</button>
-        </div>
-      </form>
+    
+    <div class="input-group">
+      <i class="fas fa-file-signature input-icon"></i>
+      <input type="text" id="nombre" name="nombre" required placeholder="Nombre de la Ficha">
     </div>
-  </div>
+    
+    <div class="input-group">
+      <i class="fas fa-align-left input-icon"></i>
+      <textarea id="descripcion" name="descripcion" rows="3" placeholder="Observaciones/Descripción"></textarea>
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-user-tie input-icon"></i>
+      <select id="id_instructor_lider" name="id_instructor_lider">
+        <option value="">Seleccione un instructor líder</option>
+        {% for instructor in instructores %}
+        <option value="{{ instructor.id_usuario }}">{{ instructor.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Crear Ficha
+      </button>
+    </div>
+  </form>
 </div>
 {% endblock %}
 
+{% block extra_js %}
 <script>
 // Validación extra por JS para evitar letras en el input
 const idFichaInput = document.getElementById('id_ficha');
@@ -50,3 +52,4 @@ idFichaInput.addEventListener('input', function(e) {
   this.value = this.value.replace(/[^0-9]/g, '');
 });
 </script>
+{% endblock %}

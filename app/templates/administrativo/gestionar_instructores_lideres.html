@@ -29,32 +29,39 @@
 {% block content %}
 <div class="lideres-panel">
   <h2><i class="fas fa-users-cog"></i> Gestionar Instructores Líderes</h2>
-  <form id="buscador-lideres" class="mb-3 d-flex flex-wrap" autocomplete="off">
+  
+  <form id="buscador-lideres" autocomplete="off">
     <div class="input-group">
       <i class="fas fa-hashtag input-icon"></i>
-      <input type="text" name="buscar_id" class="form-control" placeholder="ID de ficha">
+      <input type="text" name="buscar_id" placeholder="ID de ficha">
     </div>
     <div class="input-group">
       <i class="fas fa-file-alt input-icon"></i>
-      <input type="text" name="buscar_ficha" class="form-control" placeholder="Nombre de ficha">
+      <input type="text" name="buscar_ficha" placeholder="Nombre de ficha">
     </div>
     <div class="input-group">
       <i class="fas fa-user-tie input-icon"></i>
-      <input type="text" name="buscar_instructor" class="form-control" placeholder="Instructor líder">
+      <input type="text" name="buscar_instructor" placeholder="Instructor líder">
     </div>
     <div class="input-group">
       <i class="fas fa-filter input-icon"></i>
-      <select name="buscar_estado" class="form-control">
+      <select name="buscar_estado">
         <option value="">Todos</option>
         <option value="asignado">Con líder asignado</option>
         <option value="sin_asignar">Sin líder</option>
       </select>
     </div>
-    <div class="form-actions">
-      <button type="button" id="btn-buscar-lider" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
-      <button type="button" id="btn-limpiar-lider" class="btn btn-secondary"><i class="fas fa-broom"></i> Limpiar</button>
+    
+    <div class="botones-busqueda">
+      <button type="button" id="btn-buscar-lider" class="btn btn-primary">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+      <button type="button" id="btn-limpiar-lider" class="btn btn-secondary">
+        <i class="fas fa-broom"></i> Limpiar
+      </button>
     </div>
   </form>
+
   <div class="table-container">
     <table class="lideres-table">
       <thead>
@@ -78,7 +85,7 @@
             {% endif %}
           </td>
           <td>
-            <div style="margin-bottom: 6px;" class="botones-container">
+            <div class="botones-container">
               {% if ficha.instructor_lider %}
                 <button type="button" class="btn-lider" onclick="event.preventDefault(); this.parentNode.style.display = 'none'; const modal = document.getElementById('modal-{{ ficha.id_ficha }}'); modal.classList.remove('closing'); modal.style.display='block'">
                   <i class="fas fa-exchange-alt"></i> Cambiar Instructor
@@ -100,13 +107,13 @@
                 <div class="modal-title">
                   <i class="fas fa-user-plus"></i> Asignar Instructor Líder - {{ ficha.nombre }}
                 </div>
-                <select name="id_instructor" required class="form-control">
+                <select name="id_instructor" required>
                   <option value="">Seleccione un instructor...</option>
                   {% for instructor in instructores %}
                   <option value="{{ instructor.id_usuario }}" {% if ficha.instructor_lider and ficha.instructor_lider.id_usuario == instructor.id_usuario %}selected{% endif %}>{{ instructor.nombre }}</option>
                   {% endfor %}
                 </select>
-                <div class="form-actions" style="margin-top: 1rem; text-align: center; display: flex; justify-content: center;">
+                <div class="form-actions">
                   <button type="button" class="btn-cancelar" onclick="event.preventDefault(); cerrarModal('modal-{{ ficha.id_ficha }}')">
                     <i class="fas fa-times"></i> Cancelar
                   </button>
@@ -123,6 +130,7 @@
     </table>
   </div>
 </div>
+
 <script>
   // Función para cerrar modales con animación
   function cerrarModal(modalId) {
@@ -137,20 +145,18 @@
       if (botonesContainer) {
         botonesContainer.style.display = 'flex';
       }
-    }, 300); // Tiempo igual a la duración de la animación
+    }, 300);
   }
 
   // Cierra todos los modales al hacer clic fuera
   document.addEventListener('click', function(e) {
     document.querySelectorAll('.asignar-modal').forEach(function(modal) {
       if (modal.style.display === 'block' && !modal.contains(e.target) && e.target.type !== 'button') {
-        // Cerrar con animación
         modal.classList.add('closing');
         
         setTimeout(() => {
         modal.style.display = 'none';
           modal.classList.remove('closing');
-          // Mostrar los botones nuevamente
           const botonesContainer = modal.parentNode.querySelector('.botones-container');
           if (botonesContainer) {
             botonesContainer.style.display = 'flex';

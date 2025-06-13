@@ -6,10 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
 
     // Verificar que todos los elementos existan
-    if (!hamburger || !sidebar || !overlay) {
-        console.error('Elementos del menú no encontrados');
-        return;
-    }
+    if (!hamburger || !sidebar || !overlay) return;
 
     function toggleMenu() {
         hamburger.classList.toggle('active');
@@ -20,31 +17,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Eventos para el botón hamburguesa
-    ['click', 'touchend'].forEach(eventType => {
-        hamburger.addEventListener(eventType, function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleMenu();
-        }, { passive: false });
+    hamburger.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleMenu();
     });
     
     // Eventos para el overlay
-    ['click', 'touchend'].forEach(eventType => {
-        overlay.addEventListener(eventType, function(e) {
-            e.preventDefault();
-            toggleMenu();
-        }, { passive: false });
+    overlay.addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleMenu();
     });
 
     // Cerrar menú al hacer clic en un enlace
-    const menuLinks = sidebar.querySelectorAll('a');
-    menuLinks.forEach(link => {
-        ['click', 'touchend'].forEach(eventType => {
-            link.addEventListener(eventType, () => {
+    sidebar.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
             if (sidebar.classList.contains('active')) {
                 toggleMenu();
             }
-            }, { passive: true });
         });
     });
 
@@ -55,20 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Asegurar que el menú esté cerrado al cargar la página
-    if (sidebar.classList.contains('active')) {
-        toggleMenu();
-    }
-    
     // Prevenir que el menú se cierre al hacer clic dentro de él
-    ['click', 'touchend'].forEach(eventType => {
-        sidebar.addEventListener(eventType, function(e) {
-            e.stopPropagation();
-        });
-    });
-    
-    // Fix para iOS: asegurar que el scroll funcione correctamente
-    sidebar.addEventListener('touchmove', function(e) {
+    sidebar.addEventListener('click', function(e) {
         e.stopPropagation();
-    }, { passive: true });
+    });
 });
