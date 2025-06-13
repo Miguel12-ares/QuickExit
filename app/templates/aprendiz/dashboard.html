@@ -1,23 +1,38 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/aprendiz/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="dashboard-container">
-    <div class="panel-heading">
-        <h2><i class="fas fa-user-graduate"></i> Panel del Aprendiz</h2>
-    </div>
-    <div class="dashboard-cards">
-        <a href="{{ url_for('main.aprendiz_nueva_solicitud') }}" class="card">
-            <div class="card-icon"><i class="fas fa-plus-circle"></i></div>
-            <div class="card-title">Nueva Solicitud</div>
-        </a>
-        <a href="{{ url_for('main.aprendiz_historial') }}" class="card">
-            <div class="card-icon"><i class="fas fa-history"></i></div>
-            <div class="card-title">Historial de Solicitudes</div>
-        </a>
+<div class="admin-panel">
+    <h2><i class="fas fa-user-graduate"></i> Panel del Aprendiz</h2>
+    
+    <div class="dashboard-sections">
+        <div class="seccion-dashboard">
+            <div class="dashboard-cards">
+                <a href="{{ url_for('main.aprendiz_nueva_solicitud') }}" class="card card-nueva">
+                    <div class="card-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Nueva Solicitud</h3>
+                        <p>Crear una nueva solicitud de salida</p>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('main.aprendiz_historial') }}" class="card card-historial">
+                    <div class="card-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Historial de Solicitudes</h3>
+                        <p>Ver todas mis solicitudes anteriores</p>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

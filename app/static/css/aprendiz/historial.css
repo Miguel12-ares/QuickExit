@@ -1,222 +1,499 @@
-/* Estilos para la página de Historial de Solicitudes */
+/* Estilos para Historial de Solicitudes de Aprendiz */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-green: #4CAF50;
+  --dark-green: #388E3C;
+  --light-green: #a5d6a7;
+  --bg-light-green: #f6fef7;
+  --border-green: #e8f5e9;
+}
+
 body {
-    font-family: 'Work Sans', Arial, sans-serif;
-    background: linear-gradient(135deg, #f0f2f5 0%, #e0e4eb 100%);
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Alinea al inicio para dejar espacio en la parte superior */
-    min-height: 100vh;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+  font-family: 'Work Sans', Arial, sans-serif;
+  margin: 0;
+  padding: 60px 20px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.container {
-    width: 100%;
-    max-width: 1200px; /* Ancho máximo para la tabla */
-    margin-top: 30px; /* Margen superior para separarlo del navbar */
-    animation: fadeIn 0.8s ease-out;
+.admin-panel {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(34, 139, 34, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin: 0 auto;
+  max-width: 1100px;
+  width: 100%;
+  animation: zoomIn 1.2s cubic-bezier(.4,0,.2,1);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.panel {
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
+.admin-panel h2 {
+  color: var(--dark-green);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
 }
 
-.panel-heading {
-    background: linear-gradient(45deg, #4CAF50, #66BB6A);
-    color: #fff;
-    padding: 1.5rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+.admin-panel h2 i {
+  font-size: 1.1em;
+  color: var(--primary-green);
 }
 
-.panel-heading h3 {
-    margin: 0;
-    font-size: 1.8rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 600;
-}
-
-.panel-heading h3 i {
-    font-size: 1.2em;
+.panel-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .btn-back {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    border: none;
-    padding: 0.7rem 1.2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s ease, transform 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+  background: var(--primary-green);
+  color: #fff;
+  border: none;
+  padding: 0.9rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  box-shadow: 0 2px 6px rgba(76,175,80,0.08);
+  font-family: 'Work Sans', Arial, sans-serif;
+  letter-spacing: 0.3px;
 }
 
 .btn-back:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+  background: var(--dark-green);
+  box-shadow: 0 6px 18px rgba(76,175,80,0.18);
+  transform: translateY(-2px) scale(1.04);
 }
 
-.panel-body {
-    padding: 2rem;
+.btn-back:active {
+  animation: btnPop 0.18s cubic-bezier(.4,0,.2,1);
 }
 
-.table-responsive {
-    overflow-x: auto;
+@keyframes btnPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.96); }
+  100% { transform: scale(1); }
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-    color: #333;
+.table-section {
+  animation: slideInUp 0.8s ease-out 0.2s both;
 }
 
-.table th,
-.table td {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.table th {
-    background-color: #f5f5f5;
-    font-weight: 600;
-    color: #555;
-    white-space: nowrap; /* Evita que los encabezados se envuelvan */
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: #fff;
 }
 
-.table tbody tr:hover {
-    background-color: #f0f0f0;
+.solicitudes-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1rem;
+  background: #fff;
+  font-family: 'Work Sans', Arial, sans-serif;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: #f9f9f9;
+.solicitudes-table th {
+  background: var(--primary-green);
+  color: #fff;
+  font-weight: 700;
+  padding: 1rem;
+  text-align: left;
+  white-space: nowrap;
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+  font-family: 'Work Sans', Arial, sans-serif;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #e8f5e9; /* Un verde muy suave al pasar el ratón */
+.solicitudes-table th:first-child {
+  border-top-left-radius: 12px;
 }
 
-.alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
-    font-weight: 500;
-    text-align: center;
+.solicitudes-table th:last-child {
+  border-right: none;
+  border-top-right-radius: 12px;
 }
 
-.alert-info {
-    background-color: #e0f2f7;
-    color: #016b8e;
-    border: 1px solid #b3e5fc;
+.solicitudes-table th i {
+  margin-right: 0.5rem;
+  font-size: 0.9em;
 }
 
-/* Media Queries para Responsividad */
-@media (max-width: 992px) {
-    .panel-body {
-        padding: 1.5rem;
-    }
+.solicitudes-table tr:nth-child(even) {
+  background: var(--bg-light-green);
+}
+
+.solicitudes-table td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-green);
+  border-right: 1px solid var(--border-green);
+  color: #333;
+  font-weight: 500;
+}
+
+.solicitudes-table td:last-child {
+  border-right: none;
+}
+
+.solicitudes-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.solicitudes-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.solicitudes-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+.solicitudes-table tbody tr:hover {
+  background: #e8f5e9;
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+.motivo-cell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.estado-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.estado-pendiente {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.estado-aprobada {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.estado-rechazada {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.estado-en_proceso {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+/* Estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: var(--light-green);
+  margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+  color: var(--dark-green);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(76,175,80,0.08);
+  transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+  font-family: 'Work Sans', Arial, sans-serif;
+  letter-spacing: 0.3px;
+  gap: 0.8rem;
+}
+
+.btn-primary {
+  background: var(--primary-green);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--dark-green);
+  box-shadow: 0 6px 18px rgba(76,175,80,0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.btn:active {
+  animation: btnPop 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+/* Asegurar iconos Font Awesome */
+.fas, .far, .fab, .fa {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+  font-weight: 900;
+}
+
+.far {
+  font-weight: 400 !important;
+}
+
+.fab {
+  font-family: "Font Awesome 6 Brands" !important;
+}
+
+/* Media queries */
+@media (max-width: 1000px) {
+  .admin-panel {
+    max-width: 95%;
+    padding: 2rem 1.5rem;
+  }
+  
+  .solicitudes-table {
+    font-size: 0.9rem;
+  }
+  
+  .solicitudes-table th,
+  .solicitudes-table td {
+    padding: 0.8rem 0.6rem;
+  }
 }
 
 @media (max-width: 768px) {
-    .panel-heading {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 1rem;
-    }
-    .panel-heading h3 {
-        font-size: 1.3rem;
-        gap: 0.3rem;
-        flex-wrap: wrap;
-        line-height: 1.4;
-        margin-bottom: 1rem;
-    }
-    
-    .panel-heading h3 i {
-        font-size: 1em;
-    }
-    
-    .btn-back {
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-        padding: 0.8rem;
-    }
-    .panel-body {
-        padding: 1rem;
-    }
-    .table th,
-    .table td {
-        padding: 0.8rem;
-        font-size: 0.9rem;
-    }
-    .table thead {
-        display: none; /* Oculta el thead en móviles para transformar la tabla */
-    }
-    .table, .table tbody, .table tr, .table td {
-        display: block;
-        width: 100%;
-    }
-    .table tr {
-        margin-bottom: 1rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .table td {
-        border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 50%; /* Espacio para el pseudo-elemento */
-        text-align: right;
-    }
-    .table td:before {
-        content: attr(data-label); /* Usa el atributo data-label */
-        position: absolute;
-        left: 0;
-        width: 45%;
-        padding-left: 15px;
-        font-weight: 600;
-        text-align: left;
-        white-space: nowrap;
-        color: #555;
-    }
-    /* Reglas específicas para cada columna con data-label */
-    .table td:nth-of-type(1):before { content: "ID Solicitud:"; }
-    .table td:nth-of-type(2):before { content: "Tipo de Salida:"; }
-    .table td:nth-of-type(3):before { content: "Hora Salida Estimada:"; }
-    .table td:nth-of-type(4):before { content: "Hora Reingreso Estimada:"; }
-    .table td:nth-of-type(5):before { content: "Motivo:"; }
-    .table td:nth-of-type(6):before { content: "Estado:"; }
-    .table td:nth-of-type(7):before { content: "Fecha Solicitud:"; }
+  body {
+    padding: 60px 15px 15px 15px;
+  }
+  
+  .admin-panel {
+    padding: 2rem 1rem;
+  }
+  
+  .admin-panel h2 {
+    font-size: 1.3rem;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    line-height: 1.4;
+    margin-bottom: 1.2rem;
+  }
+  
+  .admin-panel h2 i {
+    font-size: 1em;
+  }
+  
+  .btn-back {
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+  }
+  
+  /* Tabla responsiva - transformar en cards */
+  .table-container {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  
+  .solicitudes-table,
+  .solicitudes-table thead,
+  .solicitudes-table tbody,
+  .solicitudes-table th,
+  .solicitudes-table td,
+  .solicitudes-table tr {
+    display: block;
+  }
+  
+  .solicitudes-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  .solicitudes-table tr {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(34, 139, 34, 0.1);
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 2px solid var(--border-green);
+  }
+  
+  .solicitudes-table tr:hover {
+    transform: none;
+    box-shadow: 0 6px 20px rgba(34, 139, 34, 0.15);
+  }
+  
+  .solicitudes-table td {
+    border: none;
+    border-bottom: 1px solid var(--border-green);
+    position: relative;
+    padding: 0.8rem 0.8rem 0.8rem 40%;
+    text-align: right;
+  }
+  
+  .solicitudes-table td:last-child {
+    border-bottom: none;
+  }
+  
+  .solicitudes-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.8rem;
+    width: 35%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: 700;
+    color: var(--dark-green);
+    text-align: left;
+  }
+  
+  .solicitudes-table td:nth-of-type(1):before { content: "ID:"; }
+  .solicitudes-table td:nth-of-type(2):before { content: "Tipo:"; }
+  .solicitudes-table td:nth-of-type(3):before { content: "Hora Salida:"; }
+  .solicitudes-table td:nth-of-type(4):before { content: "Hora Reingreso:"; }
+  .solicitudes-table td:nth-of-type(5):before { content: "Motivo:"; }
+  .solicitudes-table td:nth-of-type(6):before { content: "Estado:"; }
+  .solicitudes-table td:nth-of-type(7):before { content: "Fecha:"; }
+  
+  .motivo-cell {
+    max-width: none;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+  
+  .empty-state {
+    padding: 3rem 1rem;
+  }
+  
+  .empty-icon {
+    font-size: 3rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.3rem;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+  }
+  
+  .btn {
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
-    .container {
-        margin-top: 15px;
-        padding: 0 10px;
-    }
-    .panel-heading h3 {
-        font-size: 1.2rem;
-        gap: 0.2rem;
-    }
-    
-    .panel-heading h3 i {
-        font-size: 0.9em;
-    }
+  .admin-panel {
+    padding: 1.5rem 0.8rem;
+  }
+  
+  .admin-panel h2 {
+    font-size: 1.2rem;
+    gap: 0.2rem;
+  }
+  
+  .admin-panel h2 i {
+    font-size: 0.9em;
+  }
+  
+  .btn-back {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .solicitudes-table tr {
+    padding: 0.8rem;
+  }
+  
+  .solicitudes-table td {
+    padding: 0.6rem 0.6rem 0.6rem 35%;
+  }
+  
+  .solicitudes-table td:before {
+    left: 0.6rem;
+    width: 30%;
+    font-size: 0.85rem;
+  }
+  
+  .empty-state {
+    padding: 2rem 0.5rem;
+  }
+  
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.2rem;
+  }
+  
+  .empty-state p {
+    font-size: 0.95rem;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.2rem;
+  }
 }

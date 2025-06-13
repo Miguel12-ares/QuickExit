@@ -3,40 +3,42 @@
 {% block title %}Gestionar Porteros - QuickExit{% endblock %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/porteros.css') }}">
-  <!-- Asegurar que Font Awesome se cargue correctamente -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/porteros.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="porteros-panel">
+<div class="admin-panel">
   <h2><i class="fas fa-user-shield"></i> Gestionar Porteros</h2>
   
-  <form id="buscador-porteros" class="mb-3 d-flex flex-wrap" autocomplete="off">
-    <div class="input-group">
-      <i class="fas fa-id-card input-icon"></i>
-      <input type="text" name="buscar_identificacion" class="form-control" placeholder="Identificación">
-    </div>
-    <div class="input-group">
-      <i class="fas fa-user input-icon"></i>
-      <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre">
-    </div>
-    <div class="input-group">
-      <i class="fas fa-envelope input-icon"></i>
-      <input type="text" name="buscar_email" class="form-control" placeholder="Email">
-    </div>
-    <div class="botones-busqueda">
-      <button type="button" id="btn-buscar-port" class="btn btn-primary">
-        <i class="fas fa-search"></i> Buscar
-      </button>
-      <button type="button" id="btn-limpiar-port" class="btn btn-secondary">
-        <i class="fas fa-broom"></i> Limpiar
-      </button>
-    </div>
-  </form>
+  <div class="filtros-busqueda">
+    <form id="buscador-porteros" class="search-form" autocomplete="off">
+      <div class="input-group">
+        <i class="fas fa-id-card input-icon"></i>
+        <input type="text" name="buscar_identificacion" placeholder="Identificación">
+      </div>
+      <div class="input-group">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" name="buscar_nombre" placeholder="Nombre">
+      </div>
+      <div class="input-group">
+        <i class="fas fa-envelope input-icon"></i>
+        <input type="text" name="buscar_email" placeholder="Email">
+      </div>
+      
+      <div class="botones-busqueda">
+        <button type="button" id="btn-buscar-port" class="btn btn-primary">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+        <button type="button" id="btn-limpiar-port" class="btn btn-secondary">
+          <i class="fas fa-broom"></i> Limpiar
+        </button>
+      </div>
+    </form>
+  </div>
 
   <div class="table-container">
-    <table class="porteros-table">
+    <table class="admin-table">
       <thead>
         <tr>
           <th><i class="fas fa-id-card"></i> Identificación</th>

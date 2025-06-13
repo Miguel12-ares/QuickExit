@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputEmail = document.querySelector('input[name="buscar_email"]');
   const btnBuscar = document.getElementById('btn-buscar-port');
   const btnLimpiar = document.getElementById('btn-limpiar-port');
-  const tbody = document.querySelector('.porteros-table tbody');
+  const tbody = document.querySelector('.admin-table tbody');
 
   let t;
   const debounce = fn => {
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function render(porteros) {
     tbody.innerHTML = '';
     if (porteros.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No se encontraron resultados</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#888; font-style:italic; padding:2rem;">No se encontraron resultados</td></tr>';
       return;
     }
     porteros.forEach(p => {

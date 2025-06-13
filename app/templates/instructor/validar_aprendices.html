@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
 {% block extra_css %}
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/panel.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/validar_aprendices.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor/modal.css') }}">
 {% endblock %}
 
@@ -30,21 +30,27 @@
           <td>{{ aprendiz.ficha.nombre }}</td>
           <td>{{ aprendiz.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
           <td>
-            <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST" style="display:inline-block;">
-              <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')"><i class="fas fa-check"></i> Aprobar</button>
-            </form>
-            <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST" style="display:inline-block;">
-              <button type="submit" class="btn btn-secondary" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')"><i class="fas fa-times"></i> Rechazar</button>
-            </form>
+            <div class="botones-container">
+              <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST">
+                <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')"><i class="fas fa-check"></i> Aprobar</button>
+              </form>
+              <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST">
+                <button type="submit" class="btn btn-secondary" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')"><i class="fas fa-times"></i> Rechazar</button>
+              </form>
+            </div>
           </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    {% if not aprendices or aprendices|length == 0 %}
-      <div style="text-align:center; color:#888; margin-top:24px; font-size:1.1rem;">No hay aprendices pendientes de validación en tus fichas.</div>
-    {% endif %}
   </div>
+  
+  {% if not aprendices or aprendices|length == 0 %}
+    <div class="empty-state">
+      <i class="fas fa-user-graduate"></i>
+      <p>No hay aprendices pendientes de validación en tus fichas.</p>
+    </div>
+  {% endif %}
 </div>
 
 <!-- Modal para mensaje de no fichas asignadas -->

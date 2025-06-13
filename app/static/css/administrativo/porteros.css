@@ -14,16 +14,20 @@ body {
   background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
   font-family: 'Work Sans', Arial, sans-serif;
   margin: 0;
-  padding: 20px;
+  padding: 60px 20px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.porteros-panel {
+.admin-panel {
   background: #fff;
   border-radius: 20px;
   box-shadow: 0 8px 32px 0 rgba(34, 139, 34, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
   padding: 2.5rem 2rem 2rem 2rem;
-  margin: 5rem auto 0 auto;
+  margin: 0 auto;
   max-width: 1100px;
+  width: 100%;
   animation: zoomIn 1.2s cubic-bezier(.4,0,.2,1);
 }
 
@@ -38,7 +42,7 @@ body {
   }
 }
 
-.porteros-panel h2 {
+.admin-panel h2 {
   color: var(--dark-green);
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -51,15 +55,18 @@ body {
   justify-content: center;
 }
 
-.porteros-panel h2 i {
+.admin-panel h2 i {
   font-size: 1.1em;
 }
 
-#buscador-porteros {
+.filtros-busqueda {
+  margin-bottom: 2.5rem;
+}
+
+.search-form {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-bottom: 2.5rem;
   justify-content: center;
   align-items: flex-end;
   padding: 0 1rem;
@@ -189,7 +196,7 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-.porteros-table {
+.admin-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -198,7 +205,7 @@ body {
   font-family: 'Work Sans', Arial, sans-serif;
 }
 
-.porteros-table th {
+.admin-table th {
   background: var(--primary-green);
   color: #fff;
   font-weight: 700;
@@ -209,20 +216,20 @@ body {
   font-family: 'Work Sans', Arial, sans-serif;
 }
 
-.porteros-table th:last-child {
+.admin-table th:last-child {
   border-right: none;
 }
 
-.porteros-table th i {
+.admin-table th i {
   margin-right: 0.5rem;
   font-size: 1.1em;
 }
 
-.porteros-table tr:nth-child(even) {
+.admin-table tr:nth-child(even) {
   background: var(--bg-light-green);
 }
 
-.porteros-table td {
+.admin-table td {
   padding: 1rem;
   vertical-align: middle;
   border-bottom: 1px solid var(--border-green);
@@ -232,13 +239,13 @@ body {
   text-align: center;
 }
 
-.porteros-table td:nth-child(1),
-.porteros-table td:nth-child(2),
-.porteros-table td:nth-child(3) {
+.admin-table td:nth-child(1),
+.admin-table td:nth-child(2),
+.admin-table td:nth-child(3) {
   text-align: left;
 }
 
-.porteros-table td:last-child {
+.admin-table td:last-child {
   border-right: none;
 }
 
@@ -294,18 +301,31 @@ body {
 }
 
 @media (max-width: 700px) {
-  .porteros-panel h2 {
+  body {
+    padding: 60px 15px 15px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .admin-panel {
+    margin: 0;
+    padding: 2rem 1.5rem;
+    width: 100%;
+  }
+  
+  .admin-panel h2 {
     font-size: 1.3rem;
     gap: 0.3rem;
     flex-wrap: wrap;
     line-height: 1.4;
   }
   
-  .porteros-panel h2 i {
+  .admin-panel h2 i {
     font-size: 1em;
   }
   
-  #buscador-porteros {
+  .search-form {
     gap: 1rem;
     padding: 0;
   }
@@ -344,9 +364,9 @@ body {
     min-width: unset;
     max-width: unset;
   }
-  
-  .porteros-table th,
-  .porteros-table td {
+
+  .admin-table th,
+  .admin-table td {
     padding: 0.8rem;
     font-size: 0.95rem;
   }

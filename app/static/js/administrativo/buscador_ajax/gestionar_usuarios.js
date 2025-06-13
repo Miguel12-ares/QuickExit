@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const buscadorForm = document.getElementById('buscador-usuarios');
-    const tablaBody = document.querySelector('.usuarios-table tbody');
+    const tablaBody = document.querySelector('.admin-table tbody');
     const btnBuscar = document.getElementById('btn-buscar-usr');
     const btnLimpiar = document.getElementById('btn-limpiar-usr');
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const accionesCell = row.insertCell();
                         // Botón de eliminar
                         const deleteButton = document.createElement('button');
-                        deleteButton.textContent = 'Eliminar';
+                        deleteButton.innerHTML = '<i class="fas fa-trash"></i> Eliminar';
                         deleteButton.classList.add('btn', 'btn-delete');
                         deleteButton.dataset.id = usuario.id_usuario;
                         deleteButton.addEventListener('click', function() {
@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     cell.colSpan = 7; // Ajustar al número de columnas
                     cell.textContent = 'No se encontraron usuarios.';
                     cell.style.textAlign = 'center';
+                    cell.style.color = '#888';
+                    cell.style.fontStyle = 'italic';
+                    cell.style.padding = '2rem';
                 }
             })
             .catch(error => console.error('Error al cargar usuarios:', error));
