@@ -3,7 +3,7 @@ from app import db, bcrypt
 from app.models import Usuario, Ficha, TipoSalida, Solicitud, AuditoriaGeneral, EstadoSolicitud, RolesEnum
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date
-from sqlalchemy import select
+from sqlalchemy import select, or_
 
 main = Blueprint('main', __name__)
 
@@ -748,8 +748,15 @@ def api_buscar_usuarios():
     buscar_ficha = request.args.get('buscar_ficha', '').strip()
     buscar_rol = request.args.get('buscar_rol', '').strip()
 
-    # Excluir usuarios con rol 'admin' y 'administrativo'
-    query = Usuario.query.filter(
+    print(f"[DEBUG] buscar_ficha: {buscar_ficha}")
+    print(f"[DEBUG] buscar_rol: {buscar_rol}")
+
+    # Iniciar la consulta uniendo Usuario y Ficha para poder filtrar y obtener info de ficha
+    # El JOIN considera tanto aprendices (por id_ficha) como instructores líderes (por id_instructor_lider).
+    query = db.session.query(Usuario, Ficha).outerjoin(Ficha, or_(
+        Usuario.id_ficha == Ficha.id_ficha,             # Condición para aprendices
+        Usuario.id_usuario == Ficha.id_instructor_lider # Condición para instructores líderes
+    )).filter(
         (Usuario.rol != RolesEnum.admin) &
         (Usuario.rol != RolesEnum.administrativo)
     )
@@ -760,42 +767,55 @@ def api_buscar_usuarios():
         query = query.filter(Usuario.nombre.ilike(f"%{buscar_nombre}%"))
     if buscar_email:
         query = query.filter(Usuario.email.ilike(f"%{buscar_email}%"))
-    
-    if buscar_ficha:
-        # Buscar por ID o nombre de ficha para aprendices e instructores
-        subquery_fichas = Ficha.query.filter(
-            (Ficha.id_ficha.like(f"%{buscar_ficha}%")) |
-            (Ficha.nombre.ilike(f"%{buscar_ficha}%"))
-        ).subquery()
-        query = query.filter(
-            (Usuario.id_ficha.in_(select(subquery_fichas.c.id_ficha))) |
-            (Usuario.rol == RolesEnum.instructor).and_(
-                Usuario.id_usuario.in_(select(Usuario.id_usuario).join(Ficha, Ficha.id_instructor_lider == Usuario.id_usuario).filter(Ficha.id_ficha.in_(select(subquery_fichas.c.id_ficha))))
-            )
-        )
 
     if buscar_rol:
         query = query.filter(Usuario.rol == RolesEnum(buscar_rol))
 
-    usuarios = query.all()
+    if buscar_ficha:
+        ficha_id_valido = None
+        try:
+            ficha_id_valido = int(buscar_ficha)
+            print(f"[DEBUG] ficha_id_valido (int): {ficha_id_valido}")
+            # Aplicar filtro por ID de ficha directamente sobre la tabla Ficha unida
+            query = query.filter(Ficha.id_ficha == ficha_id_valido)
+        except ValueError:
+            print(f"[DEBUG] ValueError: '{buscar_ficha}' no es un número válido. Filtrando por ID inexistente.")
+            # Si no es un número válido, asegurar que la búsqueda por ficha no retorne resultados
+            query = query.filter(Ficha.id_ficha == -1)
+
+    print(f"[DEBUG] SQL Query antes de ejecutar: {query.statement}")
+
+    # Ejecutar la consulta y obtener las tuplas (Usuario, Ficha)
+    results = query.all()
+
+    print(f"[DEBUG] Número de resultados obtenidos: {len(results)}")
+    for usr, ficha in results:
+        print(f"[DEBUG] Usuario ID: {usr.id_usuario}, Rol: {usr.rol.value}, Ficha ID (JOIN): {ficha.id_ficha if ficha else 'None'}")
 
     usuarios_json = []
-    for usr in usuarios:
-        ficha_info = None
-        if usr.id_ficha:
-            ficha = Ficha.query.get(usr.id_ficha)
+    # Usar un conjunto para evitar usuarios duplicados si la unión resulta en múltiples fichas
+    # para un instructor (aunque en el modelo actual, un instructor debería ser líder de una principal).
+    processed_user_ids = set()
+    
+    for usr, ficha in results:
+        if usr.id_usuario not in processed_user_ids:
+            ficha_info = None
+            # La información de la ficha se obtiene directamente del objeto ficha unido
             if ficha:
                 ficha_info = {'id_ficha': ficha.id_ficha, 'nombre': ficha.nombre}
-        
-        usuarios_json.append({
-            'id_usuario': usr.id_usuario,
-            'documento': usr.documento,
-            'nombre': usr.nombre,
-            'email': usr.email,
-            'rol': usr.rol.value,
-            'ficha': ficha_info,
-            'validado': usr.validado
-        })
+            
+            usuarios_json.append({
+                'id_usuario': usr.id_usuario,
+                'documento': usr.documento,
+                'nombre': usr.nombre,
+                'email': usr.email,
+                'rol': usr.rol.value,
+                'ficha': ficha_info,
+                'validado': usr.validado
+            })
+            processed_user_ids.add(usr.id_usuario)
+
+    print(f"[DEBUG] Número de usuarios serializados para JSON: {len(usuarios_json)}")
     return jsonify({'usuarios': usuarios_json})
 
 @main.route('/admin/eliminar_usuario/<int:id_usuario>', methods=['POST'])
