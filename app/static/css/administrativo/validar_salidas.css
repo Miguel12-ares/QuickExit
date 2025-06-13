@@ -1,126 +1,212 @@
-/* static/css/validar_salidas.css */
-.validar-salidas {
-    padding: 20px;
+/* Estilos para validar salidas */
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+  font-family: 'Work Sans', Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.validar-salidas-panel {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(34, 139, 34, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin: 5rem auto 0 auto;
+  max-width: 1100px;
+  animation: zoomIn 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
   }
-  
-  .validar-salidas h2 {
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .validar-salidas table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .validar-salidas th,
-  .validar-salidas td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .validar-salidas th {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .validar-salidas .btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .validar-salidas .btn.aprobar {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .validar-salidas .btn.rechazar {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  /* Estilos para la validación de salidas de aprendices */
+}
+
+.validar-salidas-panel h2 {
+  color: #388e3c;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.validar-salidas-panel h2 i {
+  font-size: 1.1em;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.validar-salidas-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 1rem;
+  background: #fff;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.validar-salidas-table th {
+  background: #4CAF50;
+  color: #fff;
+  font-weight: 700;
+  padding: 1rem;
+  text-align: left;
+  white-space: nowrap;
+  border-right: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.validar-salidas-table th:last-child {
+  border-right: none;
+}
+
+.validar-salidas-table th i {
+  margin-right: 0.5rem;
+}
+
+.validar-salidas-table tr:nth-child(even) {
+  background: #f1f8f1;
+}
+
+.validar-salidas-table tr:hover {
+  background: #e8f5e9;
+}
+
+.validar-salidas-table td {
+  padding: 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #c8e6c9;
+  border-right: 1px solid #c8e6c9;
+  text-align: center;
+}
+
+.validar-salidas-table td:last-child {
+  border-right: none;
+}
+
+.btn-aprobar {
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Work Sans', Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.5rem;
+  letter-spacing: 0.3px;
+}
+
+.btn-aprobar:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76,175,80,0.2);
+}
+
+.btn-rechazar {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Work Sans', Arial, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.3px;
+}
+
+.btn-rechazar:hover {
+  background: #b71c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(229,57,53,0.2);
+}
+
+.no-solicitudes {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #666;
+  font-size: 1.1rem;
+  background: #f6fef7;
+  border-radius: 12px;
+  border: 2px dashed #a5d6a7;
+  margin-top: 2rem;
+}
+
+.no-solicitudes i {
+  font-size: 3rem;
+  color: #a5d6a7;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+@media (max-width: 1300px) {
   .validar-salidas-panel {
-    max-width: 950px;
-    margin: 40px auto 0 auto;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-    padding: 32px 20px;
+    max-width: 98vw;
+    padding: 1.5rem 1rem;
   }
+}
+
+@media (max-width: 700px) {
   .validar-salidas-panel h2 {
-    color: #2e7d32;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 18px;
-    text-align: left;
+    font-size: 1.3rem;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    line-height: 1.4;
   }
-  .validar-salidas-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 18px;
-    background: #f7faf7;
-    border-radius: 10px;
-    overflow: hidden;
-    font-size: 1rem;
+  
+  .validar-salidas-panel h2 i {
+    font-size: 1em;
   }
-  .validar-salidas-table th, .validar-salidas-table td {
-    padding: 14px 10px;
-    text-align: left;
-  }
-  .validar-salidas-table th {
-    background: #fbc02d;
-    color: #222;
-    font-weight: 600;
-    font-size: 1.05rem;
-    border-bottom: 2px solid #f9a825;
-  }
-  .validar-salidas-table tr:nth-child(even) {
-    background: #fffde7;
-  }
-  .validar-salidas-table tr:nth-child(odd) {
-    background: #fff;
-  }
+  
+  .validar-salidas-table th, 
   .validar-salidas-table td {
-    color: #222;
-    vertical-align: middle;
+    padding: 0.8rem;
+    font-size: 0.95rem;
   }
-  .btn-aprobar, .btn-rechazar {
-    border: none;
-    border-radius: 5px;
-    padding: 7px 18px;
-    font-weight: 600;
-    font-size: 0.98rem;
-    margin: 2px 4px 2px 0;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: inline-block;
-  }
-  .btn-aprobar {
-    background: #43a047;
-    color: #fff;
-  }
-  .btn-aprobar:hover {
-    background: #2e7d32;
-  }
+  
+  .btn-aprobar,
   .btn-rechazar {
-    background: #e53935;
-    color: #fff;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
   }
-  .btn-rechazar:hover {
-    background: #b71c1c;
+}
+
+@media (max-width: 480px) {
+  .validar-salidas-panel h2 {
+    font-size: 1.2rem;
+    gap: 0.2rem;
   }
-  @media (max-width: 900px) {
-    .validar-salidas-panel { padding: 12px 2vw; }
-    .validar-salidas-table th, .validar-salidas-table td { padding: 10px 4px; font-size: 0.97rem; }
+  
+  .validar-salidas-panel h2 i {
+    font-size: 0.9em;
   }
-  @media (max-width: 600px) {
-    .validar-salidas-panel { padding: 4px 0; }
-    .validar-salidas-table th, .validar-salidas-table td { font-size: 0.93rem; }
-    .validar-salidas-panel h2 { font-size: 1.2rem; }
-  }
+}
   

@@ -1,4 +1,13 @@
 /* Estilos para la página de Nueva Solicitud */
+
+/* Ajuste universal para box-sizing */
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 body {
     font-family: 'Work Sans', Arial, sans-serif;
     background: linear-gradient(135deg, #f0f2f5 0%, #e0e4eb 100%);
@@ -77,18 +86,79 @@ body {
 
 .form-nueva-solicitud label {
     display: block;
-    margin-bottom: 0.7rem;
-    font-weight: 600;
+    margin-bottom: 0.2rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 320px;
+    font-weight: 500;
     color: #333;
+    font-size: 0.9rem;
+    font-family: 'Work Sans', Arial, sans-serif;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 1.05rem;
 }
 
 .form-nueva-solicitud label i {
     color: #4CAF50;
     font-size: 1.1em;
+}
+
+.input-group {
+    width: 100%;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    background: #f6fef7;
+    border-radius: 8px;
+    border: 1.5px solid #a5d6a7;
+    margin-bottom: 1rem;
+    padding: 0.1rem 0.8rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-group:focus-within {
+    border-color: #388e3c;
+    box-shadow: 0 0 6px #a5d6a7;
+}
+
+.input-icon {
+    color: #4CAF50;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    min-width: 1rem;
+    text-align: center;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    padding: 0.7rem 0.2rem;
+    width: 100%;
+    font-family: 'Work Sans', Arial, sans-serif;
+    color: #333;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a5d6a7;
+    opacity: 1;
+    font-weight: 400;
+}
+
+.form-group select {
+    color: #333;
+    font-weight: 500;
+    background: transparent;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 .form-control {
@@ -100,19 +170,6 @@ body {
     color: #333;
     background-color: #f8fff8;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea { /* Añadido textarea y select aquí */
-    border-radius: 8px;
-    border: 1.5px solid #a5d6a7;
-    padding: 0.8rem 1rem;
-    font-size: 1rem;
-    background: #fff;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    font-family: 'Work Sans', Arial, sans-serif;
-    width: 100%; /* Asegura que select y textarea ocupen el 100% */
 }
 
 .form-control:focus {
@@ -127,16 +184,21 @@ textarea.form-control {
 }
 
 .alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto 1rem auto;
+    padding: 0.8rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
     font-weight: 500;
+    text-align: center;
+    box-shadow: 0 1px 4px 0 rgba(34, 139, 34, 0.05);
 }
 
 .alert-warning {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
+    background: #fffde7;
+    color: #f9a825;
+    border: 1.5px solid #ffe082;
 }
 
 .form-actions {
@@ -145,66 +207,97 @@ textarea.form-control {
 }
 
 .btn-primary {
-    background: #4CAF50;
-    color: #fff;
-    border: none;
-    padding: 1rem 2.5rem;
-    border-radius: 10px;
-    font-size: 1.1rem;
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    margin: 1.6rem auto 0 auto;
+    padding: 0.9rem 0;
+    font-size: 1.05rem;
     font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    outline: none;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(76,175,80,0.08);
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s, transform 0.18s;
+    font-family: 'Work Sans', Arial, sans-serif;
+    letter-spacing: 0.3px;
+    background: var(--primary-green, #4CAF50);
+    color: #fff;
 }
 
 .btn-primary:hover {
-    background: #388E3C;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+    background: var(--dark-green, #388E3C);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(76,175,80,0.18);
+    transform: translateY(-2px) scale(1.04);
 }
 
-/* Media Queries para Responsividad */
-@media (max-width: 768px) {
-    .panel-heading {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 1rem;
+.btn-primary:active {
+    animation: btnPop 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes btnPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+    .container {
+        margin: 15px auto;
+        max-width: 90%;
     }
-    .panel-heading h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-    }
-    .btn-back {
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-        padding: 0.8rem;
-    }
+    
     .panel-body {
-        padding: 1.5rem;
+        padding: 1.5rem 1rem;
     }
-    .form-control {
-        padding: 0.8rem;
+    
+    .form-nueva-solicitud label {
+        font-size: 0.85rem;
+        max-width: 100%;
     }
+    
+    .input-group {
+        max-width: 100%;
+        padding: 0.1rem 0.6rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.2rem;
+    }
+    
+    .input-icon {
+        font-size: 0.8rem;
+        margin-right: 0.4rem;
+    }
+    
     .btn-primary {
-        width: 100%;
-        padding: 0.9rem 1.5rem;
         font-size: 1rem;
+        padding: 0.8rem 0;
+        max-width: 100%;
+        margin-top: 1.2rem;
+    }
+    
+    .alert {
+        max-width: 100%;
+        font-size: 0.85rem;
+        padding: 0.7rem 0.8rem;
     }
 }
 
 @media (max-width: 480px) {
-    .container {
-        margin-top: 15px;
-        padding: 0 10px; /* Añade un poco de padding lateral */
+    .panel-body {
+        padding: 1.2rem 0.8rem;
     }
+    
     .panel-heading h3 {
-        font-size: 1.3rem;
-    }
-    .form-nueva-solicitud label {
-        font-size: 0.95rem;
+        font-size: 1.5rem;
     }
 }
