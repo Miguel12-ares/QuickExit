@@ -879,36 +879,58 @@ def api_buscar_usuarios():
 @main.route('/admin/eliminar_usuario/<int:id_usuario>', methods=['POST'])
 @login_required
 def eliminar_usuario(id_usuario):
-    print(f"[DEBUG] Intentando eliminar usuario con ID: {id_usuario}")
-    print(f"[DEBUG] Usuario actual: {current_user.nombre} (rol: {current_user.rol.value})")
-    
     if current_user.rol.value not in ['admin', 'administrativo']:
-        print(f"[DEBUG] Acceso denegado - rol no autorizado: {current_user.rol.value}")
         flash("Acceso no autorizado", "danger")
         return jsonify({'success': False, 'message': 'Acceso no autorizado'}), 403
     
     usuario = Usuario.query.get(id_usuario)
     if not usuario:
-        print(f"[DEBUG] Usuario con ID {id_usuario} no encontrado")
         return jsonify({'success': False, 'message': 'Usuario no encontrado'}), 404
-
-    print(f"[DEBUG] Usuario encontrado: {usuario.nombre} (rol: {usuario.rol.value})")
 
     # No permitir eliminar administradores
     if usuario.rol == RolesEnum.admin:
-        print(f"[DEBUG] Intento de eliminar administrador bloqueado")
         flash("No se puede eliminar un usuario con rol de administrador.", "danger")
         return jsonify({'success': False, 'message': 'No se puede eliminar un usuario con rol de administrador.'}), 400
 
     try:
-        print(f"[DEBUG] Procediendo a eliminar usuario {usuario.nombre}")
+        # Verificar dependencias críticas
+        solicitudes_aprendiz = Solicitud.query.filter_by(id_aprendiz=id_usuario).count()
+        solicitudes_instructor = Solicitud.query.filter_by(id_instructor_aprobador=id_usuario).count()
+        fichas_lider = Ficha.query.filter_by(id_instructor_lider=id_usuario).count()
+
+        # Si tiene solicitudes, no permitir eliminar (mantiene integridad de datos históricos)
+        if solicitudes_aprendiz > 0 or solicitudes_instructor > 0:
+            mensaje = f"No se puede eliminar a {usuario.nombre} porque tiene solicitudes asociadas como "
+            if solicitudes_aprendiz > 0 and solicitudes_instructor > 0:
+                mensaje += f"aprendiz ({solicitudes_aprendiz}) e instructor ({solicitudes_instructor}). "
+            elif solicitudes_aprendiz > 0:
+                mensaje += f"aprendiz ({solicitudes_aprendiz}). "
+            else:
+                mensaje += f"instructor ({solicitudes_instructor}). "
+            
+            # Sugerir alternativa para usuarios inactivos
+            if not usuario.validado:
+                mensaje += "Como el usuario está inactivo, considere mantenerlo deshabilitado en lugar de eliminarlo."
+            else:
+                mensaje += "Considere desactivar el usuario en lugar de eliminarlo para preservar el historial."
+            
+            return jsonify({'success': False, 'message': mensaje}), 400
+
+        # Limpiar relaciones seguras antes de eliminar
+        if fichas_lider > 0:
+            # Remover como instructor líder de fichas
+            Ficha.query.filter_by(id_instructor_lider=id_usuario).update({'id_instructor_lider': None})
+        
+        # Eliminar el usuario
+        nombre_usuario = usuario.nombre
         db.session.delete(usuario)
         db.session.commit()
-        print(f"[DEBUG] Usuario {usuario.nombre} eliminado exitosamente")
-        flash(f"Usuario {usuario.nombre} eliminado exitosamente.", "success")
-        return jsonify({'success': True, 'message': f'Usuario {usuario.nombre} eliminado exitosamente.'})
+        
+        flash(f"Usuario {nombre_usuario} eliminado exitosamente.", "success")
+        return jsonify({'success': True, 'message': f'Usuario {nombre_usuario} eliminado exitosamente.'})
+        
     except Exception as e:
-        print(f"[DEBUG] Error al eliminar usuario: {str(e)}")
         db.session.rollback()
-        flash(f"Error al eliminar el usuario: {str(e)}", "danger")
-        return jsonify({'success': False, 'message': f'Error al eliminar el usuario: {str(e)}'}), 500
+        error_msg = f"Error al eliminar el usuario: {str(e)}"
+        flash(error_msg, "danger")
+        return jsonify({'success': False, 'message': error_msg}), 500

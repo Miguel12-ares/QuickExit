@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         deleteButton.classList.add('btn', 'btn-delete');
                         deleteButton.dataset.id = usuario.id_usuario;
                         deleteButton.addEventListener('click', function() {
-                            console.log(`Intentando eliminar usuario ${usuario.id_usuario}: ${usuario.nombre}`);
                             if (confirm(`¿Estás seguro de que quieres eliminar a ${usuario.nombre}?`)) {
                                 eliminarUsuario(usuario.id_usuario);
                             }
@@ -62,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function eliminarUsuario(id_usuario) {
-        console.log(`Iniciando eliminación del usuario con ID: ${id_usuario}`);
-        
         fetch(`/admin/eliminar_usuario/${id_usuario}`, {
             method: 'POST',
             headers: {
@@ -72,16 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
             },
         })
         .then(response => {
-            console.log(`Respuesta del servidor: ${response.status} ${response.statusText}`);
-            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
             return response.json();
         })
         .then(data => {
-            console.log('Datos recibidos:', data);
             if (data.success) {
                 alert(data.message);
                 cargarUsuarios(); // Recargar la tabla después de eliminar
