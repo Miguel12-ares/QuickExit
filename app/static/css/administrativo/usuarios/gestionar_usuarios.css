@@ -456,18 +456,21 @@ input:checked + .slider:before {
     font-size: 1rem;
     padding: 0.8rem 1.2rem;
     min-width: unset;
-    width: 100%;
+    flex: 1;
+    max-width: 48%;
   }
   
   .botones-busqueda {
-    flex-direction: column;
-    gap: 0.8rem;
+    flex-direction: row;
+    gap: 1rem;
     width: 100%;
+    justify-content: space-between;
   }
   
   #btn-buscar-usr,
   #btn-limpiar-usr {
-    max-width: 100%;
+    flex: 1;
+    max-width: 48%;
   }
 
   .admin-table {
@@ -488,5 +491,23 @@ input:checked + .slider:before {
   .badge {
     font-size: 0.75rem;
     padding: 0.3rem 0.6rem;
+  }
+}
+
+/* Media query adicional para dispositivos muy pequeños */
+@media (max-width: 480px) {
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.7rem 1rem;
+  }
+  
+  .botones-busqueda {
+    gap: 0.8rem;
+  }
+  
+  #btn-buscar-usr,
+  #btn-limpiar-usr {
+    flex: 1;
+    max-width: 47%;
   }
 } 
