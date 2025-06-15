@@ -251,4 +251,29 @@ body {
     width: 100%;
     max-width: 250px;
   }
+}
+
+.crear-usuario-panel p {
+  text-align: center;
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+
+.crear-usuario-panel p i {
+  color: var(--primary-green);
+  margin-right: 0.5rem;
+}
+
+.crear-usuario-panel p a {
+  color: var(--primary-green);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.crear-usuario-panel p a:hover {
+  color: var(--dark-green);
+  text-decoration: underline;
 } 

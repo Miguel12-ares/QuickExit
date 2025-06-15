@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputBuscar = document.querySelector('input[name="buscar_id"]');
     const inputNombre = document.querySelector('input[name="buscar_nombre"]');
     const inputInstructor = document.querySelector('input[name="buscar_instructor"]');
-    const tablaBody = document.querySelector('.fichas-table tbody');
+    const tablaBody = document.querySelector('.admin-table tbody');
     const btnBuscar = document.getElementById('btn-buscar');
     const btnLimpiar = document.getElementById('btn-limpiar');
     const modalsContainer = document.getElementById('modals-container');
@@ -44,20 +44,24 @@ document.addEventListener('DOMContentLoaded', function() {
             let accionesHtml = '';
             if (tieneInstructorLider) {
                 accionesHtml = `
-                    <button type="button" class="btn-lider" onclick="abrirModal('modal-${ficha.id_ficha}')">
-                      <i class="fas fa-exchange-alt"></i> Cambiar Instructor
-                    </button>
-                    <form action="${routeRemover}${ficha.id_ficha}" method="POST" style="display:inline-block;">
-                      <button type="submit" class="btn-remover">
-                        <i class="fas fa-user-minus"></i> Remover
-                      </button>
-                    </form>
+                    <div class="botones-container">
+                        <button type="button" class="btn-lider btn-asignar" onclick="abrirModal('modal-${ficha.id_ficha}')">
+                          <i class="fas fa-exchange-alt"></i> Cambiar
+                        </button>
+                        <form action="${routeRemover}${ficha.id_ficha}" method="POST" style="display:inline-block;">
+                          <button type="submit" class="btn-lider btn-remover">
+                            <i class="fas fa-user-minus"></i> Remover
+                          </button>
+                        </form>
+                    </div>
                 `;
             } else {
                 accionesHtml = `
-                    <button type="button" class="btn-asignar" onclick="abrirModal('modal-${ficha.id_ficha}')">
-                      <i class="fas fa-user-plus"></i> Asignar Instructor
-                    </button>
+                    <div class="botones-container">
+                        <button type="button" class="btn-lider btn-asignar" onclick="abrirModal('modal-${ficha.id_ficha}')">
+                          <i class="fas fa-user-plus"></i> Asignar
+                        </button>
+                    </div>
                 `;
             }
 
@@ -68,27 +72,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>
                         ${tieneInstructorLider ? 
                             `<span class="badge-lider"><i class="fas fa-check-circle"></i> ${ficha.instructor_lider}</span>` :
-                            `<span class="badge-sin-lider"><i class="fas fa-times-circle"></i> Sin instructor líder asignado</span>`
+                            `<span class="badge-sin-lider"><i class="fas fa-times-circle"></i> Sin instructor líder</span>`
                         }
                     </td>
                     <td>
-                        <form method="POST" class="estado-form">
-                            <input type="hidden" name="id_ficha" value="${ficha.id_ficha}">
-                            <select name="nuevo_estado" class="estado-select">
-                                <option value="activa" ${ficha.habilitada ? 'selected' : ''}>
-                                    <i class="fas fa-check-circle"></i> Activa
-                                </option>
-                                <option value="deshabilitada" ${!ficha.habilitada ? 'selected' : ''}>
-                                    <i class="fas fa-times-circle"></i> Deshabilitada
-                                </option>
-                            </select>
-                            <button type="submit" class="btn-estado">
-                                <i class="fas fa-save"></i> Guardar
-                            </button>
-                        </form>
+                        <div class="botones-container">
+                            <form method="POST" class="estado-form">
+                                <input type="hidden" name="id_ficha" value="${ficha.id_ficha}">
+                                <select name="nuevo_estado" class="estado-select">
+                                    <option value="activa" ${ficha.habilitada ? 'selected' : ''}>Activa</option>
+                                    <option value="deshabilitada" ${!ficha.habilitada ? 'selected' : ''}>Deshabilitada</option>
+                                </select>
+                                <button type="submit" class="btn-estado">
+                                    <i class="fas fa-save"></i> Guardar
+                                </button>
+                            </form>
+                        </div>
                     </td>
                     <td>${accionesHtml}</td>
-                    <td>${ficha.descripcion}</td>
+                    <td>${ficha.descripcion || ''}</td>
                 </tr>
             `;
 
@@ -132,12 +134,21 @@ document.addEventListener('DOMContentLoaded', function() {
         if (inputBuscar.value.trim() !== '') params.append('buscar_id', inputBuscar.value.trim());
         if (inputNombre.value.trim() !== '') params.append('buscar_nombre', inputNombre.value.trim());
         if (inputInstructor.value.trim() !== '') params.append('buscar_instructor', inputInstructor.value.trim());
+        
+        console.log('Buscando fichas...', params.toString());
+        
         fetch(`/api/buscar_fichas?${params.toString()}`)
             .then(response => response.json())
             .then(data => {
+                console.log('Datos recibidos:', data);
                 if (data.fichas) {
                     renderFichas(data.fichas);
+                } else {
+                    console.error('No se recibieron fichas en la respuesta');
                 }
+            })
+            .catch(error => {
+                console.error('Error al buscar fichas:', error);
             });
     }
 
@@ -155,5 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Búsqueda inicial
+    console.log('Iniciando búsqueda inicial de fichas...');
     buscarFichas();
 });

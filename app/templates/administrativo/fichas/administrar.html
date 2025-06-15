@@ -8,33 +8,37 @@
 {% endblock %}
 
 {% block content %}
-<div class="fichas-panel">
+<div class="admin-panel">
   <h2><i class="fas fa-file-alt"></i> Administrar Fichas</h2>
-  <form id="buscador-fichas" class="mb-3 d-flex flex-wrap" autocomplete="off">
-    <div class="input-group">
-      <i class="fas fa-hashtag input-icon"></i>
-      <input type="text" name="buscar_id" class="form-control" placeholder="ID de ficha">
-    </div>
-    <div class="input-group">
-      <i class="fas fa-file-signature input-icon"></i>
-      <input type="text" name="buscar_nombre" class="form-control" placeholder="Nombre de ficha">
-    </div>
-    <div class="input-group">
-      <i class="fas fa-user-tie input-icon"></i>
-      <input type="text" name="buscar_instructor" class="form-control" placeholder="Instructor líder">
-    </div>
-    <div class="botones-busqueda">
-      <button type="button" id="btn-buscar" class="btn btn-primary">
-        <i class="fas fa-search"></i> Buscar
-      </button>
-      <button type="button" id="btn-limpiar" class="btn btn-secondary">
-        <i class="fas fa-broom"></i> Limpiar
-      </button>
-    </div>
-  </form>
+  
+  <div class="filtros-busqueda">
+    <form id="buscador-fichas" class="search-form" autocomplete="off">
+      <div class="input-group">
+        <i class="fas fa-hashtag input-icon"></i>
+        <input type="text" name="buscar_id" placeholder="ID de ficha">
+      </div>
+      <div class="input-group">
+        <i class="fas fa-file-signature input-icon"></i>
+        <input type="text" name="buscar_nombre" placeholder="Nombre de ficha">
+      </div>
+      <div class="input-group">
+        <i class="fas fa-user-tie input-icon"></i>
+        <input type="text" name="buscar_instructor" placeholder="Instructor líder">
+      </div>
+      
+      <div class="botones-busqueda">
+        <button type="button" id="btn-buscar" class="btn btn-primary">
+          <i class="fas fa-search"></i> Buscar
+        </button>
+        <button type="button" id="btn-limpiar" class="btn btn-secondary">
+          <i class="fas fa-eraser"></i> Limpiar
+        </button>
+      </div>
+    </form>
+  </div>
 
   <div class="table-container">
-    <table class="fichas-table">
+    <table class="admin-table">
       <thead>
         <tr>
           <th><i class="fas fa-hashtag"></i> ID Ficha</th>

@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnBuscar = document.getElementById('btn-buscar-usr');
     const btnLimpiar = document.getElementById('btn-limpiar-usr');
 
+    // Debounce para evitar demasiadas peticiones
+    let debounceTimeout = null;
+    function debounceCargarUsuarios() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(cargarUsuarios, 250);
+    }
+
     function cargarUsuarios() {
         const formData = new FormData(buscadorForm);
         const queryParams = new URLSearchParams();
@@ -127,6 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event Listeners
+    buscadorForm.querySelectorAll('input[type="text"], input[type="email"], input[type="number"]').forEach(input => {
+        input.addEventListener('input', debounceCargarUsuarios);
+    });
+    
+    buscadorForm.querySelector('select[name="buscar_rol"]').addEventListener('change', debounceCargarUsuarios);
+
     btnBuscar.addEventListener('click', cargarUsuarios);
     btnLimpiar.addEventListener('click', function() {
         buscadorForm.reset();
