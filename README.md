@@ -22,7 +22,7 @@
 ## Tecnologías Utilizadas
 
 *   **Backend:** Flask (Python)
-*   **Base de Datos:** SQLite (desarrollo), PostgreSQL (producción - adaptable)
+*   **Base de Datos:** MySQL (producción - adaptable)
 *   **ORM:** SQLAlchemy con Flask-SQLAlchemy
 *   **Autenticación:** Flask-Login, Flask-Bcrypt
 *   **Frontend:** HTML5, CSS3, JavaScript (Vanilla JS, AJAX)
