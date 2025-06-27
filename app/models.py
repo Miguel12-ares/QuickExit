@@ -13,7 +13,8 @@ class RolesEnum(enum.Enum):
 
 class EstadoSolicitud(enum.Enum):
     pendiente = 'pendiente'
-    aprobada = 'aprobada'
+    aprobada = 'aprobada'  # Aprobada por instructor
+    autorizada = 'autorizada'  # Validada por administrativo, lista para portería
     rechazada = 'rechazada'
     completada = 'completada'
 
@@ -68,10 +69,13 @@ class Usuario(db.Model, UserMixin):
     validado = db.Column(db.Boolean, default=True, nullable=False)
 
     # Especificar explícitamente la relación con Solicitud
-    solicitudes_creadas = db.relationship('Solicitud', 
-                                        backref='aprendiz', 
-                                        lazy=True, 
-                                        foreign_keys='Solicitud.id_aprendiz')
+    solicitudes_creadas = db.relationship(
+        'Solicitud',
+        backref='aprendiz',
+        lazy=True,
+        foreign_keys='Solicitud.id_aprendiz',
+        passive_deletes=True
+    )
 
     def get_id(self):
         return str(self.id_usuario)
@@ -90,11 +94,38 @@ class Solicitud(db.Model):
     hora_reingreso_estimada = db.Column(db.Time, nullable=True)
     motivo = db.Column(db.String(200), nullable=False)
     estado = db.Column(db.Enum(EstadoSolicitud), default=EstadoSolicitud.pendiente, nullable=False)
-    id_instructor_aprobador = db.Column(db.Integer, db.ForeignKey('USUARIOS.id_usuario'), nullable=True)
+    id_validacion = db.Column(db.Integer, db.ForeignKey('solicitud_validaciones.id_validacion'))
     hora_exacta_salida = db.Column(db.Time, nullable=True)
     hora_exacta_reingreso = db.Column(db.Time, nullable=True)
 
     auditorias = db.relationship('AuditoriaGeneral', backref='solicitud', lazy=True)
+
+    validacion = db.relationship(
+        'SolicitudValidaciones',
+        back_populates='solicitud',
+        uselist=False,
+        foreign_keys=[id_validacion]
+    )
+
+class SolicitudValidaciones(db.Model):
+    __tablename__ = 'solicitud_validaciones'
+    id_validacion = db.Column(db.Integer, primary_key=True)
+    id_solicitud = db.Column(db.Integer, db.ForeignKey('SOLICITUDES.id_solicitud'), nullable=False)
+    id_instructor_validador = db.Column(db.Integer, db.ForeignKey('USUARIOS.id_usuario'), nullable=True)
+    id_administrativo_validador = db.Column(db.Integer, db.ForeignKey('USUARIOS.id_usuario'), nullable=True)
+    id_portero_validador_salida = db.Column(db.Integer, db.ForeignKey('USUARIOS.id_usuario'), nullable=True)
+    id_portero_validador_reingreso = db.Column(db.Integer, db.ForeignKey('USUARIOS.id_usuario'), nullable=True)
+    fecha_validacion_instructor = db.Column(db.DateTime, nullable=True)
+    fecha_validacion_admin = db.Column(db.DateTime, nullable=True)
+    fecha_validacion_portero_salida = db.Column(db.DateTime, nullable=True)
+    fecha_validacion_portero_reingreso = db.Column(db.DateTime, nullable=True)
+
+    solicitud = db.relationship(
+        'Solicitud',
+        back_populates='validacion',
+        uselist=False,
+        foreign_keys='Solicitud.id_validacion'
+    )
 
 class AuditoriaGeneral(db.Model):
     __tablename__ = 'AUDITORIA_GENERAL'
@@ -113,4 +144,3 @@ class Configuracion(db.Model):
     clave = db.Column(db.String(50), unique=True, nullable=False)
     valor = db.Column(db.Text, nullable=False)
     descripcion = db.Column(db.Text, nullable=True)
-

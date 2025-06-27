@@ -29,4 +29,37 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr>`;
     });
   }
+
+  function buscarInstructores() {
+    const params = new URLSearchParams();
+    if (inputId.value.trim() !== '') params.append('buscar_id', inputId.value.trim());
+    if (inputNombre.value.trim() !== '') params.append('buscar_nombre', inputNombre.value.trim());
+    if (inputEmail.value.trim() !== '') params.append('buscar_email', inputEmail.value.trim());
+    fetch(`/admin/api/buscar_instructores?${params.toString()}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.instructores) {
+          render(data.instructores);
+        } else {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No se encontraron resultados</td></tr>';
+        }
+      })
+      .catch(error => {
+        console.error('Error al buscar instructores:', error);
+      });
+  }
+
+  inputId.addEventListener('input', () => debounce(buscarInstructores));
+  inputNombre.addEventListener('input', () => debounce(buscarInstructores));
+  inputEmail.addEventListener('input', () => debounce(buscarInstructores));
+  btnBuscar.addEventListener('click', buscarInstructores);
+  btnLimpiar.addEventListener('click', function() {
+    inputId.value = '';
+    inputNombre.value = '';
+    inputEmail.value = '';
+    buscarInstructores();
+  });
+
+  // Búsqueda inicial
+  buscarInstructores();
 });

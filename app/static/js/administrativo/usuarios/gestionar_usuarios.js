@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        fetch(`/api/buscar_usuarios?${queryParams.toString()}`)
+        fetch(`/admin/api/buscar_usuarios?${queryParams.toString()}`)
             .then(response => response.json())
             .then(data => {
                 tablaBody.innerHTML = ''; // Limpiar la tabla
@@ -80,37 +80,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function eliminarUsuario(id_usuario) {
-        fetch(`/admin/eliminar_usuario/${id_usuario}`, {
+        if (!confirm('¿Estás seguro de que deseas eliminar este usuario?')) return;
+        fetch(`/admin/api/eliminar_usuario/${id_usuario}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest',
             },
         })
-        .then(response => {
-            // Intentar obtener el JSON incluso si hay error
-            return response.json().then(data => {
-                return { status: response.status, ok: response.ok, data: data };
-            });
-        })
-        .then(result => {
-            if (result.ok) {
-                alert(result.data.message);
-                cargarUsuarios(); // Recargar la tabla después de eliminar
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                cargarUsuarios();
             } else {
-                // Mostrar el mensaje específico del servidor
-                console.error(`Error ${result.status}:`, result.data);
-                alert(result.data.message || `Error ${result.status}: ${result.data.error || 'Error desconocido'}`);
+                alert(data.message || 'No se pudo eliminar el usuario.');
             }
         })
         .catch(error => {
             console.error('Error al eliminar usuario:', error);
-            alert(`Ocurrió un error al intentar eliminar el usuario: ${error.message}`);
+            alert('Ocurrió un error al eliminar el usuario.');
         });
     }
 
     function actualizarEstadoUsuario(id_usuario, nuevo_estado) {
-        fetch(`/admin/actualizar_estado_usuario/${id_usuario}`, {
+        fetch(`/admin/api/actualizar_estado_usuario/${id_usuario}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded', // Para enviar como form data

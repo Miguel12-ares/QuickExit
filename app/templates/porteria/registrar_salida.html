@@ -24,7 +24,7 @@
             <td>{{ solicitud.tipo_salida.nombre }}</td>
             <td>{{ solicitud.hora_salida_estimada }}</td>
             <td>
-              <form action="{{ url_for('main.porteria_registrar_salida', id_solicitud=solicitud.id_solicitud) }}" method="post" class="form-inline">
+              <form action="{{ url_for('porteria.porteria_registrar_salida', id_solicitud=solicitud.id_solicitud) }}" method="post" class="form-inline">
                 <input type="time" name="hora_exacta_salida" required>
                 <button type="submit" class="btn-aprobar">Registrar Salida</button>
               </form>

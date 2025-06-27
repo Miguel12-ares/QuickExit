@@ -31,10 +31,10 @@
           <td>{{ aprendiz.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
           <td>
             <div class="botones-container">
-              <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST">
+              <form action="{{ url_for('instructor.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST">
                 <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')"><i class="fas fa-check"></i> Aprobar</button>
               </form>
-              <form action="{{ url_for('main.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST">
+              <form action="{{ url_for('instructor.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST">
                 <button type="submit" class="btn btn-secondary" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')"><i class="fas fa-times"></i> Rechazar</button>
               </form>
             </div>
@@ -65,7 +65,7 @@
       No tienes fichas asignadas como instructor líder.
     </div>
     <div class="modal-footer">
-      <button class="modal-btn" data-url="{{ url_for('main.dashboard') }}">
+      <button class="modal-btn" data-url="{{ url_for('instructor.instructor_dashboard') }}">
         <i class="fas fa-home"></i> Volver al Inicio
       </button>
     </div>

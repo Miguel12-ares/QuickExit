@@ -36,10 +36,10 @@
             <td>{{ solicitud.motivo }}</td>
             <td class="actions-cell">
               <div class="form-actions">
-                <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="POST">
+                <form action="{{ url_for('instructor.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="POST">
                   <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Aprobar</button>
                 </form>
-                <form action="{{ url_for('main.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="POST">
+                <form action="{{ url_for('instructor.instructor_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="POST">
                   <button type="submit" class="btn btn-secondary"><i class="fas fa-times"></i> Rechazar</button>
                 </form>
               </div>
