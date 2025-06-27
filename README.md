@@ -33,7 +33,7 @@ QuickExit es una aplicación web desarrollada en Flask y MySQL, diseñada para l
 ## Tecnologías Utilizadas
 - **Backend:** Flask (Python)
 - **Base de datos:** MySQL
-- **Frontend:** HTML5, CSS3, JavaScript (con Bootstrap y FontAwesome)
+- **Frontend:** HTML5, CSS3, JavaScript (con FontAwesome)
 
 ## Instalación y Despliegue
 1. Clona el repositorio y navega al directorio del proyecto.
