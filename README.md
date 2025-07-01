@@ -1,63 +1,138 @@
 # QuickExit
 
-QuickExit es una plataforma web para la gestión de salidas, usuarios y fichas en entornos educativos, orientada a la administración eficiente y segura de permisos y roles.
+![QuickExit Logo](app/static/img/logo.png)
 
-## Características principales
+## Descripción del Proyecto
 
-- Gestión de usuarios por roles: aprendices, instructores, administrativos y portería.
-- Registro y validación de salidas y reingresos.
-- Paneles diferenciados para cada tipo de usuario.
-- Administración de fichas y asignación de instructores líderes.
-- Sistema de notificaciones elegante y centralizado para mensajes, alertas y confirmaciones.
-- Control de acceso y validación de datos.
+**QuickExit** es una aplicación web para la gestión y validación de salidas y reingresos de aprendices en entornos educativos (como el SENA). Ofrece paneles diferenciados según el rol del usuario (Aprendiz, Instructor, Portero, Administrativo, Administrador) y optimiza los procesos de solicitud, aprobación y registro de salidas.
 
-## Instalación
+## Características Principales
 
-1. Clona el repositorio:
-   ```bash
-   git clone <url-del-repo>
-   cd QuickExit
-   ```
-2. Instala las dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Configura la base de datos y variables de entorno según `config.py`.
-4. Ejecuta la aplicación:
-   ```bash
-   python run.py
-   ```
+- **Gestión de Usuarios:** Registro de aprendices y creación/gestión de usuarios administrativos (instructores, porteros, administrativos, admin).
+- **Roles y Permisos:** Acceso diferenciado y paneles personalizados para cada rol.
+- **Solicitudes de Salida:** Los aprendices pueden crear solicitudes de salida con motivos y horarios estimados.
+- **Validación de Instructores y Administrativos:** Aprobación/rechazo de solicitudes y validación de cuentas.
+- **Registro de Portería:** Registro de horas exactas de salida y reingreso.
+- **Historial y Seguimiento:** Visualización del estado y el historial de todas las solicitudes.
+- **Gestión de Fichas:** Creación, administración, habilitación/deshabilitación y asignación de instructores líderes.
+- **Buscadores AJAX:** Búsqueda avanzada y filtros dinámicos en tablas de usuarios, fichas, porteros e instructores.
+- **Notificaciones Elegantes:** Sistema centralizado de notificaciones visuales para mensajes, alertas y confirmaciones (incluye doble validación en acciones críticas).
 
-## Uso
+## Tecnologías Utilizadas
 
-- Accede a la aplicación en `http://localhost:5000`.
-- Regístrate como aprendiz (solo fichas habilitadas aparecerán en el registro).
-- Los administrativos pueden crear, habilitar/deshabilitar y asignar instructores a fichas desde el panel de administración.
-- El sistema de notificaciones muestra mensajes de éxito, error, advertencia y confirmaciones de manera elegante y no intrusiva.
-- Todas las acciones críticas (eliminar, aprobar, rechazar) requieren doble confirmación mediante notificaciones.
+- **Backend:** Flask (Python)
+- **Base de Datos:** MySQL (por defecto, adaptable a SQLite para pruebas)
+- **ORM:** SQLAlchemy
+- **Autenticación:** Flask-Login, Flask-Bcrypt
+- **Frontend:** HTML5, CSS3, JavaScript (Vanilla JS, AJAX)
+- **Estilos:** Font Awesome
 
-## Notificaciones elegantes
+## Configuración y Puesta en Marcha
 
-- Todas las alertas y confirmaciones usan un sistema de notificaciones visual, moderno y centralizado.
-- Los mensajes flash de Flask y las validaciones críticas se muestran como notificaciones en la interfaz.
-- El sistema reemplaza el uso de `alert()` y `confirm()` nativos.
-- Las notificaciones pueden tener acciones personalizadas y doble validación para operaciones sensibles.
+### 1. Clonar el Repositorio
+```bash
+git clone <URL_DEL_REPOSITORIO>
+cd QuickExit
+```
 
-## Restricciones y validaciones
+### 2. Crear y Activar un Entorno Virtual
+```bash
+python -m venv venv
+# En Windows:
+.\venv\Scripts\activate
+# En macOS/Linux:
+source venv/bin/activate
+```
 
-- **Registro de aprendices:** solo pueden seleccionar fichas habilitadas y con instructor líder asignado.
-- **Asignación de instructores:** solo se pueden asignar instructores validados a fichas habilitadas.
-- **Creación de fichas:** no se permite asignar instructores vacíos o inválidos.
-- **Panel de administración de fichas:** permite ver y gestionar tanto fichas habilitadas como deshabilitadas.
+### 3. Instalar Dependencias
+```bash
+pip install -r requirements.txt
+```
 
-## Estructura del proyecto
+### 4. Configuración de Variables de Entorno
+Puedes crear un archivo `.env` o configurar variables de entorno para:
+- `SQLALCHEMY_DATABASE_URI` (por defecto: MySQL local)
+- `SECRET_KEY` (clave secreta para sesiones)
 
-- `app/` - Código principal de la aplicación (Flask, modelos, rutas, plantillas, estáticos)
-- `migrations/` - Archivos de migración de base de datos
-- `requirements.txt` - Dependencias del proyecto
-- `run.py` - Script principal para ejecutar la app
+Ejemplo `.env`:
+```
+SECRET_KEY='tu_clave_secreta'
+SQLALCHEMY_DATABASE_URI='mysql+pymysql://usuario:password@localhost/quickexit_db'
+```
 
-## Contribución
+### 5. Inicializar la Base de Datos
+```bash
+python init_db.py
+```
+Esto creará todas las tablas necesarias.
+
+### 6. Crear Usuario Administrador Inicial
+Ejecuta el siguiente script para crear un usuario admin por defecto:
+```bash
+python init_admin.py
+```
+Por defecto, el usuario creado es:
+- Documento: `0001`
+- Nombre: `Administrador`
+- Email: `admin@quickexit.com`
+- Contraseña: `1234`
+
+Puedes modificar estos valores en `init_admin.py` antes de ejecutar el script.
+
+### 7. Ejecutar la Aplicación
+- Para desarrollo local:
+  ```bash
+  python run.py
+  # O
+  python localRun.py
+  ```
+- Accede a la app en: [http://localhost:5000](http://localhost:5000)
+
+## Estructura del Proyecto
+
+```
+QuickExit/
+├── app/
+│   ├── static/
+│   ├── templates/
+│   ├── models.py
+│   ├── routes/
+│   └── ...
+├── migrations/
+├── config.py
+├── init_admin.py
+├── init_db.py
+├── requirements.txt
+├── run.py
+├── localRun.py
+└── README.md
+```
+
+## Uso de la Aplicación
+
+### Registro y Validación
+- **Aprendices:** Se registran directamente. Solo pueden elegir fichas habilitadas y con instructor líder asignado. Su cuenta queda pendiente de validación por el instructor líder.
+- **Administradores:** Crean usuarios administrativos, instructores y porteros desde el panel.
+- **Validaciones:** Todas las acciones críticas (eliminar, aprobar, rechazar) requieren doble confirmación mediante notificaciones elegantes.
+
+### Paneles por Rol
+- **Aprendiz:** Solicitud y seguimiento de salidas.
+- **Instructor:** Validación de aprendices y solicitudes.
+- **Portero:** Registro de salidas y reingresos.
+- **Administrativo/Admin:** Gestión completa de usuarios, fichas, instructores y solicitudes.
+
+### Panel Administrativo
+- **Gestión de Usuarios:** Crear, buscar, filtrar y eliminar usuarios (excepto admin).
+- **Gestión de Fichas:** Crear, habilitar/deshabilitar, asignar/remover instructores líderes.
+- **Validar Salidas:** Gestionar solicitudes aprobadas por instructores.
+- **Buscadores AJAX:** Búsqueda avanzada en todas las tablas administrativas.
+
+## Notificaciones y Confirmaciones
+- Todas las alertas y confirmaciones usan un sistema visual moderno.
+- Doble validación para acciones críticas (eliminar, aprobar, rechazar).
+- Los mensajes flash de Flask se muestran como notificaciones elegantes.
+
+## Contribuir
 
 1. Haz un fork del repositorio.
 2. Crea una rama para tu feature o fix.
