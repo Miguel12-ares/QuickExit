@@ -1,6 +1,5 @@
 # QuickExit
 
-![QuickExit Logo](app/static/img/logo.png)
 
 ## Descripción del Proyecto
 
