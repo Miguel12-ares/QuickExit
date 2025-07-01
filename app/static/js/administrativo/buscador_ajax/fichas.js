@@ -134,13 +134,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (inputBuscar.value.trim() !== '') params.append('buscar_id', inputBuscar.value.trim());
         if (inputNombre.value.trim() !== '') params.append('buscar_nombre', inputNombre.value.trim());
         if (inputInstructor.value.trim() !== '') params.append('buscar_instructor', inputInstructor.value.trim());
-        
-        console.log('Buscando fichas...', params.toString());
-        
         fetch(`/admin/api/buscar_fichas?${params.toString()}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Datos recibidos:', data);
                 if (data.fichas) {
                     renderFichas(data.fichas);
                 } else {

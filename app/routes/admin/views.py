@@ -101,11 +101,14 @@ def crear_ficha():
         if Ficha.query.get(id_ficha):
             flash('Ya existe una ficha con ese ID', 'danger')
             return redirect(url_for('admin.crear_ficha'))
+        # Validar que si se selecciona un instructor, no sea vacío
+        if id_instructor_lider == '':
+            id_instructor_lider = None
         ficha = Ficha(
             id_ficha=int(id_ficha),
             nombre=nombre,
             descripcion=descripcion,
-            id_instructor_lider=id_instructor_lider if id_instructor_lider else None
+            id_instructor_lider=id_instructor_lider
         )
         db.session.add(ficha)
         db.session.commit()

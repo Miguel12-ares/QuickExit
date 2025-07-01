@@ -12,7 +12,7 @@ def api_buscar_instructores():
     buscar_id = request.args.get('buscar_id', '').strip()
     buscar_nombre = request.args.get('buscar_nombre', '').strip()
     buscar_email = request.args.get('buscar_email', '').strip()
-    query = Usuario.query.filter_by(rol=RolesEnum.instructor)
+    query = Usuario.query.filter_by(rol=RolesEnum.instructor, validado=True)
     if buscar_id:
         query = query.filter(Usuario.id_usuario.like(f"%{buscar_id}%"))
     if buscar_nombre:
@@ -22,7 +22,7 @@ def api_buscar_instructores():
     instructores = query.all()
     result = []
     for i in instructores:
-        ficha_nombre = i.ficha.nombre if i.ficha else None
+        ficha_nombre = i.ficha.nombre if i.ficha and i.ficha.habilitada else None
         result.append({
             'id_usuario': i.id_usuario,
             'nombre': i.nombre,

@@ -31,11 +31,11 @@
           <td>{{ aprendiz.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
           <td>
             <div class="botones-container">
-              <form action="{{ url_for('instructor.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST">
-                <button type="submit" class="btn btn-primary" onclick="return confirm('¿Está seguro de aprobar a este aprendiz?')"><i class="fas fa-check"></i> Aprobar</button>
+              <form action="{{ url_for('instructor.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='aprobar') }}" method="POST" onsubmit="event.preventDefault(); confirmarAccionAprobar(this);">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Aprobar</button>
               </form>
-              <form action="{{ url_for('instructor.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST">
-                <button type="submit" class="btn btn-secondary" onclick="return confirm('¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.')"><i class="fas fa-times"></i> Rechazar</button>
+              <form action="{{ url_for('instructor.validar_aprendiz', id_usuario=aprendiz.id_usuario, accion='rechazar') }}" method="POST" onsubmit="event.preventDefault(); confirmarAccionRechazar(this);">
+                <button type="submit" class="btn btn-secondary"><i class="fas fa-times"></i> Rechazar</button>
               </form>
             </div>
           </td>
@@ -76,4 +76,96 @@
 
 {% block extra_js %}
 <script src="{{ url_for('static', filename='js/instructor/validar_aprendices.js') }}"></script>
+<script>
+function confirmarAccionAprobar(form) {
+  QuickExitNotifications.show({
+    type: 'warning',
+    title: 'Primera Confirmación',
+    message: '¿Está seguro de aprobar a este aprendiz?',
+    duration: 0,
+    dismissible: true,
+    actions: [
+      {
+        text: 'Cancelar',
+        type: 'secondary',
+        icon: 'fas fa-times',
+        callback: () => {}
+      },
+      {
+        text: 'Continuar',
+        type: 'primary',
+        icon: 'fas fa-arrow-right',
+        callback: () => {
+          QuickExitNotifications.show({
+            type: 'success',
+            title: 'Confirmación Final',
+            message: '¿Realmente desea aprobar a este aprendiz?',
+            duration: 0,
+            dismissible: true,
+            actions: [
+              {
+                text: 'Cancelar',
+                type: 'secondary',
+                icon: 'fas fa-times',
+                callback: () => {}
+              },
+              {
+                text: 'Aprobar',
+                type: 'primary',
+                icon: 'fas fa-check',
+                callback: () => { form.submit(); }
+              }
+            ]
+          });
+        }
+      }
+    ]
+  });
+}
+function confirmarAccionRechazar(form) {
+  QuickExitNotifications.show({
+    type: 'warning',
+    title: 'Primera Confirmación',
+    message: '¿Está seguro de rechazar a este aprendiz? Esta acción no se puede deshacer.',
+    duration: 0,
+    dismissible: true,
+    actions: [
+      {
+        text: 'Cancelar',
+        type: 'secondary',
+        icon: 'fas fa-times',
+        callback: () => {}
+      },
+      {
+        text: 'Continuar',
+        type: 'primary',
+        icon: 'fas fa-arrow-right',
+        callback: () => {
+          QuickExitNotifications.show({
+            type: 'danger',
+            title: 'Confirmación Final',
+            message: '¿Realmente desea rechazar a este aprendiz? Esta acción no se puede deshacer.',
+            duration: 0,
+            dismissible: true,
+            actions: [
+              {
+                text: 'Cancelar',
+                type: 'secondary',
+                icon: 'fas fa-times',
+                callback: () => {}
+              },
+              {
+                text: 'Rechazar',
+                type: 'primary',
+                icon: 'fas fa-times',
+                callback: () => { form.submit(); }
+              }
+            ]
+          });
+        }
+      }
+    ]
+  });
+}
+</script>
 {% endblock %} 

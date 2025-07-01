@@ -12,7 +12,10 @@ def api_buscar_fichas():
     buscar_id = request.args.get('buscar_id', '').strip()
     buscar_nombre = request.args.get('buscar_nombre', '').strip()
     buscar_instructor = request.args.get('buscar_instructor', '').strip()
+    solo_habilitadas = request.args.get('solo_habilitadas', None)
     query = Ficha.query
+    if solo_habilitadas == '1':
+        query = query.filter_by(habilitada=True)
     if buscar_id:
         query = query.filter(Ficha.id_ficha.like(f"%{buscar_id}%"))
     if buscar_nombre:

@@ -19,7 +19,7 @@ def home():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.dashboard'))
-    fichas = Ficha.query.all()  # Obtener todas las fichas (solo para aprendices)
+    fichas = Ficha.query.filter_by(habilitada=True).all()  # Solo fichas habilitadas
 
     if request.method == 'POST':
         documento = request.form.get('documento', '').strip()
@@ -38,11 +38,10 @@ def register():
             return redirect(url_for('main.register'))
 
         if rol_str == 'aprendiz':
-            ficha = Ficha.query.filter_by(id_ficha=id_ficha).first()
+            ficha = Ficha.query.filter_by(id_ficha=id_ficha, habilitada=True).first()
             if not ficha:
-                flash('Ficha seleccionada no válida.', 'danger')
+                flash('Ficha seleccionada no válida o deshabilitada.', 'danger')
                 return redirect(url_for('main.register'))
-            
             if not ficha.instructor_lider:
                 flash('Esta ficha no tiene un instructor líder asignado. Contacte al administrador.', 'danger')
                 return redirect(url_for('main.register'))

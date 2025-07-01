@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (motivoPrincipal === 'Otro' && motivoEspecificacion === '') {
                 event.preventDefault(); // Detener el envío si 'Otro' está seleccionado y la especificación está vacía
-                alert('Por favor, especifique el motivo cuando selecciona "Otro".');
+                showWarning('Por favor, especifique el motivo cuando selecciona "Otro".');
                 return;
             }
 
