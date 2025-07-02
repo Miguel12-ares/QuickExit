@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        fetch(`/api/buscar_usuarios?${queryParams.toString()}`)
+        fetch(`/admin/api/buscar_usuarios?${queryParams.toString()}`)
             .then(response => response.json())
             .then(data => {
                 tablaBody.innerHTML = ''; // Limpiar la tabla
@@ -56,9 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         deleteButton.classList.add('btn', 'btn-delete');
                         deleteButton.dataset.id = usuario.id_usuario;
                         deleteButton.addEventListener('click', function() {
-                            if (confirm(`¿Estás seguro de que quieres eliminar a ${usuario.nombre}?`)) {
-                                eliminarUsuario(usuario.id_usuario);
-                            }
+                            eliminarUsuario(usuario.id_usuario, usuario.nombre);
                         });
                         accionesCell.appendChild(deleteButton);
                     });
@@ -75,42 +73,80 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error al cargar usuarios:', error);
-                alert('Error al cargar usuarios. Revisa la consola para más detalles.');
+                showError('Error al cargar usuarios. Revisa la consola para más detalles.');
             });
     }
 
-    function eliminarUsuario(id_usuario) {
-        fetch(`/admin/eliminar_usuario/${id_usuario}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-        })
-        .then(response => {
-            // Intentar obtener el JSON incluso si hay error
-            return response.json().then(data => {
-                return { status: response.status, ok: response.ok, data: data };
-            });
-        })
-        .then(result => {
-            if (result.ok) {
-                alert(result.data.message);
-                cargarUsuarios(); // Recargar la tabla después de eliminar
-            } else {
-                // Mostrar el mensaje específico del servidor
-                console.error(`Error ${result.status}:`, result.data);
-                alert(result.data.message || `Error ${result.status}: ${result.data.error || 'Error desconocido'}`);
-            }
-        })
-        .catch(error => {
-            console.error('Error al eliminar usuario:', error);
-            alert(`Ocurrió un error al intentar eliminar el usuario: ${error.message}`);
+    function eliminarUsuario(id_usuario, nombre_usuario) {
+        // Primera validación
+        QuickExitNotifications.show({
+            type: 'warning',
+            title: 'Primera Confirmación',
+            message: `¿Estás seguro de que quieres eliminar a ${nombre_usuario}? Esta acción es irreversible.`,
+            duration: 0,
+            dismissible: true,
+            actions: [
+                {
+                    text: 'Cancelar',
+                    type: 'secondary',
+                    icon: 'fas fa-times',
+                    callback: () => {}
+                },
+                {
+                    text: 'Continuar',
+                    type: 'primary',
+                    icon: 'fas fa-arrow-right',
+                    callback: () => {
+                        // Segunda validación
+                        QuickExitNotifications.show({
+                            type: 'danger',
+                            title: 'Confirmación Final',
+                            message: `Esta es la última confirmación. ¿Realmente deseas eliminar a ${nombre_usuario}?`,
+                            duration: 0,
+                            dismissible: true,
+                            actions: [
+                                {
+                                    text: 'Cancelar',
+                                    type: 'secondary',
+                                    icon: 'fas fa-times',
+                                    callback: () => {}
+                                },
+                                {
+                                    text: 'Eliminar',
+                                    type: 'primary',
+                                    icon: 'fas fa-trash',
+                                    callback: () => {
+                                        fetch(`/admin/api/eliminar_usuario/${id_usuario}`, {
+                                            method: 'POST',
+                                            headers: {
+                                                'X-Requested-With': 'XMLHttpRequest',
+                                            },
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                showSuccess(data.message);
+                                                cargarUsuarios();
+                                            } else {
+                                                showError(data.message || 'No se pudo eliminar el usuario.');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error al eliminar usuario:', error);
+                                            showError('Ocurrió un error al eliminar el usuario.');
+                                        });
+                                    }
+                                }
+                            ]
+                        });
+                    }
+                }
+            ]
         });
     }
 
     function actualizarEstadoUsuario(id_usuario, nuevo_estado) {
-        fetch(`/admin/actualizar_estado_usuario/${id_usuario}`, {
+        fetch(`/admin/api/actualizar_estado_usuario/${id_usuario}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded', // Para enviar como form data
@@ -121,15 +157,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.message) {
-                alert(data.message);
+                showSuccess(data.message);
                 cargarUsuarios(); // Recargar la tabla para reflejar los cambios
             } else if (data.error) {
-                alert(`Error: ${data.error}`);
+                showError(`Error: ${data.error}`);
             }
         })
         .catch(error => {
             console.error('Error al actualizar estado:', error);
-            alert('Ocurrió un error al actualizar el estado del usuario.');
+            showError('Ocurrió un error al actualizar el estado del usuario.');
         });
     }
 

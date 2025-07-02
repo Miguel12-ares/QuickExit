@@ -6,18 +6,110 @@ document.addEventListener("DOMContentLoaded", function() {
   
     approveButtons.forEach(function(btn) {
       btn.addEventListener("click", function(e) {
-        if (!confirm("¿Estás seguro de aprobar este instructor?")) {
-          e.preventDefault();
-        }
+        e.preventDefault();
       });
     });
   
     rejectButtons.forEach(function(btn) {
       btn.addEventListener("click", function(e) {
-        if (!confirm("¿Estás seguro de rechazar este instructor? Esta acción eliminará al usuario.")) {
-          e.preventDefault();
-        }
+        e.preventDefault();
       });
     });
   });
+  
+function aprobarInstructor(id_instructor, nombre) {
+    QuickExitNotifications.show({
+        type: 'warning',
+        title: 'Primera Confirmación',
+        message: `¿Estás seguro de aprobar a ${nombre}?`,
+        duration: 0,
+        dismissible: true,
+        actions: [
+            {
+                text: 'Cancelar',
+                type: 'secondary',
+                icon: 'fas fa-times',
+                callback: () => {}
+            },
+            {
+                text: 'Continuar',
+                type: 'primary',
+                icon: 'fas fa-arrow-right',
+                callback: () => {
+                    QuickExitNotifications.show({
+                        type: 'success',
+                        title: 'Confirmación Final',
+                        message: `¿Realmente deseas aprobar a ${nombre}?`,
+                        duration: 0,
+                        dismissible: true,
+                        actions: [
+                            {
+                                text: 'Cancelar',
+                                type: 'secondary',
+                                icon: 'fas fa-times',
+                                callback: () => {}
+                            },
+                            {
+                                text: 'Aprobar',
+                                type: 'primary',
+                                icon: 'fas fa-check',
+                                callback: () => {
+                                    // Aquí va la lógica de aprobación
+                                }
+                            }
+                        ]
+                    });
+                }
+            }
+        ]
+    });
+}
+
+function rechazarInstructor(id_instructor, nombre) {
+    QuickExitNotifications.show({
+        type: 'warning',
+        title: 'Primera Confirmación',
+        message: `¿Estás seguro de rechazar a ${nombre}? Esta acción eliminará al usuario.`,
+        duration: 0,
+        dismissible: true,
+        actions: [
+            {
+                text: 'Cancelar',
+                type: 'secondary',
+                icon: 'fas fa-times',
+                callback: () => {}
+            },
+            {
+                text: 'Continuar',
+                type: 'primary',
+                icon: 'fas fa-arrow-right',
+                callback: () => {
+                    QuickExitNotifications.show({
+                        type: 'danger',
+                        title: 'Confirmación Final',
+                        message: `¿Realmente deseas rechazar a ${nombre}? Esta acción eliminará al usuario permanentemente.`,
+                        duration: 0,
+                        dismissible: true,
+                        actions: [
+                            {
+                                text: 'Cancelar',
+                                type: 'secondary',
+                                icon: 'fas fa-times',
+                                callback: () => {}
+                            },
+                            {
+                                text: 'Rechazar',
+                                type: 'primary',
+                                icon: 'fas fa-trash',
+                                callback: () => {
+                                    // Aquí va la lógica de rechazo
+                                }
+                            }
+                        ]
+                    });
+                }
+            }
+        ]
+    });
+}
   

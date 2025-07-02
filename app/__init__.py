@@ -37,7 +37,11 @@ def create_app():
     def load_user(user_id):
         return Usuario.query.get(int(user_id))
 
-    from app.routes import main
-    app.register_blueprint(main)
+    from app.routes import main_bp, admin_bp, aprendiz_bp, porteria_bp, instructor_bp
+    app.register_blueprint(main_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(aprendiz_bp)
+    app.register_blueprint(porteria_bp)
+    app.register_blueprint(instructor_bp)
 
     return app

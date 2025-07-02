@@ -1,0 +1,314 @@
+/* Sistema de Notificaciones Elegantes - QuickExit */
+/* Este archivo es independiente y no interfiere con los modales existentes */
+
+/* Variables CSS para consistencia con el diseño */
+:root {
+  --notification-primary-green: #4CAF50;
+  --notification-dark-green: #388E3C;
+  --notification-light-green: #a5d6a7;
+  --notification-bg-light-green: #f6fef7;
+  --notification-border-green: #e8f5e9;
+  --notification-danger: #f44336;
+  --notification-warning: #ff9800;
+  --notification-info: #2196f3;
+  --notification-success: #4CAF50;
+  --notification-text-dark: #333;
+  --notification-text-light: #666;
+  --notification-shadow: 0 8px 32px 0 rgba(34, 139, 34, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+  --notification-border-radius: 16px;
+  --notification-font: 'Work Sans', Arial, sans-serif;
+}
+
+/* Contenedor principal de notificaciones */
+.quickexit-notifications-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+/* Notificación individual */
+.quickexit-notification {
+  background: #fff;
+  border-radius: var(--notification-border-radius);
+  box-shadow: var(--notification-shadow);
+  padding: 1.2rem 1.5rem;
+  min-width: 320px;
+  max-width: 420px;
+  border-left: 4px solid var(--notification-primary-green);
+  font-family: var(--notification-font);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--notification-text-dark);
+  position: relative;
+  overflow: hidden;
+  pointer-events: auto;
+  transform: translateX(100%);
+  opacity: 0;
+  animation: slideInNotification 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animación de entrada */
+@keyframes slideInNotification {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animación de salida */
+@keyframes slideOutNotification {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Estados de las notificaciones */
+.quickexit-notification.quickexit-notification-danger {
+  border-left-color: var(--notification-danger);
+  background: linear-gradient(135deg, #fff 0%, #fff5f5 100%);
+}
+
+.quickexit-notification.quickexit-notification-warning {
+  border-left-color: var(--notification-warning);
+  background: linear-gradient(135deg, #fff 0%, #fffbf0 100%);
+}
+
+.quickexit-notification.quickexit-notification-info {
+  border-left-color: var(--notification-info);
+  background: linear-gradient(135deg, #fff 0%, #f0f8ff 100%);
+}
+
+.quickexit-notification.quickexit-notification-success {
+  border-left-color: var(--notification-success);
+  background: linear-gradient(135deg, #fff 0%, #f0fff4 100%);
+}
+
+/* Header de la notificación */
+.quickexit-notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.quickexit-notification-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--notification-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quickexit-notification-title i {
+  font-size: 1.1em;
+}
+
+/* Iconos por tipo */
+.quickexit-notification-danger .quickexit-notification-title i {
+  color: var(--notification-danger);
+}
+
+.quickexit-notification-warning .quickexit-notification-title i {
+  color: var(--notification-warning);
+}
+
+.quickexit-notification-info .quickexit-notification-title i {
+  color: var(--notification-info);
+}
+
+.quickexit-notification-success .quickexit-notification-title i {
+  color: var(--notification-success);
+}
+
+/* Botón de cerrar */
+.quickexit-notification-close {
+  background: none;
+  border: none;
+  color: var(--notification-text-light);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.quickexit-notification-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--notification-text-dark);
+  transform: scale(1.1);
+}
+
+/* Contenido de la notificación */
+.quickexit-notification-content {
+  color: var(--notification-text-dark);
+  font-weight: 400;
+  margin-bottom: 0.8rem;
+}
+
+/* Footer de la notificación */
+.quickexit-notification-footer {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.quickexit-notification-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--notification-font);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.quickexit-notification-btn-primary {
+  background: var(--notification-primary-green);
+  color: white;
+}
+
+.quickexit-notification-btn-primary:hover {
+  background: var(--notification-dark-green);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.quickexit-notification-btn-secondary {
+  background: transparent;
+  color: var(--notification-text-light);
+  border: 1px solid #ddd;
+}
+
+.quickexit-notification-btn-secondary:hover {
+  background: #f5f5f5;
+  color: var(--notification-text-dark);
+}
+
+/* Barra de progreso */
+.quickexit-notification-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--notification-primary-green);
+  animation: progressBar 5s linear forwards;
+}
+
+.quickexit-notification-danger .quickexit-notification-progress {
+  background: var(--notification-danger);
+}
+
+.quickexit-notification-warning .quickexit-notification-progress {
+  background: var(--notification-warning);
+}
+
+.quickexit-notification-info .quickexit-notification-progress {
+  background: var(--notification-info);
+}
+
+.quickexit-notification-success .quickexit-notification-progress {
+  background: var(--notification-success);
+}
+
+@keyframes progressBar {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+/* Estados de salida */
+.quickexit-notification.quickexit-notification-exiting {
+  animation: slideOutNotification 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .quickexit-notifications-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+  
+  .quickexit-notification {
+    min-width: auto;
+    max-width: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .quickexit-notification {
+    padding: 1rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .quickexit-notification-title {
+    font-size: 0.95rem;
+  }
+  
+  .quickexit-notification-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Modo oscuro (opcional) */
+@media (prefers-color-scheme: dark) {
+  .quickexit-notification {
+    background: #2d3748;
+    color: #e2e8f0;
+    border-color: #4a5568;
+  }
+  
+  .quickexit-notification-title {
+    color: #e2e8f0;
+  }
+  
+  .quickexit-notification-close {
+    color: #a0aec0;
+  }
+  
+  .quickexit-notification-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+  }
+  
+  .quickexit-notification-btn-secondary {
+    border-color: #4a5568;
+    color: #a0aec0;
+  }
+  
+  .quickexit-notification-btn-secondary:hover {
+    background: #4a5568;
+    color: #e2e8f0;
+  }
+} 

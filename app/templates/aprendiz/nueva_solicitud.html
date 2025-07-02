@@ -16,7 +16,7 @@
     </div>
     {% endif %}
     
-    <form action="{{ url_for('main.aprendiz_nueva_solicitud') }}" method="post" class="register-form">
+    <form action="{{ url_for('aprendiz.aprendiz_nueva_solicitud') }}" method="post" class="register-form">
         <div class="input-group">
             <span class="input-icon"><i class="fas fa-tag"></i></span>
             {% if tipos_salida and tipos_salida|length > 0 %}
@@ -66,7 +66,7 @@
         <button type="submit" class="btn btn-primary">Enviar Solicitud <i class="fas fa-paper-plane"></i></button>
     </form>
     
-    <p><a href="{{ url_for('main.aprendiz_dashboard') }}"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a></p>
+    <p><a href="{{ url_for('aprendiz.aprendiz_dashboard') }}"><i class="fas fa-arrow-left"></i> Volver al Dashboard</a></p>
 </div>
 {% endblock %}
 

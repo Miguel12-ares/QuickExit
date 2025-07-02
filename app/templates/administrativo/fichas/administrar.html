@@ -3,8 +3,8 @@
 {% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/administrativo/fichas/administrar.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <meta name="route-asignar" content="{{ url_for('main.asignar_instructor_lider', id_ficha=0) }}">
-  <meta name="route-remover" content="{{ url_for('main.remover_instructor_lider', id_ficha=0) }}">
+  <meta name="route-asignar" content="{{ url_for('admin.asignar_instructor_lider', id_ficha=0) }}">
+  <meta name="route-remover" content="{{ url_for('admin.remover_instructor_lider', id_ficha=0) }}">
 {% endblock %}
 
 {% block content %}

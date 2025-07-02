@@ -11,7 +11,7 @@
 <div class="crear-usuario-panel">
   <h2><i class="fas fa-user-plus"></i> Crear Nuevo Usuario</h2>
   
-  <form method="POST" action="{{ url_for('main.crear_usuario_avanzado') }}" class="usuario-form">
+  <form method="POST" action="{{ url_for('admin.crear_usuario_avanzado') }}" class="usuario-form">
     <div class="input-group">
       <i class="fas fa-id-card input-icon"></i>
       <input type="text" id="documento" name="documento" required pattern="[0-9]+" inputmode="numeric" placeholder="Documento" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
@@ -47,7 +47,7 @@
       </button>
     </div>
   </form>
-  <p><i class="fas fa-arrow-left"></i> <a href="{{ url_for('main.gestionar_usuarios_dashboard') }}">Volver al Dashboard</a></p>
+  <p><i class="fas fa-arrow-left"></i> <a href="{{ url_for('admin.gestionar_usuarios_dashboard') }}">Volver al Dashboard</a></p>
 </div>
 {% endblock %}
 

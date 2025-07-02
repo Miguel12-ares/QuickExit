@@ -10,7 +10,7 @@
   <h2><i class="fas fa-check-circle"></i> Validar Salidas de Aprendices</h2>
   
   <div class="panel-actions">
-    <a href="{{ url_for('main.administrativo_dashboard') }}" class="btn-back">
+    <a href="{{ url_for('admin.administrativo_dashboard') }}" class="btn-back">
       <i class="fas fa-arrow-left"></i> Volver al Dashboard
     </a>
   </div>
@@ -36,12 +36,12 @@
             <td>{{ solicitud.motivo }}</td>
             <td>
               <div class="botones-container">
-                <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='aprobar') }}" method="post" style="display:inline;">
+                <form action="/admin/gestionar_solicitud/{{ solicitud.id_solicitud }}/aprobar" method="post" style="display:inline;">
                   <button type="submit" class="btn btn-success">
                     <i class="fas fa-check"></i> Aprobar
                   </button>
                 </form>
-                <form action="{{ url_for('main.admin_gestionar_solicitud', id_solicitud=solicitud.id_solicitud, accion='rechazar') }}" method="post" style="display:inline;">
+                <form action="/admin/gestionar_solicitud/{{ solicitud.id_solicitud }}/rechazar" method="post" style="display:inline;">
                   <button type="submit" class="btn btn-danger">
                     <i class="fas fa-times"></i> Rechazar
                   </button>
