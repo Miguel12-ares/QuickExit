@@ -18,14 +18,21 @@
 - **Notificaciones Elegantes:** Sistema centralizado de notificaciones visuales para mensajes, alertas y confirmaciones (incluye doble validación en acciones críticas).
 
 ## Tecnologías Utilizadas
-
+<<<<<< test
 - **Backend:** Flask (Python)
 - **Base de Datos:** MySQL (por defecto, adaptable a SQLite para pruebas)
 - **ORM:** SQLAlchemy
 - **Autenticación:** Flask-Login, Flask-Bcrypt
 - **Frontend:** HTML5, CSS3, JavaScript (Vanilla JS, AJAX)
 - **Estilos:** Font Awesome
-
+=======
+*   **Backend:** Flask (Python)
+*   **Base de Datos:** MySQL (producción - adaptable)
+*   **ORM:** SQLAlchemy con Flask-SQLAlchemy
+*   **Autenticación:** Flask-Login, Flask-Bcrypt
+*   **Frontend:** HTML5, CSS3, JavaScript (Vanilla JS, AJAX)
+*   **Estilos y Iconografía:** Font Awesome
+*   **Manejo de Dependencias:** `pip`
 ## Configuración y Puesta en Marcha
 
 ### 1. Clonar el Repositorio
