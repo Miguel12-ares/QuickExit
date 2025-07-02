@@ -2,7 +2,7 @@
 import os
 
 # Usar variable de entorno si existe, si no, usar valor local por defecto
-SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'mysql+pymysql://root:@localhost/quickexit_db')
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://uwp4mcn7ndpzn1yq:RudBjybBtcjVmUhQn05M@bmzv59food8yw9io46pr-mysql.services.clever-cloud.com:3306/bmzv59food8yw9io46pr"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = os.environ.get('SQLALCHEMY_ECHO', 'False').lower() == 'true'
 SECRET_KEY = os.environ.get('SECRET_KEY', 'mysecretkey')
