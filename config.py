@@ -2,7 +2,7 @@
 import os
 
 # Usar variable de entorno si existe, si no, usar valor local por defecto
-SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:xbPNXAvJHsIoneySwDOSBhrytQglOfya@trolley.proxy.rlwy.net:50319/railway"
+SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI', 'mysql+pymysql://root:yrKOHCWHRqjuUSDafBfxbhDZfdiRRWRa@crossover.proxy.rlwy.net:50762/railway')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = os.environ.get('SQLALCHEMY_ECHO', 'False').lower() == 'true'
 SECRET_KEY = os.environ.get('SECRET_KEY', 'mysecretkey')
